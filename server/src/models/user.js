@@ -2,6 +2,7 @@ const mongoose = require("mongoose")
 
 
 const userSchema = mongoose.Schema({
+    user_reward_points: { type: Number, default: 0 },// Điểm tích lũy khi đánh giá sản phẩm thành công
     user_firstName: { type: String, default: "" },
     user_lastName: { type: String, default: "" },
     user_email: { type: String, required: true, unique: true },

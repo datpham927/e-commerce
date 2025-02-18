@@ -30,6 +30,8 @@ const DiscountSchema = new Schema({
     discount_applies_to: { type: String, required: true, enum: ["all", "specific"] },
     // Danh sách sản phẩm được áp dụng (nếu discount_applies_to === "specific")
     discount_product_ids: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
+    // Điểm tích lũy cần thiết để đổi voucher (chỉ áp dụng khi discount_type = "user")
+    discount_required_points: { type: Number, default: 0 }
 }, {
     timestamps: true // Tự động thêm createdAt, updatedAt
 });

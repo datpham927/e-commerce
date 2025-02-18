@@ -4,7 +4,7 @@ const slugify = require("slugify")
 const categorySchema = mongoose.Schema({
     category_name: { type: String, require: true },
     category_code: { type: String, require: true },
-    category_image: { type: String, require: true },
+    category_thumb: { type: String, require: true },
     category_slug: { type: String, require: true },
 }, {
     timestamps: true

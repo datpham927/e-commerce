@@ -4,7 +4,7 @@ const slugify = require("slugify")
 const brandSchema = mongoose.Schema({
     brand_name: { type: String, require: true },
     brand_code: { type: String, require: true },
-    brand_image: { type: String, require: true },
+    brand_thumb: { type: String, require: true },
     brand_slug: { type: String, require: true },
     brand_banner_image: { type: String, require: true },
 

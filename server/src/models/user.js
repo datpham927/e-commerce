@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
     user_password: { type: String },
     user_address: { type: String },
     user_address_detail: { type: String },
-    user_mobile: { type: String },
+    user_mobile: { type: String,required: true, unique: true },
     user_voucher: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Discount' }],
     user_avatar_url: { type: String },
     user_passwordChangedAt: { type: String },

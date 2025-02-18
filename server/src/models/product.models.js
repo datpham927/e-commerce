@@ -34,12 +34,8 @@ const productSchema = new Schema({
     product_brand_code: { type: mongoose.Schema.Types.ObjectId, ref: "Brand" },
     // Số lượt xem của sản phẩm, mặc định là 0
     product_views: { type: Number, default: 0 },
-    // Liên kết đến người dùng đã tạo sản phẩm (tham chiếu đến mô hình "User")
-    product_user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     // Các tính năng hình ảnh sản phẩm,lưu trữ các đặc trưng của hình ảnh dưới dạng array
     product_image_features: { type: Array, default: [] },
-    // Trạng thái ẩn sản phẩm, mặc định là true và không được chọn khi truy vấn
-    product_isDraft: { type: Boolean, default: false, index: true, select: false },
     // Trạng thái đã xuất bản của sản phẩm, mặc định là true và không được chọn khi truy vấn
     product_isPublished: { type: Boolean, default: true, index: true, select: false },
 }, {

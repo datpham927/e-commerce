@@ -7,7 +7,7 @@ const { Schema } = require('mongoose');
 const KeyTokenSchema = new mongoose.Schema({
     user: {
         type: Schema.Types.ObjectId,
-        ref: "shop"
+        ref: "User"
     },
     publicKey: {
         type: String,
@@ -21,7 +21,7 @@ const KeyTokenSchema = new mongoose.Schema({
     refreshTokensUsed: {
         type: Array, default: [] //đã sử dụng
     },
-    refreshToken:{  // đang sử dụng
+    refreshToken: {  // đang sử dụng
         type: String,
         required: true,
     }

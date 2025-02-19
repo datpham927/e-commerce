@@ -14,6 +14,11 @@ const shippingCompanySchema = new mongoose.Schema({
     sc_active: { type: Boolean, default: true },
     // Mức giá giao hàng  
     sc_shipping_price: { type: Number, required: true, min: 0 },
+    // thời gian vận chuyển
+    sc_delivery_time: {
+        from: { type: Number, default: 7 }, // tối thiểu 7 ngày
+        to: { type: Number, default: 10 },  // tối đa 10 ngày
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model("ShippingCompany", shippingCompanySchema);

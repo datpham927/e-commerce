@@ -7,7 +7,6 @@ const brandSchema = mongoose.Schema({
     brand_thumb: { type: String, require: true },
     brand_slug: { type: String, require: true },
     brand_banner_image: { type: String, require: true },
-
 }, {
     timestamps: true
 })

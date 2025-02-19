@@ -6,6 +6,7 @@ const DOCUMENT_NAME = "cart"
 const COLLECTION_NAME = "carts"
 
 const cartSchema = new mongoose.Schema({
+    cart_userId: { type: string, require: true },
     cart_products: { type: Array, require: true, default: [] },
     //  {
     //     productId,
@@ -14,7 +15,6 @@ const cartSchema = new mongoose.Schema({
     //     price
     //  }
     cart_count_product: { type: Number, default: 0 }, // số lượng sản phẩm trong giỏ hàng
-    cart_userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 }, {
     timestamp: true,
 });

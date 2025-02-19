@@ -4,7 +4,7 @@ const orderSchema = new mongoose.Schema({
     order_user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // order_user: ID của người dùng liên kết với đơn hàng
     order_products: [
         {
-            productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
+            productId: { type: string, required: true },
             productName: { type: String, required: true },
             productImage: { type: String, required: true },
             quantity: { type: Number, required: true, default: 1 },

@@ -33,4 +33,4 @@ const VoucherSchema = new Schema({
 });
 
 // Export model
-module.exports = mongoose.model('voucher', VoucherSchema);
+module.exports = mongoose.model('Voucher', VoucherSchema);

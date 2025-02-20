@@ -19,4 +19,3 @@ router.put("/:id", asyncHandle(CategoryController.updateCategory));
 router.delete("/:id", asyncHandle(CategoryController.deleteCategory));
 
 module.exports = router;
-C:\e-commerce\server\src\routes\category\index.js

@@ -6,7 +6,7 @@ const DOCUMENT_NAME = "cart"
 const COLLECTION_NAME = "carts"
 
 const cartSchema = new mongoose.Schema({
-    cart_user: { type: String, require: true },
+    cart_user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     cart_products: { type: Array, require: true, default: [] },
     //  {
     //     productId,

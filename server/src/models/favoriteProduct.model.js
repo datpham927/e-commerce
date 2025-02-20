@@ -2,9 +2,8 @@ const mongoose = require("mongoose");
 
 const favoriteProductSchema = mongoose.Schema(
     {
-        user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-        product: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
-        createdAt: { type: Date, default: Date.now },
+        fp_user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+        fp_product: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
     },
     {
         timestamps: true,

@@ -30,8 +30,8 @@ const productSchema = new Schema({
     product_sold: { type: Number, default: 0 }, // Số lượng đã bán, mặc định là 0
     product_discount: { type: Number, default: 0 }, // Giảm giá cho sản phẩm, mặc định là 0 đơn vị %
     product_in_stock: { type: Number, default: 0 }, // Số lượng còn trong kho, mặc định là 0
-    product_category_code: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
-    product_brand_code: { type: mongoose.Schema.Types.ObjectId, ref: "Brand" },
+    product_category_id: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
+    product_brand_id: { type: mongoose.Schema.Types.ObjectId, ref: "Brand" },
     // Số lượt xem của sản phẩm, mặc định là 0
     product_views: { type: Number, default: 0 },
     // Các tính năng hình ảnh sản phẩm,lưu trữ các đặc trưng của hình ảnh dưới dạng array

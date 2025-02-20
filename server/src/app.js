@@ -15,10 +15,10 @@ app.use(express.urlencoded({
 app.use(bodyParser.json());
 
 //init db
-require("../dbs/init.mongodb")
+require("./dbs/init.mongodb")
 
 //init routes
-// app.use("/", require("./routes"))
+app.use("/", require("./routes"))
 //handle error
 app.use((req, res, next) => {
     const error = new Error("Not Found")

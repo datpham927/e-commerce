@@ -5,8 +5,7 @@ const { Schema } = mongoose;
 
 const notificationSchema = new Schema(
     {
-        // ID user, liên kết tới User (nếu cần thao tác populate)
-        notification_userId: { type: String, require: true },
+        notification_user: { type: String, require: true },
         // Tên người dùng (nếu cần hiển thị)
         notification_userName: { type: String, required: true },
         // Tiêu đề thông báo

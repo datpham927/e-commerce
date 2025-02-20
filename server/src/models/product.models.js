@@ -1,5 +1,6 @@
-"use strict"
-const { Schema } = require('mongoose');
+"use strict";
+const mongoose = require("mongoose"); // Import mongoose
+const { Schema } = mongoose; // Lấy Schema từ mongoose
 const slugify = require("slugify");
 
 // Định nghĩa schema cho sản phẩm
@@ -30,11 +31,11 @@ const productSchema = new Schema({
     product_sold: { type: Number, default: 0 }, // Số lượng đã bán, mặc định là 0
     product_discount: { type: Number, default: 0 }, // Giảm giá cho sản phẩm, mặc định là 0 đơn vị %
     product_in_stock: { type: Number, default: 0 }, // Số lượng còn trong kho, mặc định là 0
-    product_category_id: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
-    product_brand_id: { type: mongoose.Schema.Types.ObjectId, ref: "Brand" },
+    product_category_id: { type: Schema.Types.ObjectId, ref: "Category" }, // Tham chiếu đến bảng Category
+    product_brand_id: { type: Schema.Types.ObjectId, ref: "Brand" }, // Tham chiếu đến bảng Brand
     // Số lượt xem của sản phẩm, mặc định là 0
     product_views: { type: Number, default: 0 },
-    // Các tính năng hình ảnh sản phẩm,lưu trữ các đặc trưng của hình ảnh dưới dạng array
+    // Các tính năng hình ảnh sản phẩm, lưu trữ các đặc trưng của hình ảnh dưới dạng array
     product_image_features: { type: Array, default: [] },
     // Trạng thái đã xuất bản của sản phẩm, mặc định là true và không được chọn khi truy vấn
     product_isPublished: { type: Boolean, default: true, index: true, select: false },

@@ -22,29 +22,36 @@ class UserAuthController {
     }
     // thực hiện đăng ký khi xác thực thành công
     static async userSignup(req, res) {
-        const data = await UserAuthService.userSignup(req.body);
-        const { accessToken, refreshToken } = data
-        res.cookie("refresh_token", `Bearer ${refreshToken}`, {
-            httpOnly: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        })
+        const access_token = await UserAuthService.userSignup(req.body, res);
         return res.status(200).json({
             success: true,
-            data: { access_token: accessToken },
-            message: "Đăng ký thành công!"
+            data: { access_token },
+            message: "Đăng nhập thành công!"
         });
     }
     static async userLogin(req, res) {
-        const data = await UserAuthService.userLogin(req.body);
-        const { accessToken, refreshToken } = data
-        res.cookie("refresh_token", `Bearer ${refreshToken}`, {
-            httpOnly: true,
-            maxAge: 7 * 24 * 60 * 60 * 1000
-        })
+        const access_token = await UserAuthService.userLogin(req.body, res);
         return res.status(200).json({
             success: true,
-            data: { access_token: accessToken },
+            data: { access_token },
             message: "Đăng nhập thành công!"
+        });
+    }
+    static async userLogout(req, res) {
+        await UserAuthService.userLogout(res);
+        return res.status(200).json({
+            success: true,
+            message: "Đăng xuất thành công!"
+        });
+    }
+    static async refreshToken(req, res) {
+        const { refresh_token } = req.cookies
+        console.log(refresh_token)
+        const access_token = await UserAuthService.handleRefreshToken(refresh_token, res);
+        return res.status(200).json({
+            success: true,
+            data: { access_token },
+            message: "Thành công!"
         });
     }
 }

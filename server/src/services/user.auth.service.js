@@ -4,12 +4,12 @@ const { BadRequestError } = require("../core/error.response");
 const bcrypt = require("bcrypt")
 const crypto = require("crypto")
 const redis = require("../config/redisClient");
-const { findUserByEmail } = require("../models/repositories/user.repo")
+const { findUserByEmail, findUserById } = require("../models/repositories/user.repo")
 const { randomTokenByCrypto, hashTokenByCrypto } = require("../utils/tokenUtils");
 const sendMail = require("../utils/sendMail");
 const userModel = require("../models/user.model");
 const createTokenPairs = require("../utils/auth/createTokenPairs");
-const KeyTokenService = require("./keyToken.service");
+const verifyRefreshToken = require("../utils/auth/verifyRefreshToken");
 
 class UserAuthService {
     // gửi mã xác thực 
@@ -65,7 +65,7 @@ class UserAuthService {
         await redis.hset(redisKey, "confirmed", "false");
     }
     // xác thực thành công -> đăng ký
-    static async userSignup({ email, password, name }) {
+    static async userSignup({ email, password, name }, res) {
         if (!email || !password || !name) throw new BadRequestError("Vui lòng nhập đầy đủ thông tin");
         const redisKey = `verify_email:${email}`;
         const holderUser = await findUserByEmail(email)
@@ -82,31 +82,41 @@ class UserAuthService {
         if (!newUser) {
             throw new BadRequestError("Đăng ký không thành công!", 403)
         }
-        const publicKey = crypto.randomBytes(100).toString('hex')
-        const privateKey = crypto.randomBytes(100).toString('hex')
-        // tạo ra key token và lưu vào database 
-        // create accessToken and refreshToken
-        const tokens = await createTokenPairs(newUser.toObject(), publicKey, privateKey)
-        await KeyTokenService.createKeyToken({ userId: newUser._id, refreshToken: tokens.refreshToken, privateKey, publicKey })
-        return tokens
+        const tokens = await createTokenPairs(newUser.toObject())
+        const { accessToken, refreshToken } = tokens
+        res.cookie("refresh_token", `${refreshToken}`, {
+            httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000
+        })
+        return accessToken
 
     }
-    static async userLogin({ email, password }) {
+    static async userLogin({ email, password }, res) {
         const foundUser = await findUserByEmail(email)
         if (!foundUser) {
             throw new BadRequestError("Tài khoản không tồn tại", 403)
         }
-        // kiểm tra password
         const matchPassword = bcrypt.compareSync(password, foundUser.user_password)
         if (!matchPassword) throw new BadRequestError("Tài khoản hoặc mật khẩu không đúng", 201)
-        // render 2 key để lưu vào db và đăng ký token và refresh token
-        const publicKey = crypto.randomBytes(100).toString('hex')
-        const privateKey = crypto.randomBytes(100).toString('hex')
-        // create accessToken and refreshToken and add to database
-        const tokens = await createTokenPairs(foundUser, publicKey, privateKey)
-        // thêm key vào db
-        await KeyTokenService.createKeyToken({ userId: foundUser._id, refreshToken: tokens.refreshToken, privateKey, publicKey })
-        return tokens
+        const tokens = await createTokenPairs(foundUser)
+        const { accessToken, refreshToken } = tokens
+        res.cookie("refresh_token", `${refreshToken}`, {
+            httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000
+        })
+        return accessToken
+    }
+    static async userLogout(res) {
+        res.clearCookie("refresh_token")
+    }
+    static async handleRefreshToken(refreshToken, res) {
+        if (!refreshToken) throw new BadRequestError("Cookie required", 201)
+        const response = verifyRefreshToken(refreshToken)
+        if (!response) throw new BadRequestError("Verification failed", 201)
+        const foundUser = await findUserById(response._id)
+        const tokens = await createTokenPairs(foundUser)
+        res.cookie("refresh_token", `${tokens.refreshToken}`, {
+            httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000
+        })
+        return tokens.accessToken
     }
 }
 

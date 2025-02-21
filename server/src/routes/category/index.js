@@ -1,5 +1,5 @@
 const express = require("express");
-const CategoryController = require("../../controllers/category.controllers");
+const CategoryController = require("../../controllers/category.controller");
 const asyncHandle = require("../../helper/asyncHandle");
 const router = express.Router();
 

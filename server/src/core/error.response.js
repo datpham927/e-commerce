@@ -13,7 +13,7 @@ class ErrorResponse extends Error {
     }
 }
 
-class BadRequestRequestError extends ErrorResponse {
+class BadRequestError extends ErrorResponse {
     constructor(message = ResponseStatusCode.CONFLICT, status = StatusCode.CONFLICT) {
         super(message)
         this.status = status
@@ -29,5 +29,5 @@ class NotFoundError extends ErrorResponse {
 
 module.exports = {
     NotFoundError,
-    BadRequestRequestError, ErrorResponse
+    BadRequestError, ErrorResponse
 }

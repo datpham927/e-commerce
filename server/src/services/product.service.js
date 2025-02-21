@@ -1,13 +1,13 @@
 "use strict";
 
-const { BadRequestRequestError, NotFoundError } = require("../core/error.response");
+const { BadRequestError, NotFoundError } = require("../core/error.response");
 const Product = require("../models/product.models");
 
 class ProductService {
     // Tạo sản phẩm mới
     static async createProduct(payload) {
         if (Object.keys(payload).length === 0) {
-            throw new BadRequestRequestError("Vui lòng cung cấp dữ liệu sản phẩm");
+            throw new BadRequestError("Vui lòng cung cấp dữ liệu sản phẩm");
         }
         return await Product.create(payload);
     }

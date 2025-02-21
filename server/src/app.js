@@ -16,7 +16,6 @@ app.use(bodyParser.json());
 
 //init db
 require("./dbs/init.mongodb")
-
 //init routes
 app.use("/", require("./routes"))
 //handle error

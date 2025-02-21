@@ -1,13 +1,13 @@
 "use strict";
 
-const { BadRequestRequestError, NotFoundError } = require("../core/error.response");
+const { BadRequestError, NotFoundError } = require("../core/error.response");
 const Banner = require("../models/banner.model");
 
 class BannerService {
     // Tạo banner mới
     static async createBanner(payload) {
         if (Object.keys(payload).length === 0) {
-            throw new BadRequestRequestError("Vui lòng cung cấp dữ liệu banner");
+            throw new BadRequestError("Vui lòng cung cấp dữ liệu banner");
         }
         return await Banner.create(payload);
     }

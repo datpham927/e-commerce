@@ -1,4 +1,4 @@
-"use strict";
+// productSchema
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const slugify = require("slugify");
@@ -23,7 +23,7 @@ const productSchema = new Schema({
     product_discount: { type: Number, default: 0 },
     product_in_stock: { type: Number, default: 0 },
     product_category_id: { type: Schema.Types.ObjectId, ref: "Category", required: true },
-    product_brand_id: { type: Schema.Types.ObjectId, ref: "Brand" },
+    product_brand_id: { type: Schema.Types.ObjectId, ref: "Brand", required: true }, // yêu cầu thương hiệu
     product_views: { type: Number, default: 0 },
     product_image_features: { type: Array, default: [] },
     product_isPublished: { type: Boolean, default: true, index: true, select: false },
@@ -34,7 +34,7 @@ const productSchema = new Schema({
 // Tạo chỉ mục văn bản cho các trường tên và mô tả sản phẩm
 productSchema.index({ product_name: 'text', product_description: 'text' });
 
-// Middleware kiểm tra tồn tại của danh mục
+// Middleware kiểm tra tồn tại của danh mục và thương hiệu
 productSchema.pre("save", async function (next) {
     // Kiểm tra xem danh mục có tồn tại không
     const category = await mongoose.model("Category").findById(this.product_category_id);
@@ -42,11 +42,18 @@ productSchema.pre("save", async function (next) {
         const error = new Error("Category does not exist");
         next(error); // Nếu danh mục không tồn tại, trả về lỗi
     } else {
-        // Nếu danh mục tồn tại, tiếp tục lưu sản phẩm
-        if (!this.product_slug) {
-            this.product_slug = slugify(this.product_name, { lower: true });
+        // Kiểm tra xem thương hiệu có tồn tại không
+        const brand = await mongoose.model("Brand").findById(this.product_brand_id);
+        if (!brand) {
+            const error = new Error("Brand does not exist");
+            next(error); // Nếu thương hiệu không tồn tại, trả về lỗi
+        } else {
+            // Nếu tất cả đều tồn tại, tiếp tục lưu sản phẩm
+            if (!this.product_slug) {
+                this.product_slug = slugify(this.product_name, { lower: true });
+            }
+            next();
         }
-        next();
     }
 });
 

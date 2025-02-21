@@ -1,0 +1,22 @@
+const express = require("express");
+const ShippingCompanyController = require("../../controllers/shippingCompany.controller");
+const asyncHandle = require("../../helper/asyncHandle");
+
+const router = express.Router();
+
+// Thêm mới công ty vận chuyển
+router.post("/add", asyncHandle(ShippingCompanyController.createShippingCompany));
+
+// Lấy danh sách tất cả công ty vận chuyển
+router.get("/all", asyncHandle(ShippingCompanyController.getAllShippingCompanies));
+
+// Lấy chi tiết công ty vận chuyển theo ID
+router.get("/:id", asyncHandle(ShippingCompanyController.getShippingCompanyById));
+
+// Cập nhật công ty vận chuyển theo ID
+router.put("/:id", asyncHandle(ShippingCompanyController.updateShippingCompany));
+
+// Xóa công ty vận chuyển theo ID
+router.delete("/:id", asyncHandle(ShippingCompanyController.deleteShippingCompany));
+
+module.exports = router;

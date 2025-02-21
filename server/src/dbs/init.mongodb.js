@@ -2,15 +2,17 @@
 const mongoose = require("mongoose")
 require("dotenv").config();
 const connectUrl = process.env.MONGODB_URL
+
 class Database {
     constructor() {
         this.connect()
     }
     connect(type = "mongodb") {
-        if (1 === 1) {
-            mongoose.set("debug", true)
-            mongoose.set("debug", { color: true })
-        }
+        // tắt log
+        // if (1 === 1) { 
+        //     mongoose.set("debug", false)
+        //     mongoose.set("debug", { color: true })
+        // }
         mongoose.connect(connectUrl).then(() => console.log("connected successfully!"))
             .catch(() => console.log("connection failed!"))
     }

@@ -14,13 +14,13 @@ router.post("/add", asyncHandle(BannerController.createBanner));
 router.get("/all", asyncHandle(BannerController.getAllBanners));
 
 // Lấy banner theo ID
-router.get("/:id", asyncHandle(BannerController.getBannerById));
+router.get("/:id/search", asyncHandle(BannerController.getBannerById));
 
 // Cập nhật banner
-router.put("/update/:id", asyncHandle(BannerController.updateBanner));
+router.put("/:id/update", asyncHandle(BannerController.updateBanner));
 
 // Xóa banner
-router.delete("/:id", asyncHandle(BannerController.deleteBanner));
+router.delete("/:id/delete", asyncHandle(BannerController.deleteBanner));
 
 
 module.exports = router;

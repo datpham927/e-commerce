@@ -1,6 +1,7 @@
 const express = require("express");
 const ProductController = require("../../controllers/product.controller");
 const asyncHandle = require("../../helper/asyncHandle");
+
 const router = express.Router();
 
 // Tìm kiếm sản phẩm theo tên
@@ -13,12 +14,12 @@ router.post("/add", asyncHandle(ProductController.createProduct));
 router.get("/all", asyncHandle(ProductController.getAllProducts));
 
 // Lấy sản phẩm theo ID
-router.get("/:id", asyncHandle(ProductController.getProductById));
+router.get("/:id/search", asyncHandle(ProductController.getProductById));
 
 // Cập nhật sản phẩm
-router.put("/:id", asyncHandle(ProductController.updateProduct));
+router.put("/:id/update", asyncHandle(ProductController.updateProduct));
 
 // Xóa sản phẩm
-router.delete("/:id", asyncHandle(ProductController.deleteProduct));
+router.delete("/:id/delete", asyncHandle(ProductController.deleteProduct));
 
 module.exports = router;

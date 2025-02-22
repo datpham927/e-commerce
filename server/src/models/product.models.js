@@ -1,4 +1,5 @@
-// productSchema
+"use strict";
+
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const slugify = require("slugify");
@@ -40,21 +41,46 @@ productSchema.pre("save", async function (next) {
     const category = await mongoose.model("Category").findById(this.product_category_id);
     if (!category) {
         const error = new Error("Category does not exist");
-        next(error); // Nếu danh mục không tồn tại, trả về lỗi
-    } else {
-        // Kiểm tra xem thương hiệu có tồn tại không
-        const brand = await mongoose.model("Brand").findById(this.product_brand_id);
-        if (!brand) {
-            const error = new Error("Brand does not exist");
-            next(error); // Nếu thương hiệu không tồn tại, trả về lỗi
-        } else {
-            // Nếu tất cả đều tồn tại, tiếp tục lưu sản phẩm
-            if (!this.product_slug) {
-                this.product_slug = slugify(this.product_name, { lower: true });
-            }
-            next();
+        return next(error); // Nếu danh mục không tồn tại, trả về lỗi
+    }
+
+    // Kiểm tra xem thương hiệu có tồn tại không
+    const brand = await mongoose.model("Brand").findById(this.product_brand_id);
+    if (!brand) {
+        const error = new Error("Brand does not exist");
+        return next(error); // Nếu thương hiệu không tồn tại, trả về lỗi
+    }
+
+    // Kiểm tra nếu product_name đã tồn tại trong cơ sở dữ liệu
+    const existingProduct = await mongoose.model("Product").findOne({ product_name: this.product_name });
+    if (existingProduct && existingProduct._id.toString() !== this._id.toString()) {
+        const error = new Error("Product name already exists!");
+        return next(error); // Nếu tên sản phẩm đã tồn tại, trả về lỗi
+    }
+
+    // Tạo slug nếu chưa có
+    if (!this.product_slug) {
+        this.product_slug = slugify(this.product_name, { lower: true });
+    }
+
+    next();
+});
+
+// Middleware kiểm tra trùng lặp product_name trước khi cập nhật
+productSchema.pre("findOneAndUpdate", async function (next) {
+    const updatedProduct = this.getUpdate();
+    const productName = updatedProduct.product_name;
+
+    // Kiểm tra nếu product_name đã tồn tại trong cơ sở dữ liệu
+    if (productName) {
+        const existingProduct = await mongoose.model("Product").findOne({ product_name: productName });
+        if (existingProduct && existingProduct._id.toString() !== this._conditions._id.toString()) {
+            const error = new Error("sản phẩm đã tồn tại!");
+            return next(error); // Nếu tên sản phẩm đã tồn tại, trả về lỗi
         }
     }
+    
+    next();
 });
 
 // Export model

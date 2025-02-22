@@ -29,6 +29,13 @@ const ShippingCompanyController = {
     deleteShippingCompany: async (req, res) => {
         await ShippingCompanyService.deleteShippingCompany(req.params.id);
         res.status(200).json({ success: true, message: "Xóa công ty vận chuyển thành công!" });
+    },
+
+    // Tìm kiếm công ty vận chuyển theo tên
+    searchShippingCompanies: async (req, res) => {
+        const { name } = req.query;
+        const companies = await ShippingCompanyService.searchShippingCompaniesByName(name);
+        res.status(200).json({ success: true, data: companies });
     }
 };
 

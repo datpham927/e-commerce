@@ -1,11 +1,11 @@
 const Brand = require("../models/brand.model");
-const { BadRequestRequestError, NotFoundError } = require("../core/error.response");
+const { BadRequestError, NotFoundError } = require("../core/error.response");
 
 const BrandService = {
     // Tạo thương hiệu mới
     createBrand: async (payload) => {
         if (!payload.brand_name || !payload.brand_thumb || !payload.brand_banner_image) {
-            throw new BadRequestRequestError("Thiếu thông tin bắt buộc!");
+            throw new BadRequestError("Thiếu thông tin bắt buộc!");
         }
         return await Brand.create(payload);
     },
@@ -34,6 +34,12 @@ const BrandService = {
         const brand = await Brand.findByIdAndDelete(id);
         if (!brand) throw new NotFoundError("Thương hiệu không tồn tại!");
         return brand;
+    },
+
+    // 🔹 Tìm kiếm thương hiệu theo tên
+    searchBrandByName: async (name) => {
+        const brands = await Brand.find({ brand_name: { $regex: name, $options: "i" } });
+        return brands;
     }
 };
 

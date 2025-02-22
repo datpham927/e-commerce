@@ -4,6 +4,9 @@ const asyncHandle = require("../../helper/asyncHandle");
 
 const router = express.Router();
 
+// Tìm kiếm công ty vận chuyển theo tên
+router.get("/search", asyncHandle(ShippingCompanyController.searchShippingCompanies));
+
 // Thêm mới công ty vận chuyển
 router.post("/add", asyncHandle(ShippingCompanyController.createShippingCompany));
 

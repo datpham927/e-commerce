@@ -1,13 +1,13 @@
 "use strict";
 
-const { BadRequestRequestError, NotFoundError } = require("../core/error.response");
+const { BadRequestError, NotFoundError } = require("../core/error.response");
 const Banner = require("../models/banner.model");
 
 class BannerService {
     // Tạo banner mới
     static async createBanner(payload) {
         if (Object.keys(payload).length === 0) {
-            throw new BadRequestRequestError("Vui lòng cung cấp dữ liệu banner");
+            throw new BadRequestError("Vui lòng cung cấp dữ liệu banner");
         }
         return await Banner.create(payload);
     }
@@ -42,6 +42,13 @@ class BannerService {
         if (!deletedBanner) throw new NotFoundError("Không tìm thấy banner để xóa");
         return deletedBanner;
     }
+    //tìm theo tên
+    static async searchBannerByName(name) {
+        const banners = await Banner.find({ banner_title: { $regex: name, $options: "i" } });
+        return banners;
+    }
+    
 }
+
 
 module.exports = BannerService;

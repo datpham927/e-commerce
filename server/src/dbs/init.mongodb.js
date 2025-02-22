@@ -1,6 +1,7 @@
 "use strict"
 const mongoose = require("mongoose")
-const connectUrl = "mongodb+srv://11111111:dn2yTO8JJTXY8rev@cluster0.nto34.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+require("dotenv").config();
+const connectUrl = process.env.MONGODB_URL
 class Database {
     constructor() {
         this.connect()

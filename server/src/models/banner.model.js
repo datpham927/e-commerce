@@ -80,6 +80,7 @@ bannerSchema.pre('findOneAndUpdate', async function(next) {
     } else {
         next();  // Tiếp tục nếu không có lỗi
     }
+    
 });
 
 module.exports = mongoose.model("Banner", bannerSchema);

@@ -46,7 +46,6 @@ class UserAuthController {
     }
     static async refreshToken(req, res) {
         const { refresh_token } = req.cookies
-        console.log(refresh_token)
         const access_token = await UserAuthService.handleRefreshToken(refresh_token, res);
         return res.status(200).json({
             success: true,

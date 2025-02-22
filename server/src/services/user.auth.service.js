@@ -65,8 +65,8 @@ class UserAuthService {
         await redis.hset(redisKey, "confirmed", "false");
     }
     // xác thực thành công -> đăng ký
-    static async userSignup({ email, password, name }, res) {
-        if (!email || !password || !name) throw new BadRequestError("Vui lòng nhập đầy đủ thông tin");
+    static async userSignup({ email, password, mobile }, res) {
+        if (!email || !password) throw new BadRequestError("Vui lòng nhập đầy đủ thông tin");
         const redisKey = `verify_email:${email}`;
         const holderUser = await findUserByEmail(email)
         if (holderUser) { throw new BadRequestError("Tài khoản đã tồn tại", 201) }
@@ -75,8 +75,9 @@ class UserAuthService {
         const passwordHash = await bcrypt.hashSync(password, 10)
         // create new shop
         const newUser = await userModel.create({
-            user_name: name,
+            user_name: email?.split("@")[0],
             user_email: email,
+            user_mobile: mobile,
             user_password: passwordHash
         })
         if (!newUser) {

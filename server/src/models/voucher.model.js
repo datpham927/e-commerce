@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const VoucherSchema = new Schema({
-    voucher_name: { type: String, required: true },
-    voucher_description: { type: String, required: true },
+    voucher_name: { type: String, required: true, unique: true },  // Tên voucher, phải duy nhất
+    voucher_description: { type: String, required: true },  // Mô tả voucher
     voucher_type: { type: String, enum: ["system", "user"], default: "system" }, // "system" (hệ thống) hoặc "user" (do user đổi điểm)
     voucher_thumb: { type: String, required: true }, // Hình thumbnail
     voucher_banner_image: { type: String, required: true }, // Hình banner quảng cáo
@@ -31,6 +31,29 @@ const VoucherSchema = new Schema({
 }, {
     timestamps: true // Tự động thêm createdAt, updatedAt
 });
+
+// Middleware kiểm tra trùng lặp voucher_name cho các thao tác save, update
+const checkVoucherNameUnique = async function (next) {
+    const voucher = this instanceof mongoose.Document ? this : this._update;  // Kiểm tra xem là document hay update operation
+
+    try {
+        const existingVoucher = await mongoose.model('Voucher').findOne({
+            voucher_name: voucher.voucher_name
+        });
+
+        // Nếu tìm thấy voucher trùng tên và không phải là chính nó đang được cập nhật
+        if (existingVoucher && existingVoucher._id.toString() !== (voucher._id ? voucher._id.toString() : null)) {
+            return next(new Error('voucher đã tồn tại!'));
+        }
+
+        next(); // Nếu không có lỗi, tiếp tục
+    } catch (error) {
+        next(error); // Xử lý lỗi
+    }
+};
+
+// Áp dụng middleware cho cả các thao tác save và update
+VoucherSchema.pre(['save', 'findOneAndUpdate', 'updateOne'], checkVoucherNameUnique);
 
 // Export model
 module.exports = mongoose.model('Voucher', VoucherSchema);

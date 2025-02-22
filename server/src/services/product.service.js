@@ -42,6 +42,15 @@ class ProductService {
         if (!deletedProduct) throw new NotFoundError("Không tìm thấy sản phẩm để xóa");
         return deletedProduct;
     }
+    // Tìm kiếm sản phẩm theo tên
+    static async searchProductsByName(name) {
+        if (!name) throw new BadRequestError("Vui lòng nhập tên sản phẩm để tìm kiếm");
+        const products = await Product.find({
+        product_name: { $regex: name, $options: "i" } // Tìm kiếm không phân biệt hoa thường
+        });
+        if (products.length === 0) throw new NotFoundError("Không tìm thấy sản phẩm nào");
+        return products;
+    }
 }
 
 module.exports = ProductService;

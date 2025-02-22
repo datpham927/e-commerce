@@ -3,6 +3,9 @@ const ProductController = require("../../controllers/product.controller");
 const asyncHandle = require("../../helper/asyncHandle");
 const router = express.Router();
 
+// Tìm kiếm sản phẩm theo tên
+router.get("/search", asyncHandle(ProductController.searchProducts));
+
 // Thêm sản phẩm
 router.post("/add", asyncHandle(ProductController.createProduct));
 

@@ -27,6 +27,12 @@ class CategoryController {
         await CategoryService.deleteCategory(req.params.id);
         res.status(200).json({ success: true, message: "Danh mục đã bị xóa" });
     }
+    //tìm theo tên
+    static async searchCategory(req, res, next) {
+        const categories = await CategoryService.searchCategoryByName(req.query.name);
+        res.status(200).json({ success: true, data: categories });
+    }
+    
 }
 
 module.exports = CategoryController;

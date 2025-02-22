@@ -4,6 +4,9 @@ const asyncHandle = require("../../helper/asyncHandle");
 
 const router = express.Router();
 
+//tìm theo tên
+router.get("/search", asyncHandle(BrandController.searchBrand));
+
 // Thêm mới thương hiệu
 router.post("/add", asyncHandle(BrandController.createBrand));
 

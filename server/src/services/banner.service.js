@@ -42,6 +42,13 @@ class BannerService {
         if (!deletedBanner) throw new NotFoundError("Không tìm thấy banner để xóa");
         return deletedBanner;
     }
+    //tìm theo tên
+    static async searchBannerByName(name) {
+        const banners = await Banner.find({ banner_title: { $regex: name, $options: "i" } });
+        return banners;
+    }
+    
 }
+
 
 module.exports = BannerService;

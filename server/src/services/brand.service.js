@@ -34,6 +34,12 @@ const BrandService = {
         const brand = await Brand.findByIdAndDelete(id);
         if (!brand) throw new NotFoundError("Thương hiệu không tồn tại!");
         return brand;
+    },
+
+    // 🔹 Tìm kiếm thương hiệu theo tên
+    searchBrandByName: async (name) => {
+        const brands = await Brand.find({ brand_name: { $regex: name, $options: "i" } });
+        return brands;
     }
 };
 

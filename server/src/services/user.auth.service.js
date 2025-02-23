@@ -155,6 +155,115 @@ class UserAuthService {
         })
         return tokens.accessToken
     }
+
+    // Gửi mã quên mật khẩu
+    static async forgotPassword({ email }) {
+        if (!email) throw new BadRequestError("Vui lòng cung cấp email");
+
+        const user = await findUserByEmail(email);
+        if (!user) throw new BadRequestError("Tài khoản không tồn tại", 404);
+
+        const redisKey = `reset_password:${email}`;
+        const token = randomTokenByCrypto(6);
+        const hashToken = hashTokenByCrypto(token);
+        const expiresAt = Date.now() + 10 * 60 * 1000; // Hết hạn sau 10 phút
+
+        await redis.hset(redisKey, {
+            token: hashToken,
+            expiresAt: expiresAt.toString(),
+            confirmed: "false",
+        });
+        await redis.expire(redisKey, 10 * 60);
+
+        // Gửi email với mã đặt lại mật khẩu
+        await sendMail({
+            email,
+            html: `
+            <div style="background-color: #f9f9f9; padding: 20px; font-family: Arial, sans-serif;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" 
+                    style="max-width: 600px; margin: auto; background: #ffffff; padding: 20px; border-radius: 10px;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    
+                    <tr>
+                        <td align="center" style="padding-bottom: 20px;">
+                            <h2 style="color: #333; margin: 0;">Yêu Cầu Đặt Lại Mật Khẩu</h2>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="color: #555; font-size: 16px; text-align: left;">
+                            <p>Chào <b>${email.split("@")[0]}</b>,</p>
+                            <p>Bạn đã yêu cầu đặt lại mật khẩu. Vui lòng sử dụng mã sau để xác nhận:</p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td align="center" style="padding: 20px 0;">
+                            <span style="background: #fff; color: #000; font-size: 24px; padding: 12px 24px; border: 2px solid #000; border-radius: 5px; display: inline-block; font-weight: bold;"> ${token}</span>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="color: #555; font-size: 16px; text-align: left;">
+                            <p>Mã này có hiệu lực trong vòng <b>10 phút</b>. Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td align="center" style="padding-top: 20px;">
+                            <hr style="border: none; border-top: 1px solid #ddd; width: 100%;">
+                            <p style="text-align: center; font-size: 14px; color: #888; margin-top: 10px;">
+                                Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </div>`,
+            fullName: email.split("@")[0],
+        });
+
+        return { success: true, message: "Mã xác nhận đã được gửi qua email" };
+    }
+
+    // Xác nhận mã quên mật khẩu
+    static async verifyResetCode({ email, token }) {
+        if (!email || !token) throw new BadRequestError("Vui lòng cung cấp đầy đủ thông tin");
+
+        const redisKey = `reset_password:${email}`;
+        const existingData = await redis.hgetall(redisKey);
+        if (!existingData?.token) throw new BadRequestError("Mã xác nhận không hợp lệ", 400);
+        if (Date.now() > parseInt(existingData.expiresAt, 10)) {
+            throw new BadRequestError("Mã xác nhận đã hết hạn", 400);
+        }
+
+        const hashToken = hashTokenByCrypto(token);
+        if (hashToken !== existingData.token) throw new BadRequestError("Mã xác nhận không đúng", 400);
+
+        // Xác nhận thành công -> cập nhật trạng thái mã
+        await redis.hset(redisKey, "confirmed", "true");
+
+        return { success: true, message: "Xác nhận thành công, bạn có thể đặt lại mật khẩu" };
+    }
+
+    // Đổi mật khẩu mới
+    static async resetPassword({ email, newPassword }) {
+        if (!email || !newPassword) {
+            throw new BadRequestError("Vui lòng cung cấp đầy đủ thông tin");
+        }
+
+        const redisKey = `reset_password:${email}`;
+        const existingData = await redis.hgetall(redisKey);
+        if (!existingData?.confirmed || existingData.confirmed !== "true") {
+            throw new BadRequestError("Bạn chưa xác nhận mã đặt lại mật khẩu", 400);
+        }
+
+        const passwordHash = await bcrypt.hash(newPassword, 10);
+        await userModel.updateOne({ user_email: email }, { user_password: passwordHash });
+
+        await redis.del(redisKey); // Xóa mã sau khi dùng
+
+        return { success: true, message: "Mật khẩu đã được đặt lại thành công" };
+    }
 }
 
 module.exports = UserAuthService;

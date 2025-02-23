@@ -1,25 +1,25 @@
 const express = require("express");
-const ShippingCompanyController = require("../../controllers/shippingCompany.controller");
+const VoucherController = require("../../controllers/voucher.controller");
 const asyncHandle = require("../../helper/asyncHandle");
 
 const router = express.Router();
 
-// Tìm kiếm công ty vận chuyển theo tên
-router.get("/search", asyncHandle(ShippingCompanyController.searchShippingCompanies));
+// Tìm kiếm voucher theo tên
+router.get("/search", asyncHandle(VoucherController.searchVoucherByName));
 
-// Thêm mới công ty vận chuyển
-router.post("/add", asyncHandle(ShippingCompanyController.createShippingCompany));
+// Thêm mới voucher
+router.post("/add", asyncHandle(VoucherController.createVoucher));
 
-// Lấy danh sách tất cả công ty vận chuyển
-router.get("/all", asyncHandle(ShippingCompanyController.getAllShippingCompanies));
+// Lấy danh sách tất cả voucher
+router.get("/all", asyncHandle(VoucherController.getAllVouchers));
 
-// Lấy chi tiết công ty vận chuyển theo ID
-router.get("/:id/search", asyncHandle(ShippingCompanyController.getShippingCompanyById));
+// Lấy chi tiết voucher theo ID
+router.get("/:id/search", asyncHandle(VoucherController.getVoucherById));
 
-// Cập nhật công ty vận chuyển theo ID
-router.put("/:id/update", asyncHandle(ShippingCompanyController.updateShippingCompany));
+// Cập nhật voucher theo ID
+router.put("/:id/update", asyncHandle(VoucherController.updateVoucher));
 
-// Xóa công ty vận chuyển theo ID
-router.delete("/:id/delete", asyncHandle(ShippingCompanyController.deleteShippingCompany));
+// Xóa voucher theo ID
+router.delete("/:id/delete", asyncHandle(VoucherController.deleteVoucher));
 
 module.exports = router;

@@ -1,11 +1,11 @@
 "use strict";
 
-const UserAuthService = require("../services/user.auth.service");
+const AuthService = require("../services/auth.service");
 
 class UserAuthController {
     // Gửi token xác nhận email
     static async sendVerificationEmail(req, res) {
-        await UserAuthService.sendVerificationEmail(req.body);
+        await AuthService.sendVerificationEmail(req.body);
         return res.status(200).json({
             success: true,
             message: "Mã xác thực đã được gửi thành công!"
@@ -14,7 +14,7 @@ class UserAuthController {
     }
     // Xác nhận email bằng token
     static async confirmVerificationEmail(req, res) {
-        await UserAuthService.confirmVerificationEmail(req.body);
+        await AuthService.confirmVerificationEmail(req.body);
         return res.status(200).json({
             success: true,
             message: "Email xác thực thành công!"
@@ -22,7 +22,7 @@ class UserAuthController {
     }
     // thực hiện đăng ký khi xác thực thành công
     static async userSignup(req, res) {
-        const access_token = await UserAuthService.userSignup(req.body, res);
+        const access_token = await AuthService.userSignup(req.body, res);
         return res.status(200).json({
             success: true,
             data: { access_token },
@@ -30,7 +30,7 @@ class UserAuthController {
         });
     }
     static async userLogin(req, res) {
-        const access_token = await UserAuthService.userLogin(req.body, res);
+        const access_token = await AuthService.userLogin(req.body, res);
         return res.status(200).json({
             success: true,
             data: { access_token },
@@ -38,7 +38,7 @@ class UserAuthController {
         });
     }
     static async userLogout(req, res) {
-        await UserAuthService.userLogout(res);
+        await AuthService.userLogout(res);
         return res.status(200).json({
             success: true,
             message: "Đăng xuất thành công!"
@@ -46,29 +46,29 @@ class UserAuthController {
     }
     static async refreshToken(req, res) {
         const { refresh_token } = req.cookies
-        const access_token = await UserAuthService.handleRefreshToken(refresh_token, res);
+        const access_token = await AuthService.handleRefreshToken(refresh_token, res);
         return res.status(200).json({
             success: true,
             data: { access_token },
             message: "Thành công!"
         });
     }
-    
+
     // Gửi mã xác nhận quên mật khẩu
     static async forgotPassword(req, res) {
-        const response = await UserAuthService.forgotPassword(req.body);
+        const response = await AuthService.forgotPassword(req.body);
         res.json(response);
     }
 
     // Xác nhận mã quên mật khẩu
     static async verifyResetCode(req, res) {
-        const response = await UserAuthService.verifyResetCode(req.body);
+        const response = await AuthService.verifyResetCode(req.body);
         res.json(response);
     }
 
     // Đổi mật khẩu mới
     static async resetPassword(req, res) {
-        const response = await UserAuthService.resetPassword(req.body);
+        const response = await AuthService.resetPassword(req.body);
         res.json(response);
     }
 }

@@ -13,9 +13,6 @@ const userSchema = mongoose.Schema({
     user_voucher: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Voucher' }],
     user_avatar_url: { type: String },
     user_passwordChangedAt: { type: String },
-    user_verificationEmailToken: { type: String },
-    user_passwordResetToken: { type: String },
-    user_passwordTokenExpires: { type: String },
 }, {
     timestamps: true
 })

@@ -23,10 +23,10 @@ const productSchema = new Schema({
         set: (val) => Math.round(val * 10) / 10  // Làm tròn đánh giá
     },
     product_sold: { type: Number, default: 0 },
-    product_in_stock: { type: Number, default: 0 },
     product_category_id: { type: Schema.Types.ObjectId, ref: "Category", required: true },
     product_brand_id: { type: Schema.Types.ObjectId, ref: "Brand", required: true }, // yêu cầu thương hiệu
     product_views: { type: Number, default: 0 },
+
     product_image_features: { type: Array, default: [] },
     product_isPublished: { type: Boolean, default: true, index: true, select: false },
 }, {

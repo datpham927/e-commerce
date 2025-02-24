@@ -1,23 +1,23 @@
-"use strict"
-const mongoose = require('mongoose'); // Erase if already required
+"use strict";
 
+const mongoose = require("mongoose");
 
-const DOCUMENT_NAME = "cart"
-const COLLECTION_NAME = "carts"
+const DOCUMENT_NAME = "Cart";
+const COLLECTION_NAME = "carts";
 
-const cartSchema = new mongoose.Schema({
-    cart_user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    cart_products: { type: Array, require: true, default: [] },
-    //  {
-    //     productId,
-    //     quantity,
-    //     name
-    //     price
-    //  }
-    cart_count_product: { type: Number, default: 0 }, // số lượng sản phẩm trong giỏ hàng
-}, {
-    timestamp: true,
-});
+const cartSchema = new mongoose.Schema(
+  {
+    cart_user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    cart_products: [
+      {
+        productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
+        quantity: { type: Number, required: true, min: 1 },
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
-//Export the model
-module.exports = mongoose.model(DOCUMENT_NAME, cartSchema);
+module.exports = mongoose.model(DOCUMENT_NAME, cartSchema, COLLECTION_NAME);

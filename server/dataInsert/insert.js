@@ -18,7 +18,6 @@ const data = [Bo_qua_tang,
 ]
 const convertArrToObject = require("../ulits/convertArrToObject")
 const { categories } = require("../ulits/const")
-const autoCode = require("../ulits/autoCode")
 const mobilenet = require("@tensorflow-models/mobilenet");
 const tf = require("@tensorflow/tfjs"); // Sử dụng phiên bản Web
 const sharp = require("sharp");
@@ -101,16 +100,10 @@ const insertProductsData = async (req, res) => {
                                 product_quantity: 1000,
                                 product_attribute: convertArrToObject(item.detail),
                                 product_sold: item.solid ? item.solid.replace(".", "") : 0,
+                                product_views: 10,
+                                product_image_features: featuresArray,
 
-                                // brand_slug: slugify(item.brand),
-                                image_features: featuresArray,
-
-                                views: 10,
-                                old_price: item.oldPrice ? item.oldPrice.replace(".", "") : 150000,
-                                new_price: item.newPrice ? item.newPrice.replace(".", "") : 200000,
                                 category_name,
-                                infoProduct: convertArrToObject(item.detail),
-                                user: user[j % 3],
                             });
                         } catch (error) {
                             errors.push(`Lỗi sản phẩm: ${item.title} - ${error.message}`);

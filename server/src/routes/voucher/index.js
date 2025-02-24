@@ -1,12 +1,10 @@
-"use strict";
-
 const express = require("express");
 const VoucherController = require("../../controllers/voucher.controller");
 const asyncHandle = require("../../helper/asyncHandle");
 
 const router = express.Router();
 
-// Tìm voucher theo tên
+// Tìm kiếm voucher theo tên
 router.get("/search", asyncHandle(VoucherController.searchVoucherByName));
 
 // Thêm mới voucher
@@ -16,12 +14,12 @@ router.post("/add", asyncHandle(VoucherController.createVoucher));
 router.get("/all", asyncHandle(VoucherController.getAllVouchers));
 
 // Lấy chi tiết voucher theo ID
-router.get("/:id", asyncHandle(VoucherController.getVoucherById));
+router.get("/:id/search", asyncHandle(VoucherController.getVoucherById));
 
 // Cập nhật voucher theo ID
-router.put("/:id", asyncHandle(VoucherController.updateVoucher));
+router.put("/:id/update", asyncHandle(VoucherController.updateVoucher));
 
 // Xóa voucher theo ID
-router.delete("/:id", asyncHandle(VoucherController.deleteVoucher));
+router.delete("/:id/delete", asyncHandle(VoucherController.deleteVoucher));
 
 module.exports = router;

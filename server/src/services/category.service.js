@@ -1,15 +1,23 @@
 "use strict";
 
-const { BadRequestRequestError, NotFoundError } = require("../core/error.response");
+const { BadRequestError, NotFoundError } = require("../core/error.response");
 const Category = require("../models/category.model");
 
 class CategoryService {
     // Tạo danh mục mới
     static async createCategory(payload) {
         if (!payload.category_name || !payload.category_thumb) {
-            throw new BadRequestRequestError("Vui lòng cung cấp đầy đủ dữ liệu");
+            throw new BadRequestError("Vui lòng cung cấp đầy đủ dữ liệu");
         }
-        return await Category.create(payload);
+
+        try {
+            // Dùng new Category() thay vì Category.create()
+            const category = new Category(payload);
+            const savedCategory = await category.save();
+            return savedCategory;
+        } catch (error) {
+            throw new BadRequestError(error.message);
+        }
     }
 
     // Lấy tất cả danh mục
@@ -40,6 +48,14 @@ class CategoryService {
         const deletedCategory = await Category.findByIdAndDelete(categoryId);
         if (!deletedCategory) throw new NotFoundError("Không tìm thấy danh mục");
         return deletedCategory;
+    }
+
+    // Tìm kiếm danh mục theo tên
+    static async searchCategoryByName(name) {
+        const categories = await Category.find({
+            category_name: { $regex: name, $options: "i" },
+        });
+        return categories;
     }
 }
 

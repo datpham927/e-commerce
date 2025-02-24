@@ -28,6 +28,11 @@ class ProductController {
         const deletedProduct = await ProductService.deleteProduct(req.params.id);
         res.status(200).json({ success: true, message: "Sản phẩm đã được xóa", data: deletedProduct });
     }
+    static async searchProducts(req, res, next) {
+        const { name } = req.query;
+        const products = await ProductService.searchProductsByName(name);
+        res.status(200).json({ success: true, data: products });
+    }    
 }
 
 module.exports = ProductController;

@@ -1,7 +1,10 @@
 const express = require("express");
-const CategoryController = require("../../controllers/category.controllers");
+const CategoryController = require("../../controllers/category.controller");
 const asyncHandle = require("../../helper/asyncHandle");
 const router = express.Router();
+
+// Tìm kiếm danh mục theo tên
+router.get("/search", asyncHandle(CategoryController.searchCategory));
 
 // Tạo danh mục mới
 router.post("/add", asyncHandle(CategoryController.createCategory));
@@ -10,12 +13,12 @@ router.post("/add", asyncHandle(CategoryController.createCategory));
 router.get("/all", asyncHandle(CategoryController.getAllCategories));
 
 // Lấy danh mục theo ID
-router.get("/:id", asyncHandle(CategoryController.getCategoryById));
+router.get("/search/:id", asyncHandle(CategoryController.getCategoryById));
 
 // Cập nhật danh mục
-router.put("/:id", asyncHandle(CategoryController.updateCategory));
+router.put("/update/:id", asyncHandle(CategoryController.updateCategory));
 
 // Xóa danh mục
-router.delete("/:id", asyncHandle(CategoryController.deleteCategory));
+router.delete("/delete/:id", asyncHandle(CategoryController.deleteCategory));
 
 module.exports = router;

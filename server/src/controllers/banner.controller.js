@@ -28,6 +28,12 @@ class BannerController {
         const deletedBanner = await BannerService.deleteBanner(req.params.id);
         res.status(200).json({ success: true, message: "Banner đã được xóa", data: deletedBanner });
     }
+    //tìm theo tên
+    static async searchBanner(req, res, next) {
+        const banners = await BannerService.searchBannerByName(req.query.name);
+        res.status(200).json({ success: true, data: banners });
+    }
+    
 }
 
 module.exports = BannerController;

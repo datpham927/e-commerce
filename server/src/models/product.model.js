@@ -9,7 +9,9 @@ const productSchema = new Schema({
     product_name: { type: String, required: true },
     product_slug: { type: String, unique: true },
     product_thumb: { type: String, required: true },
+    product_images: { type: String, required: true },
     product_price: { type: Number, required: true },
+    product_discount: { type: Number, default: 0 }, // %
     product_description: { type: String, required: true },
     product_quantity: { type: Number, required: true },
     product_attribute: { type: Schema.Types.Mixed, required: true },
@@ -21,7 +23,6 @@ const productSchema = new Schema({
         set: (val) => Math.round(val * 10) / 10  // Làm tròn đánh giá
     },
     product_sold: { type: Number, default: 0 },
-    product_discount: { type: Number, default: 0 },
     product_in_stock: { type: Number, default: 0 },
     product_category_id: { type: Schema.Types.ObjectId, ref: "Category", required: true },
     product_brand_id: { type: Schema.Types.ObjectId, ref: "Brand", required: true }, // yêu cầu thương hiệu
@@ -79,7 +80,7 @@ productSchema.pre("findOneAndUpdate", async function (next) {
             return next(error); // Nếu tên sản phẩm đã tồn tại, trả về lỗi
         }
     }
-    
+
     next();
 });
 

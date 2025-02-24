@@ -1,9 +1,8 @@
 const express = require("express")
 const router = express.Router()
 
-// router.use("/v1/api/shop", access)
 // ------- auth ----------
-router.use("/v1/api/auth/user", require("./auth/user"))
+router.use("/v1/api/auth", require("./auth/index"))
 
 // ===============================
 

@@ -53,6 +53,24 @@ class UserAuthController {
             message: "Thành công!"
         });
     }
+    
+    // Gửi mã xác nhận quên mật khẩu
+    static async forgotPassword(req, res) {
+        const response = await UserAuthService.forgotPassword(req.body);
+        res.json(response);
+    }
+
+    // Xác nhận mã quên mật khẩu
+    static async verifyResetCode(req, res) {
+        const response = await UserAuthService.verifyResetCode(req.body);
+        res.json(response);
+    }
+
+    // Đổi mật khẩu mới
+    static async resetPassword(req, res) {
+        const response = await UserAuthService.resetPassword(req.body);
+        res.json(response);
+    }
 }
 
 module.exports = UserAuthController;

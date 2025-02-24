@@ -1,42 +1,44 @@
+"use strict";
+
 const ShippingCompanyService = require("../services/shippingCompany.service");
 
-const ShippingCompanyController = {
+class ShippingCompanyController {
     // Thêm công ty vận chuyển mới
-    createShippingCompany: async (req, res) => {
+    static async createShippingCompany(req, res, next) {
         const shippingCompany = await ShippingCompanyService.createShippingCompany(req.body);
         res.status(201).json({ success: true, data: shippingCompany });
-    },
+    }
 
     // Lấy danh sách tất cả công ty vận chuyển
-    getAllShippingCompanies: async (req, res) => {
+    static async getAllShippingCompanies(req, res, next) {
         const shippingCompanies = await ShippingCompanyService.getAllShippingCompanies();
         res.status(200).json({ success: true, data: shippingCompanies });
-    },
+    }
 
     // Lấy chi tiết công ty vận chuyển theo ID
-    getShippingCompanyById: async (req, res) => {
+    static async getShippingCompanyById(req, res, next) {
         const shippingCompany = await ShippingCompanyService.getShippingCompanyById(req.params.id);
         res.status(200).json({ success: true, data: shippingCompany });
-    },
+    }
 
     // Cập nhật công ty vận chuyển theo ID
-    updateShippingCompany: async (req, res) => {
+    static async updateShippingCompany(req, res, next) {
         const updatedShippingCompany = await ShippingCompanyService.updateShippingCompany(req.params.id, req.body);
         res.status(200).json({ success: true, data: updatedShippingCompany });
-    },
+    }
 
     // Xóa công ty vận chuyển theo ID
-    deleteShippingCompany: async (req, res) => {
+    static async deleteShippingCompany(req, res, next) {
         await ShippingCompanyService.deleteShippingCompany(req.params.id);
         res.status(200).json({ success: true, message: "Xóa công ty vận chuyển thành công!" });
-    },
+    }
 
     // Tìm kiếm công ty vận chuyển theo tên
-    searchShippingCompanies: async (req, res) => {
+    static async searchShippingCompanies(req, res, next) {
         const { name } = req.query;
         const companies = await ShippingCompanyService.searchShippingCompaniesByName(name);
         res.status(200).json({ success: true, data: companies });
     }
-};
+}
 
 module.exports = ShippingCompanyController;

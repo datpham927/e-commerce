@@ -14,40 +14,40 @@ const verifyRefreshToken = require("../utils/auth/verifyRefreshToken");
 class UserAuthService {
     // gửi mã xác thực 
     static async sendVerificationEmail({ email }) {
-    if (!email) throw new BadRequestError("Vui lòng cung cấp email");
-    const user = await findUserByEmail(email);
-    if (user) throw new BadRequestError("Tài khoản đã tồn tại", 200);
-    
-    const redisKey = `verify_email:${email}`;
-    const existingData = await redis.hgetall(redisKey);
-    const currentTime = Date.now();
-    
-    if (existingData?.token) {
-        const lastSentAt = parseInt(existingData.lastSentAt || "0", 10);
-        if (currentTime - lastSentAt < 30 * 1000) {
-            throw new BadRequestError("Bạn gửi quá nhanh, vui lòng đợi 30 giây trước khi thử lại.");
+        if (!email) throw new BadRequestError("Vui lòng cung cấp email");
+        const user = await findUserByEmail(email);
+        if (user) throw new BadRequestError("Tài khoản đã tồn tại", 200);
+
+        const redisKey = `verify_email:${email}`;
+        const existingData = await redis.hgetall(redisKey);
+        const currentTime = Date.now();
+
+        if (existingData?.token) {
+            const lastSentAt = parseInt(existingData.lastSentAt || "0", 10);
+            if (currentTime - lastSentAt < 30 * 1000) {
+                throw new BadRequestError("Bạn gửi quá nhanh, vui lòng đợi 30 giây trước khi thử lại.");
+            }
         }
-    }
 
-    // Tạo token mới hoặc cập nhật token
-    const token = randomTokenByCrypto(3);
-    const hashToken = hashTokenByCrypto(token);
-    const expiresAt = existingData?.expiresAt || currentTime + 5 * 60 * 1000; // Giữ nguyên thời gian hết hạn nếu còn hiệu lực
-    const lastSentAt = currentTime; // Cập nhật thời điểm gửi cuối cùng 
-    
-    // Cập nhật lại Redis
-    await redis.hset(redisKey, {
-        token: hashToken,
-        confirmed: "false",
-        expiresAt: expiresAt.toString(),
-        lastSentAt: lastSentAt.toString()
-    });
-    await redis.expire(redisKey, 5 * 60); // Giữ thời gian hết hạn 5 phút
+        // Tạo token mới hoặc cập nhật token
+        const token = randomTokenByCrypto(3);
+        const hashToken = hashTokenByCrypto(token);
+        const expiresAt = existingData?.expiresAt || currentTime + 5 * 60 * 1000; // Giữ nguyên thời gian hết hạn nếu còn hiệu lực
+        const lastSentAt = currentTime; // Cập nhật thời điểm gửi cuối cùng 
 
-    // Gửi email chứa mã xác minh với giao diện đẹp hơn và tự căn chỉnh trên mọi thiết bị
-    await sendMail({
-        email,
-        html: `
+        // Cập nhật lại Redis
+        await redis.hset(redisKey, {
+            token: hashToken,
+            confirmed: "false",
+            expiresAt: expiresAt.toString(),
+            lastSentAt: lastSentAt.toString()
+        });
+        await redis.expire(redisKey, 5 * 60); // Giữ thời gian hết hạn 5 phút
+
+        // Gửi email chứa mã xác minh với giao diện đẹp hơn và tự căn chỉnh trên mọi thiết bị
+        await sendMail({
+            email,
+            html: `
         <div style="background-color: #f4f4f4; padding: 20px; font-family: Arial, sans-serif;">
             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; margin: auto; background: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                 <tr>
@@ -82,11 +82,11 @@ class UserAuthService {
                 </tr>
             </table>
         </div>`,
-        fullName: email.split("@")[0]
-    });
+            fullName: email.split("@")[0]
+        });
 
-    return { success: true, message: "Sent successful" };
-}
+        return { success: true, message: "Sent successful" };
+    }
 
     // thực hiện xác thực 
     static async confirmVerificationEmail({ token, email }) {
@@ -235,10 +235,8 @@ class UserAuthService {
         if (Date.now() > parseInt(existingData.expiresAt, 10)) {
             throw new BadRequestError("Mã xác nhận đã hết hạn", 400);
         }
-
         const hashToken = hashTokenByCrypto(token);
         if (hashToken !== existingData.token) throw new BadRequestError("Mã xác nhận không đúng", 400);
-
         // Xác nhận thành công -> cập nhật trạng thái mã
         await redis.hset(redisKey, "confirmed", "true");
 

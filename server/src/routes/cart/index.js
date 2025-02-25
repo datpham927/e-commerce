@@ -15,7 +15,7 @@ router.post("/add", asyncHandle(CartController.addToCart));
 router.put("/update", asyncHandle(CartController.updateCart));
 
 // Route xóa sản phẩm khỏi giỏ hàng
-router.delete("/", asyncHandle(CartController.removeFromCart));
+router.delete("/remote", asyncHandle(CartController.removeFromCart));
 
 // Route xóa toàn bộ giỏ hàng của người dùng
 router.delete("/clear", asyncHandle(CartController.clearCart));

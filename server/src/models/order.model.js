@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
-    order_user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // order_user: ID của người dùng liên kết với đơn hàng
+    order_user: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true }, // order_user: ID của người dùng liên kết với đơn hàng
     order_products: [
         {
             productId: { type: string, required: true },

@@ -71,6 +71,24 @@ class UserAuthController {
         const response = await AuthService.resetPassword(req.body);
         res.json(response);
     }
+
+    // Đổi mật khẩu
+static async changePassword(req, res) {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+        return res.status(400).json({
+            success: false,
+            message: "Vui lòng cung cấp mật khẩu hiện tại và mật khẩu mới."
+        });
+    }
+
+    // Gọi service để thực hiện đổi mật khẩu
+    const response = await AuthService.changePassword(req.userId, currentPassword, newPassword);
+
+    res.status(200).json(response);
+}
+
 }
 
 module.exports = UserAuthController;

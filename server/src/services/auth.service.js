@@ -262,6 +262,36 @@ class UserAuthService {
 
         return { success: true, message: "Mật khẩu đã được đặt lại thành công" };
     }
+    //đổi mk khi đã đăng nhập
+    static async changePassword(userId, currentPassword, newPassword) {
+        const user = await userModel.findById(userId);
+        if (!user) throw new BadRequestError("Người dùng không tồn tại");
+
+        // Kiểm tra mật khẩu hiện tại
+        const matchPassword = bcrypt.compareSync(currentPassword, user.user_password);
+        if (!matchPassword) throw new BadRequestError("Mật khẩu hiện tại không đúng");
+
+        // Kiểm tra mật khẩu mới có giống với mật khẩu cũ không
+        const isSameAsOldPassword = bcrypt.compareSync(newPassword, user.user_password);
+        if (isSameAsOldPassword) {
+            throw new BadRequestError("Mật khẩu mới không thể giống mật khẩu cũ");
+        }
+
+        // Mã hóa mật khẩu mới và cập nhật vào cơ sở dữ liệu
+        const newPasswordHash = await bcrypt.hash(newPassword, 10);
+        user.user_password = newPasswordHash;
+
+        // Cập nhật thời gian thay đổi mật khẩu
+        user.user_passwordChangedAt = new Date().toISOString();
+
+        await user.save();
+
+        return {
+            success: true,
+            message: "Mật khẩu đã được thay đổi thành công"
+        };
+    }
+    
 }
 
 module.exports = UserAuthService;

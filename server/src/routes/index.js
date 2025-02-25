@@ -13,6 +13,7 @@ router.use("/v1/api/banner", require("./banner/index"))
 router.use("/v1/api/cart", require("./cart/index"))
 router.use("/v1/api/shippingCompany", require("./shippingCompany/index"))
 router.use("/v1/api/voucher", require("./voucher/index"))
+router.use("/v1/api/favorite", require("./favoriteProduct/index"));
 // router.use("/v1/api/cart", require("./cart/index"))
 // router.use("/v1/api/checkout", require("./checkout/index"))
 // router.use("/v1/api/inventory", require("./inventory/index"))

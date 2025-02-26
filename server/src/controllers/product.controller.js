@@ -32,7 +32,16 @@ class ProductController {
         const { name } = req.query;
         const products = await ProductService.searchProductsByName(name);
         res.status(200).json({ success: true, data: products });
-    }    
+    }
+    static async getAllProducts(req, res, next) {
+        const { limit, page } = req.query;
+        const products = await ProductService.getAllProducts({
+            limit: Number(limit) || 10,
+            page: Number(page) || 1,
+        });
+        res.status(200).json({ success: true, data: products });
+    }
+        
 }
 
 module.exports = ProductController;

@@ -1,31 +1,24 @@
-const JWT = require("jsonwebtoken");
-const asyncHandle = require("../helper/asyncHandle");
-const { ErrorResponse } = require("../core/error.response");
-const verifyAccessToken = require("../utils/auth/verifyAccessToken");
-const { findUserById } = require("../models/repositories/user.repo");
-
-const HEADER = {
-    AUTHORIZATION: "authorization",
-}
-
-const authentication = asyncHandle(async (req, res, next) => {
-    const authorizationHeader = req.headers[HEADER.AUTHORIZATION]
+const authenticationUser = (req, res, next) => {
+    const authorizationHeader = req.headers['authorization']; // Lấy header authorization
     if (authorizationHeader) {
-        const accessToken = authorizationHeader.split(' ')[1];
-        // Giải mã access token sử dụng chữ ký được chia sẻ giữa máy chủ và client
-        const decodedToken = verifyAccessToken(accessToken);
-        // Tìm kiếm user liên quan đến access token
-        const user = await findUserById(decodedToken._id)
-        if (!user) throw new ErrorResponse("invalid user", 201)
-        // Lưu thông tin user vào request object để sử dụng cho các request handlers sau này
-        req.userId = user._id;
-        next(); // Cho phép request đi tiếp
+        const accessToken = authorizationHeader.split(' ')[1]; // Tách access token ra
+        try {
+            // Giải mã access token và kiểm tra token hợp lệ
+            const decodedToken = verifyAccessToken(accessToken); // Giả sử verifyAccessToken là hàm của bạn
+            req.userId = decodedToken._id; // Lưu thông tin userId vào req
+            next(); // Tiếp tục với request
+        } catch (err) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid or expired token"
+            });
+        }
     } else {
         return res.status(401).json({
             success: false,
-            message: "Require authentication"
+            message: "Authorization header missing"
         });
     }
-});
+};
 
-module.exports = authentication;
+module.exports = authenticationUser;

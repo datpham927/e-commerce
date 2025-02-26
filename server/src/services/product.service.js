@@ -2,25 +2,43 @@
 
 const { BadRequestError, NotFoundError } = require("../core/error.response");
 const Product = require("../models/product.model");
+const Notification = require("../models/notification.model");
 
 class ProductService {
     // Tạo sản phẩm mới
     static async createProduct(payload) {
         if (Object.keys(payload).length === 0) {
-            throw new BadRequestError("Vui lòng cung cấp dữ liệu sản phẩm");
+          throw new BadRequestError("Vui lòng cung cấp dữ liệu sản phẩm");
         }
-        return await Product.create(payload);
-    }
+    
+        const product = await Product.create(payload);
+    
+        // Gửi thông báo đến tất cả người dùng
+        await Notification.create({
+          notification_user: "all", 
+          notification_title: "🆕 Sản phẩm mới vừa ra mắt!",
+          notification_subtitle: `Khám phá ngay: ${payload.product_name}`,
+          notification_imageUrl: payload.product_thumb, 
+          notification_link: `/products/${product._id}`,
+          notification_isWatched: false,
+        });
+    
+        return product;
+      }
 
-    // Lấy tất cả sản phẩm (hỗ trợ phân trang)
-    static async getAllProducts({ limit = 10, page = 1 }) {
-        const products = await Product.find()
-            .limit(limit)
-            .skip((page - 1) * limit)
-            .exec();
+      // Thêm vào ProductService
+static async getAllProducts({ limit = 10, page = 1 }) {
+  const skip = (page - 1) * limit;
+  const products = await Product.find().skip(skip).limit(limit);
+  const totalProducts = await Product.countDocuments();
 
-        return products;
-    }
+  return {
+      products,
+      totalPages: Math.ceil(totalProducts / limit),
+      currentPage: page,
+  };
+}
+
 
     // Lấy sản phẩm theo ID
     static async getProductById(productId) {

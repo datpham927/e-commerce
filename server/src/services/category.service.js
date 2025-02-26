@@ -22,7 +22,7 @@ class CategoryService {
 
     // Lấy tất cả danh mục
     static async getAllCategories() {
-        return await Category.find({});
+        return await Category.find();
     }
 
     // Lấy danh mục theo ID

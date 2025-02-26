@@ -20,6 +20,7 @@ app.use(bodyParser.json());
 require("./dbs/init.mongodb")
 //init routes
 app.use("/", require("./routes"))
+
 //handle error
 app.use((req, res, next) => {
     const error = new Error("Not Found")

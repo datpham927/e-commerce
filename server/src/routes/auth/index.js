@@ -17,8 +17,7 @@ router.post("/email/send-forgot-password", asyncHandle(AuthController.forgotPass
 router.post("/verify-reset-password", asyncHandle(AuthController.verifyResetCode)); // Xác nhận mã
 router.post("/reset-password", asyncHandle(AuthController.resetPassword)); // Đổi mật khẩu
 
-// Yêu cầu authentication mới có thể logout
-router.use(authentication);
-router.post("/logout", asyncHandle(AuthController.userLogout));
+// Yêu cầu authentication mới có thể logout 
+router.post("/logout", [authentication], asyncHandle(AuthController.userLogout));
 
 module.exports = router;

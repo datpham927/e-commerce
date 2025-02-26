@@ -9,7 +9,7 @@ const productSchema = new Schema({
     product_name: { type: String, required: true },
     product_slug: { type: String, unique: true },
     product_thumb: { type: String, required: true },
-    product_images: { type: String, required: true },
+    product_images: { type: Array, required: true },
     product_price: { type: Number, required: true },
     product_discount: { type: Number, default: 0 }, // %
     product_description: { type: String, required: true },
@@ -26,7 +26,6 @@ const productSchema = new Schema({
     product_category_id: { type: Schema.Types.ObjectId, ref: "Category", required: true },
     product_brand_id: { type: Schema.Types.ObjectId, ref: "Brand", required: true }, // yêu cầu thương hiệu
     product_views: { type: Number, default: 0 },
-
     product_image_features: { type: Array, default: [] },
     product_isPublished: { type: Boolean, default: true, index: true, select: false },
 }, {

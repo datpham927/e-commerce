@@ -1,7 +1,6 @@
 "use strict";
 
 const CategoryService = require("../services/category.service");
-
 class CategoryController {
     static async createCategory(req, res, next) {
         const category = await CategoryService.createCategory(req.body);
@@ -32,7 +31,7 @@ class CategoryController {
         const categories = await CategoryService.searchCategoryByName(req.query.name);
         res.status(200).json({ success: true, data: categories });
     }
-    
+
 }
 
 module.exports = CategoryController;

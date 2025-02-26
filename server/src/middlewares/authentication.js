@@ -1,17 +1,15 @@
-const JWT = require("jsonwebtoken");
+
 const asyncHandle = require("../helper/asyncHandle");
 const { ErrorResponse } = require("../core/error.response");
-const verifyAccessToken = require("../utils/auth/verifyAccessToken");
 const { findUserById } = require("../models/repositories/user.repo");
-
+const verifyAccessToken = require('../utils/auth/verifyAccessToken')
 const HEADER = {
     AUTHORIZATION: "authorization",
 }
 
 const authentication = asyncHandle(async (req, res, next) => {
-    const authorizationHeader = req.headers[HEADER.AUTHORIZATION]
-    if (authorizationHeader) {
-        const accessToken = authorizationHeader.split(' ')[1];
+    const accessToken = req.headers[HEADER.AUTHORIZATION]
+    if (accessToken) {
         // Giải mã access token sử dụng chữ ký được chia sẻ giữa máy chủ và client
         const decodedToken = verifyAccessToken(accessToken);
         // Tìm kiếm user liên quan đến access token

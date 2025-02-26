@@ -1,7 +1,5 @@
 "use strict";
-
 const BrandService = require("../services/brand.service");
-
 class BrandController {
     // Thêm thương hiệu mới
     static async createBrand(req, res, next) {
@@ -38,6 +36,7 @@ class BrandController {
         const brands = await BrandService.searchBrandByName(req.query.name);
         res.status(200).json({ success: true, data: brands });
     }
+
 }
 
 module.exports = BrandController;

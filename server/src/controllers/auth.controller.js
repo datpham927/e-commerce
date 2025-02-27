@@ -2,7 +2,7 @@
 
 const AuthService = require("../services/auth.service");
 
-class UserAuthController {
+class AuthController {
     // Gửi token xác nhận email
     static async sendVerificationEmail(req, res) {
         await AuthService.sendVerificationEmail(req.body);
@@ -91,4 +91,4 @@ class UserAuthController {
 
 }
 
-module.exports = UserAuthController;
+module.exports = AuthController;

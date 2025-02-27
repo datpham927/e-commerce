@@ -13,6 +13,7 @@ const userSchema = mongoose.Schema({
     user_voucher: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Voucher' }],
     user_avatar_url: { type: String },
     user_passwordChangedAt: { type: Date },
+    user_isBlocked: { type: Boolean, default: false, default: false }
 }, {
     timestamps: true
 })

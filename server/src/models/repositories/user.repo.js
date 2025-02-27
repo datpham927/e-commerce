@@ -8,4 +8,8 @@ const findUserByEmail = async (email) => {
 const findUserById = async (id) => {
     return await User.findById(convertToObjectIdMongodb(id)).lean()
 }
-module.exports = { findUserByEmail, findUserById }
+
+const updateUserById = async (id, payload) => {
+    return await User.findByIdAndUpdate(id, payload, { new: isNew })
+}
+module.exports = { findUserByEmail, findUserById, updateUserById }

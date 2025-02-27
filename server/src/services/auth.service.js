@@ -11,7 +11,7 @@ const userModel = require("../models/user.model");
 const createTokenPairs = require("../utils/auth/createTokenPairs");
 const verifyRefreshToken = require("../utils/auth/verifyRefreshToken");
 
-class UserAuthService {
+class AuthService {
     // gửi mã xác thực 
     static async sendVerificationEmail({ email }) {
         if (!email) throw new BadRequestError("Vui lòng cung cấp email");
@@ -291,7 +291,7 @@ class UserAuthService {
             message: "Mật khẩu đã được thay đổi thành công"
         };
     }
-    
+
 }
 
-module.exports = UserAuthService;
+module.exports = AuthService;

@@ -1,7 +1,6 @@
 "use strict";
 
 const Voucher = require("../models/voucher.model");
-const Notification = require("../models/notification.model");
 
 const { BadRequestError, NotFoundError } = require("../core/error.response");
 
@@ -22,17 +21,7 @@ class VoucherService {
     ) {
       throw new BadRequestError("Thiếu thông tin bắt buộc!");
     }
-
     const voucher = await Voucher.create(payload);
-
-    // Gửi thông báo đến tất cả người dùng
-    await Notification.create({
-      notification_user: "all", 
-      notification_title: "🎉 Voucher mới đã được thêm!",
-      notification_subtitle: `Nhận ngay ưu đãi: ${payload.voucher_name}`,
-      notification_link: "/vouchers",
-      notification_isWatched: false,
-    });
 
     return voucher;
   }

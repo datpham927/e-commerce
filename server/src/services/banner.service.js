@@ -47,7 +47,7 @@ class BannerService {
         const banners = await Banner.find({ banner_title: { $regex: name, $options: "i" } });
         return banners;
     }
-    
+
 }
 
 

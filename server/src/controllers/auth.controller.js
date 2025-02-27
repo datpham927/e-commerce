@@ -73,21 +73,21 @@ class UserAuthController {
     }
 
     // Đổi mật khẩu
-static async changePassword(req, res) {
-    const { currentPassword, newPassword } = req.body;
+    static async changePassword(req, res) {
+        const { currentPassword, newPassword } = req.body;
 
-    if (!currentPassword || !newPassword) {
-        return res.status(400).json({
-            success: false,
-            message: "Vui lòng cung cấp mật khẩu hiện tại và mật khẩu mới."
-        });
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({
+                success: false,
+                message: "Vui lòng cung cấp mật khẩu hiện tại và mật khẩu mới."
+            });
+        }
+
+        // Gọi service để thực hiện đổi mật khẩu
+        const response = await AuthService.changePassword(req.user._id, currentPassword, newPassword);
+
+        res.status(200).json(response);
     }
-
-    // Gọi service để thực hiện đổi mật khẩu
-    const response = await AuthService.changePassword(req.userId, currentPassword, newPassword);
-
-    res.status(200).json(response);
-}
 
 }
 

@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 
 const notificationSchema = new Schema(
   {
-    notification_user: { type: String, required: true }, // 'all' hoặc userId
+    notification_user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // User nhận thông báo
     notification_userName: { type: String }, // Tên người dùng nếu có
     notification_title: { type: String, required: true }, // Tiêu đề
     notification_subtitle: { type: String, required: true }, // Mô tả ngắn

@@ -1,7 +1,8 @@
 const express = require("express");
 const SupplierController = require("../../controllers/supplier.controller");
 const asyncHandle = require("../../helper/asyncHandle");
-const authentication = require("../../middlewares/authentication");
+const { authentication } = require("../../middlewares/authMiddleware");
+
 
 const router = express.Router();
 

@@ -1,0 +1,77 @@
+[
+    {
+        "brand_name": "Burger King",
+        "brand_thumb": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Burger_King_logo.svg",
+        "brand_banner_image": "https://www.bk.com/sites/default/files/2023-01/homepage_promo_hero-1440x600.jpg"
+    },
+    {
+        "brand_name": "Starbucks",
+        "brand_thumb": "https://upload.wikimedia.org/wikipedia/commons/4/45/Starbucks_Corporation_Logo_2011.svg",
+        "brand_banner_image": "https://www.starbucks.com/we-are-starbucks.webp"
+    },
+    {
+        "brand_name": "Heinz",
+        "brand_thumb": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Heinz_Logo.svg",
+        "brand_banner_image": "https://www.heinz.com/content/dam/heinz/hero/heinz-homepage-hero.jpg"
+    },
+    {
+        "brand_name": "Oreo",
+        "brand_thumb": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Oreo_logo.svg",
+        "brand_banner_image": "https://www.snackworks.com/images/brands/oreo.jpg"
+    },
+    {
+        "brand_name": "Lay's",
+        "brand_thumb": "https://upload.wikimedia.org/wikipedia/commons/6/69/Lay%27s_logo.svg",
+        "brand_banner_image": "https://www.pepsico.com/images/default-source/newsroom/image/lays-global-brand-redesign.jpg"
+    },
+    {
+        "brand_name": "Subway",
+        "brand_thumb": "https://upload.wikimedia.org/wikipedia/commons/7/78/Subway_Restaurant_logo.svg",
+        "brand_banner_image": "https://www.subway.com/en-us/-/media/USA/HeaderImages/Subway_Logo_OG.jpg"
+    },
+    {
+        "brand_name": "Domino's Pizza",
+        "brand_thumb": "https://upload.wikimedia.org/wikipedia/commons/7/74/Domino%27s_pizza_logo.svg",
+        "brand_banner_image": "https://www.dominos.com/assets/201901/images/dominos_logo.png"
+    },
+    {
+        "brand_name": "Papa John's",
+        "brand_thumb": "https://upload.wikimedia.org/wikipedia/commons/2/28/Papa_John%27s_logo.svg",
+        "brand_banner_image": "https://www.papajohns.com/assets/images/hero.jpg"
+    },
+    {
+        "brand_name": "Dunkin' Donuts",
+        "brand_thumb": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Dunkin%27_logo.svg",
+        "brand_banner_image": "https://www.dunkindonuts.com/content/dam/dd/img/homepage_hero.jpg"
+    },
+    {
+        "brand_name": "Taco Bell",
+        "brand_thumb": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Taco_Bell_logo.svg",
+        "brand_banner_image": "https://www.tacobell.com/assets/images/hero.jpg"
+    },
+    {
+        "brand_name": "Pringles",
+        "brand_thumb": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Pringles_logo.svg",
+        "brand_banner_image": "https://www.pringles.com/content/dam/global/pringles/images/header.jpg"
+    },
+    {
+        "brand_name": "Nutella",
+        "brand_thumb": "https://upload.wikimedia.org/wikipedia/commons/6/63/Nutella_logo.svg",
+        "brand_banner_image": "https://www.ferrero.com/sites/default/files/styles/header/public/images/news/Nutella-Header.jpg"
+    },
+    {
+        "brand_name": "Red Bull",
+        "brand_thumb": "https://upload.wikimedia.org/wikipedia/en/8/88/Red_Bull_logo.svg",
+        "brand_banner_image": "https://www.redbull.com/assets/media/redbull_home_hero.jpg"
+    },
+    {
+        "brand_name": "Ben & Jerry's",
+        "brand_thumb": "https://upload.wikimedia.org/wikipedia/en/6/64/Ben_%26_Jerry%27s_logo.svg",
+        "brand_banner_image": "https://www.benjerry.com/assets/media/homepage_hero.jpg"
+    },
+    {
+        "brand_name": "Hershey's",
+        "brand_thumb": "https://upload.wikimedia.org/wikipedia/commons/e/e3/The_Hershey_Company_logo.svg",
+        "brand_banner_image": "https://www.thehersheycompany.com/content/dam/hershey/hershey_home_hero.jpg"
+    }
+]

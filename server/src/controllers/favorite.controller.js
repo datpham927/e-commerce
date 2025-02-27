@@ -6,7 +6,7 @@ class FavoriteProductController {
     // Thêm hoặc xóa sản phẩm khỏi danh sách yêu thích
     static async toggleFavoriteProduct(req, res, next) {
         try {
-            const userId = req.userId; // Lấy từ middleware auth
+            const userId = req.user._id; // Lấy từ middleware auth
             const { productId } = req.body;
 
             const result = await FavoriteProductService.toggleFavoriteProduct(userId, productId);
@@ -19,7 +19,7 @@ class FavoriteProductController {
     // Lấy danh sách yêu thích của user
     static async getUserFavoriteProducts(req, res, next) {
         try {
-            const userId = req.userId;
+            const userId = req.user._id;
             const favorites = await FavoriteProductService.getUserFavoriteProducts(userId);
             res.status(200).json({ success: true, data: favorites });
         } catch (error) {

@@ -9,7 +9,7 @@ class CartController {
       const { productId, quantity } = req.body;
       if (!productId || !quantity) throw new BadRequestError("Thiếu thông tin sản phẩm.");
 
-      const cart = await CartService.addToCart(req.userId, productId, quantity);
+      const cart = await CartService.addToCart(req.user._id, productId, quantity);
       res.status(201).json({ success: true, data: cart });
     } catch (error) {
       next(error);
@@ -18,7 +18,7 @@ class CartController {
 
   static async getCartByUserId(req, res, next) {
     try {
-      const cart = await CartService.getCartByUserId(req.userId);
+      const cart = await CartService.getCartByUserId(req.user._id);
       res.status(200).json({ success: true, data: cart });
     } catch (error) {
       next(error);
@@ -30,7 +30,7 @@ class CartController {
       const { productId, quantity } = req.body;
       if (!productId || quantity <= 0) throw new BadRequestError("Thông tin không hợp lệ.");
 
-      const cart = await CartService.updateCart(req.userId, productId, quantity);
+      const cart = await CartService.updateCart(req.user._id, productId, quantity);
       res.status(200).json({ success: true, data: cart });
     } catch (error) {
       next(error);
@@ -42,7 +42,7 @@ class CartController {
       const { productId } = req.body;
       if (!productId) throw new BadRequestError("Thiếu thông tin sản phẩm.");
 
-      const cart = await CartService.removeFromCart(req.userId, productId);
+      const cart = await CartService.removeFromCart(req.user._id, productId);
       res.status(200).json({ success: true, data: cart });
     } catch (error) {
       next(error);
@@ -51,7 +51,7 @@ class CartController {
 
   static async clearCart(req, res, next) {
     try {
-      const response = await CartService.clearCart(req.userId);
+      const response = await CartService.clearCart(req.user._id);
       res.status(200).json({ success: true, message: response.message });
     } catch (error) {
       next(error);

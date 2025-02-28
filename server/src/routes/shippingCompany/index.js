@@ -2,7 +2,7 @@ const express = require("express");
 const ShippingCompanyController = require("../../controllers/shippingCompany.controller");
 const asyncHandle = require("../../helper/asyncHandle");
 const PERMISSIONS = require("../../config/permissions");
-const { authentication } = require("../../middlewares/authMiddleware");
+const { authentication, restrictTo } = require("../../middlewares/authMiddleware");
 
 const router = express.Router();
 

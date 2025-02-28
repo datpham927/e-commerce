@@ -3,6 +3,8 @@ const ShippingCompanyController = require("../../controllers/shippingCompany.con
 const asyncHandle = require("../../helper/asyncHandle");
 const PERMISSIONS = require("../../config/permissions");
 const { authentication } = require("../../middlewares/authMiddleware");
+const { restrictTo } = require('../../middlewares/authMiddleware'); // hoặc đường dẫn đúng
+
 
 const router = express.Router();
 

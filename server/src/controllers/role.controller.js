@@ -13,7 +13,7 @@ class RoleController {
     }
   }
 
-  // Lấy danh sách vai trò
+  // Lấy danh sách vai trò (có phân trang)
   static async getAllRoles(req, res, next) {
     try {
       const { limit, page } = req.query;
@@ -49,6 +49,17 @@ class RoleController {
     try {
       await RoleService.deleteRole(req.params.id);
       res.status(200).json({ message: "Xóa vai trò thành công" });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // Lấy vai trò theo tên
+  static async getRoleByName(req, res, next) {
+    try {
+      const { name } = req.query;
+      const role = await RoleService.getRoleByName(name);
+      res.json(role);
     } catch (error) {
       next(error);
     }

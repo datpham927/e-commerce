@@ -3,42 +3,55 @@
 const { BadRequestError } = require("../core/error.response");
 const bcrypt = require("bcrypt");
 const userModel = require("../models/user.model");
+const RoleModel = require("../models/role.model");
 
 class UserService {
     static async addUser(payload) {
-        const { user_name, user_email, user_password, user_mobile, user_type } = payload;
-
+        const { user_name, user_email, user_password, user_mobile, user_type, user_role } = payload;
+    
         if (!user_name || !user_email || !user_password || !user_mobile || !user_type) {
             throw new BadRequestError("Thiếu thông tin bắt buộc!", 400);
         }
-
+    
         // Kiểm tra email đã tồn tại chưa
         const existingUser = await userModel.findOne({ user_email });
         if (existingUser) {
             throw new BadRequestError("Email đã tồn tại!", 400);
         }
-
+    
         // Kiểm tra số điện thoại đã tồn tại chưa
         const existingMobile = await userModel.findOne({ user_mobile });
         if (existingMobile) {
             throw new BadRequestError("Số điện thoại đã tồn tại!", 400);
         }
-
+    
+        // Kiểm tra Role có tồn tại không
+        let roles = [];
+        if (user_role) {
+            const role = await RoleModel.findById(user_role);
+            if (!role) {
+                throw new BadRequestError("Role không hợp lệ!", 400);
+            }
+            roles.push(user_role); // Thêm ID role vào mảng user_roles
+        }
+    
         // Mã hóa mật khẩu
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(user_password, salt);
-
+    
         // Tạo user mới
         const newUser = new userModel({
             user_name,
             user_email,
             user_password: hashedPassword,
             user_mobile,
-            user_type
+            user_type,
+            user_roles: roles  // Gán danh sách roles
         });
-
+    
         return await newUser.save();
     }
+    
 
     static async updateUser(uid, payload) {
         const { user_email, user_password, user_mobile, ...dataUser } = payload;
@@ -91,6 +104,12 @@ class UserService {
         await user.save();
         return isBlocked ? "Đã chặn người dùng thành công!" : "Đã mở chặn người dùng!";
     }
+    //tất cả tk
+    static async getAllUsers() {
+        const users = await userModel.find({}, "-user_password"); // Ẩn mật khẩu
+        return users;
+    }
+    
 }
 
 module.exports = UserService;

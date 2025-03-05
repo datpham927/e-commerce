@@ -73,10 +73,9 @@ class ProductService {
     const pageNum = parseInt(page, 10); // Mặc định page = 0
     const skipNum = pageNum * limitNum;
     // 6. Tạo và thực thi truy vấn
-    const products = await Product
+    const products = await Product 
       .find(searchFilter, { product_isPublished: true })
-      .select("_id product_thumb product_name product_slug product_ratings product_sold product_price product_discount")
-      // .sort(sort ? sort.replace(/,/g, " ") : "-createdAt")
+      .select("_id product_thumb product_name product_slug product_ratings product_sold product_price product_discount")  
       .skip(skipNum)
       .limit(limitNum).lean()
     const totalProducts = await Product.countDocuments(searchFilter);

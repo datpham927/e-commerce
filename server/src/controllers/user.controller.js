@@ -3,7 +3,6 @@
 const UserService = require("../services/user.service");
 
 class AuthController {
-    // Gửi token xác nhận email
     static async addUser(req, res) {
         res.status(200).json({
             success: true,

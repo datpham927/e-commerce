@@ -20,7 +20,6 @@ router.post("/reset-password", asyncHandle(AuthController.resetPassword)); // Đ
 // Yêu cầu authentication mới có thể logout
 router.use(authentication);
 router.post("/logout", asyncHandle(AuthController.userLogout));
-// Đổi mật khẩu (API yêu cầu người dùng đã đăng nhập)
 router.put("/change-password", asyncHandle(AuthController.changePassword));
 
 

@@ -4,12 +4,14 @@ const asyncHandle = require("../../helper/asyncHandle");
 const { authentication, restrictTo } = require("../../middlewares/authMiddleware");
 const PERMISSIONS = require("../../config/permissions");
 
-const router = express.Router();
+const router = express.Router(); 
 // Lấy danh sách tất cả thương hiệu
 router.get("/all", asyncHandle(BrandController.getAllBrands));
-router.get("/:cid/by-category", asyncHandle(BrandController.getBrandsInCategory));
+router.get("/:cid/by-category", asyncHandle(BrandController.getBrandsInCategory)); 
 router.use(authentication)
 router.use(restrictTo(PERMISSIONS.BRAND_MANAGE))
+// Lấy danh sách tất cả thương hiệu
+router.get("/all", asyncHandle(BrandController.getAllBrands));
 // Tìm kiếm thương hiệu theo tên
 router.get("/search", asyncHandle(BrandController.searchBrand));
 // Thêm mới thương hiệu

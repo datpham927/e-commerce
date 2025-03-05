@@ -2,6 +2,8 @@
 
 const { BadRequestError, NotFoundError } = require("../core/error.response");
 const Supplier = require("../models/supplier.model");
+const Product = require("../models/product.model");
+const ImportHistory = require("../models/ImportHistory");
 
 class SupplierService {
   // Thêm nhà cung cấp mới
@@ -51,6 +53,34 @@ class SupplierService {
 
     return { message: "Nhà cung cấp đã được xóa thành công." };
   }
+  static async restockProducts(supplierId, products) {
+    const supplier = await Supplier.findById(supplierId);
+    if (!supplier) throw new Error("Nhà cung cấp không tồn tại");
+
+    for (const { productId, quantity } of products) {
+        const product = await Product.findById(productId);
+        if (!product) throw new Error(`Không tìm thấy sản phẩm có ID: ${productId}`);
+
+        product.product_stock += quantity; // Cập nhật kho hàng
+        await product.save();
+
+        // Lưu lịch sử nhập hàng
+        await ImportHistory.create({ supplier_id: supplierId, product_id: productId, quantity });
+    }
+
+    return { message: "Nhập hàng thành công, tồn kho đã được cập nhật!" };
+}
+static async getImportHistory(req, res) {
+  try {
+      const history = await ImportHistory.find()
+          .populate("supplier_id", "supplier_name")
+          .populate("product_id", "product_name");
+
+      return res.status(200).json(history);
+  } catch (error) {
+      return res.status(500).json({ error: error.message });
+  }
+}
 }
 
 module.exports = SupplierService;

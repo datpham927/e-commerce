@@ -5,10 +5,11 @@ const { authentication, restrictTo } = require("../../middlewares/authMiddleware
 const PERMISSIONS = require("../../config/permissions");
 
 const router = express.Router();
-// Lấy danh sách tất cả thương hiệu
-router.get("/all", asyncHandle(BrandController.getAllBrands));
+
 router.use(authentication)
 router.use(restrictTo(PERMISSIONS.BRAND_MANAGE))
+// Lấy danh sách tất cả thương hiệu
+router.get("/all", asyncHandle(BrandController.getAllBrands));
 // Tìm kiếm thương hiệu theo tên
 router.get("/search", asyncHandle(BrandController.searchBrand));
 // Thêm mới thương hiệu

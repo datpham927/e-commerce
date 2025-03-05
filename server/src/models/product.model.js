@@ -9,7 +9,7 @@ const productSchema = new Schema({
     product_name: { type: String, required: true },
     product_slug: { type: String, unique: true },
     product_thumb: { type: String, required: true },
-    product_images: { type: String, required: true },
+    product_images: [{ type: String, required: true }],
     product_price: { type: Number, required: true },
     product_discount: { type: Number, default: 0 }, // %
     product_description: { type: String, required: true },
@@ -28,6 +28,7 @@ const productSchema = new Schema({
     product_views: { type: Number, default: 0 },
     product_image_features: { type: Array, default: [] },
     product_isPublished: { type: Boolean, default: true, index: true, select: false },
+    product_stock: { type: Number, required: true, default: 0 }, // Số lượng hàng tồn kho
 }, {
     timestamps: true
 });

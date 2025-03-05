@@ -56,7 +56,7 @@ class ProductService {
     // 6. Tạo và thực thi truy vấn
     const products = await Product
       .find(searchFilter)
-      .select("_id product_thumb product_name product_slug product_ratings product_sold product_price product_discount")
+      .select("_id product_thumb product_name product_slug product_ratings product_sold product_price product_discount product_stock")
       // .sort(sort ? sort.replace(/,/g, " ") : "-createdAt")
       .skip(skipNum)
       .limit(limitNum).lean()

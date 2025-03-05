@@ -6,6 +6,9 @@ const { authentication } = require("../../middlewares/authMiddleware");
 
 const router = express.Router();
 
+// API lấy lịch sử nhập hàng
+router.get("/import-history", SupplierController.getImportHistory);
+
 // Áp dụng middleware authentication
 router.use(authentication);
 
@@ -23,5 +26,9 @@ router.put("/update/:id", asyncHandle(SupplierController.updateSupplier));
 
 // Route xóa nhà cung cấp
 router.delete("/delete/:id", asyncHandle(SupplierController.deleteSupplier));
+
+// API nhập hàng
+router.post("/restock", SupplierController.restock);
+
 
 module.exports = router;

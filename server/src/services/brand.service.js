@@ -2,6 +2,7 @@
 
 const { BadRequestError, NotFoundError } = require("../core/error.response");
 const Brand = require("../models/brand.model");
+const Product = require("../models/product.model");
 
 class BrandService {
   // Tạo thương hiệu mới
@@ -42,6 +43,23 @@ class BrandService {
   static async searchBrandByName(name) {
     return await Brand.find({ brand_name: { $regex: name, $options: "i" } });
   }
+  static async getBrandsInCategory(categoryId) {
+    // Sử dụng phương thức distinct để lấy các thương hiệu duy nhất
+    const brandIds = await Product.distinct('product_brand_id', {
+      product_category_id: categoryId,
+      product_isPublished: true
+    });
+    // Populate thông tin chi tiết của các thương hiệu
+    const brands = await Brand.find({
+      _id: { $in: brandIds }
+    }).select('_id brand_name brand_slug');
+
+    return brands;
+
+  }
+
+
+
 }
 
 module.exports = BrandService;

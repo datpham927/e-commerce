@@ -2,7 +2,6 @@
 
 const { BadRequestError, NotFoundError } = require("../core/error.response");
 const Product = require("../models/product.model");
-const { searchProductByUser } = require("../models/repositories/product.repo");
 
 class ProductService {
   // Tạo sản phẩm mới
@@ -18,14 +17,12 @@ class ProductService {
     if (!product) throw new NotFoundError("Không tìm thấy sản phẩm");
     return product;
   }
-
   // Cập nhật sản phẩm
   static async updateProduct(productId, updateData) {
     const updatedProduct = await Product.findByIdAndUpdate(productId, updateData, { new: true });
     if (!updatedProduct) throw new NotFoundError("Không tìm thấy sản phẩm để cập nhật");
     return updatedProduct;
   }
-
   // Xóa sản phẩm
   static async deleteProduct(productId) {
     const deletedProduct = await Product.findByIdAndDelete(productId);
@@ -33,8 +30,28 @@ class ProductService {
     return deletedProduct;
   }
   // Tìm kiếm sản phẩm theo tên
-  static searchProductsByUser = async ({ keySearch }) => {
-    return await searchProductByUser({ keySearch })
+  static searchProductsByUser = async ({ keySearch, limit, page }) => {
+    //RegExp Biểu thức chính quy được sử dụng để tìm kiếm và so khớp các chuỗi dựa trên một mẫu cụ thể.
+    const regexSearch = new RegExp(keySearch)
+    // full test search
+    const limitNum = parseInt(limit, 10); // Mặc định limit = 10
+    const pageNum = parseInt(page, 10); // Mặc định page = 0
+    const skipNum = pageNum * limitNum;
+    const products = await productModel.find({ $text: { $search: regexSearch } },
+      { score: { $meta: "textScore" } }, { product_isPublished: true })
+      // tài liệu phù hợp nhất sẽ xuất hiện ở đầu kết quả
+      .sort({ score: { $meta: "textScore" } })
+      .select("_id product_thumb product_name product_slug product_ratings product_sold product_price product_discount")
+      .skip(skipNum)
+      .limit(limitNum).lean()
+    const totalProducts = await Product.countDocuments(searchFilter);
+    // 7. Trả về kết quả
+    return {
+      totalPage: Math.ceil(totalProducts / limitNum) - 1, // Tổng số trang (0-based)
+      currentPage: pageNum,
+      totalProducts,
+      products: products,
+    };
   }
 
   static getAllProducts = async (query = {}) => {
@@ -48,16 +65,17 @@ class ProductService {
       (match) => `$${match}`
     );
     const searchFilter = JSON.parse(queryString);
+
+
     // 4. Đếm tổng số sản phẩm
     // 5. Xử lý phân trang và giới hạn
     const limitNum = parseInt(limit, 10); // Mặc định limit = 10
     const pageNum = parseInt(page, 10); // Mặc định page = 0
     const skipNum = pageNum * limitNum;
     // 6. Tạo và thực thi truy vấn
-    const products = await Product
-      .find(searchFilter)
-      .select("_id product_thumb product_name product_slug product_ratings product_sold product_price product_discount product_stock")
-      // .sort(sort ? sort.replace(/,/g, " ") : "-createdAt")
+    const products = await Product 
+      .find(searchFilter, { product_isPublished: true })
+      .select("_id product_thumb product_name product_slug product_ratings product_sold product_price product_discount")  
       .skip(skipNum)
       .limit(limitNum).lean()
     const totalProducts = await Product.countDocuments(searchFilter);
@@ -71,21 +89,23 @@ class ProductService {
   }
 
   static async getFeaturedProducts() {
-    return await Product.find().sort({ sold_count: -1, rating: -1 })
+    return await Product.find({ product_isPublished: true })
+      .sort({ sold_count: -1, rating: -1 })
       .select("_id product_thumb product_name product_slug")
       .limit(8).lean();;
   }
   static async getFlashSaleProducts() {
     const products = await Product.find({
       product_discount: { $gte: 40 }, // Giảm giá từ 40% trở lên
-    }).select("_id product_thumb product_name product_slug product_discount")
+    }, { product_isPublished: true })
+      .select("_id product_thumb product_name product_slug product_discount")
       .sort({ product_discount: -1 }).lean();; // Giảm giá cao nhất lên trước
     return products
   }
   static async getNewProducts() {
     const products = await Product.find({
       createdAt: { $gte: new Date(new Date().setDate(new Date().getDate() - 30)) } // Sản phẩm được tạo trong 30 ngày gần nhất
-    })
+    }, { product_isPublished: true })
       .select("_id product_thumb product_name product_slug product_ratings product_sold product_price product_discount")
       .sort({ createdAt: -1 }).lean();; // Sắp xếp mới nhất lên trước
     return products
@@ -97,14 +117,27 @@ class ProductService {
     const similarProducts = await Product.find({
       _id: { $ne: id }, // Không lấy sản phẩm hiện tại
       product_category_id: currentProduct.product_category_id // Cùng category
-    })
+    }, { product_isPublished: true })
       .select("_id product_thumb product_name product_slug product_ratings product_sold product_price product_discount")
       .sort({ sold_count: -1 }) // Sắp xếp theo số lượt bán nhiều nhất
       .limit(10).lean();  // Giới hạn số sản phẩm trả về
     return similarProducts
+  }
+  static async getProductSuggestions(keySearch) {
+    const regexSearch = new RegExp(keySearch)
+    // full test search
+    const products = await productModel.find({ $text: { $search: regexSearch } },
+      { score: { $meta: "textScore" } }, { product_isPublished: true })
+      // tài liệu phù hợp nhất sẽ xuất hiện ở đầu kết quả
+      .sort({ score: { $meta: "textScore" } })
+      .select("_id product_name product_slug")
+      .limit(8).lean()
+    // 7. Trả về kết quả
+    return {
+      products: products,
+    };
 
   }
-
 
 }
 

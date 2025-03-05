@@ -20,9 +20,11 @@ class ProductController {
         res.status(200).json({ success: true, message: "Sản phẩm đã được xóa", data: deletedProduct });
     }
     static async getListSearchProduct(req, res) {
+        const { limit, page } = req.query
+        const keySearch = req.params
         res.status(200).json({
             success: true,
-            data: await ProductService.searchProductsByUser(req.params)
+            data: await ProductService.searchProductsByUser({ keySearch, limit, page })
         });
 
 
@@ -56,6 +58,14 @@ class ProductController {
         res.status(200).json({
             success: true,
             data: await ProductService.getSimilarProductsByCategory(req.params.id)
+        });
+    }
+    // gợi ý sản phẩm khi search
+    static async getProductSuggestions(req, res) {
+        const keySearch = req.params
+        res.status(200).json({
+            success: true,
+            data: await ProductService.getProductSuggestions(keySearch)
         });
     }
 }

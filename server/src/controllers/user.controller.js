@@ -32,6 +32,16 @@ class AuthController {
             message: await UserService.toggleBlockUser(req.params.uid, isBlocked)
         });
     }
+
+    //lấy all tk 
+    static async getAllUsers(req, res) {
+        res.status(200).json({
+            success: true,
+            message: "Lấy danh sách người dùng thành công",
+            data: await UserService.getAllUsers()
+        });
+    }
+    
 }
 
 module.exports = AuthController;

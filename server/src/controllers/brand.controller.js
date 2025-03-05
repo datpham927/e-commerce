@@ -38,6 +38,11 @@ class BrandController {
         const brands = await BrandService.searchBrandByName(req.query.name);
         res.status(200).json({ success: true, data: brands });
     }
+    // tất cả thương hiệu trong danh mục
+    static async getBrandsInCategory(req, res, next) {
+        const brands = await BrandService.getBrandsInCategory(req.params.cid);
+        res.status(200).json({ success: true, data: brands });
+    }
 }
 
 module.exports = BrandController;

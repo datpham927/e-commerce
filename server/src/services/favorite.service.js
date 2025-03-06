@@ -29,8 +29,7 @@ class FavoriteProductService {
         if (!userId) {
             throw new BadRequestError("Thiếu thông tin người dùng");
         }
-
-        return await FavoriteProduct.find({ fp_user_id: userId }).populate("fp_product");
+        return await FavoriteProduct.find({ fp_user_id: userId }).populate("fp_products");
     }
 }
 

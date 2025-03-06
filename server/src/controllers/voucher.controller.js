@@ -32,12 +32,13 @@ const VoucherController = {
     await VoucherService.deleteVoucher(req.params.id);
     res.status(200).json({ success: true, message: "Xóa voucher thành công!" });
   },
-  
+
   //tìm theo tên
   searchVoucherByName: async (req, res) => {
     const vouchers = await VoucherService.searchVoucherByName(req.query.name);
     res.status(200).json({ success: true, data: vouchers });
   },
+
 };
 
 module.exports = VoucherController;

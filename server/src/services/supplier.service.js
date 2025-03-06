@@ -53,20 +53,20 @@ class SupplierService {
 
     return { message: "Nhà cung cấp đã được xóa thành công." };
   }
-  static async restockProducts(supplierId, products) {
+  static async restockProducts({supplierId, productId,quantity,price}) {
     const supplier = await Supplier.findById(supplierId);
     if (!supplier) throw new Error("Nhà cung cấp không tồn tại");
 
-    for (const { productId, quantity } of products) {
         const product = await Product.findById(productId);
         if (!product) throw new Error(`Không tìm thấy sản phẩm có ID: ${productId}`);
 
         product.product_stock += quantity; // Cập nhật kho hàng
+        product.product_price += price; // Cập nhật kho hàng
+
         await product.save();
 
         // Lưu lịch sử nhập hàng
-        await ImportHistory.create({ supplier_id: supplierId, product_id: productId, quantity });
-    }
+        await ImportHistory.create({ supplier_id: supplierId, product_id: productId, quantity,price });
 
     return { message: "Nhập hàng thành công, tồn kho đã được cập nhật!" };
 }

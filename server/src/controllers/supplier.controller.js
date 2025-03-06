@@ -59,8 +59,7 @@ class SupplierController {
   // Nhập hàng
   static async restock(req, res) {
     try {
-        const { supplierId, products } = req.body;
-        const result = await SupplierService.restockProducts(supplierId, products);
+        const result = await SupplierService.restockProducts(req.body);
         return res.status(200).json(result);
     } catch (error) {
         return res.status(400).json({ error: error.message });

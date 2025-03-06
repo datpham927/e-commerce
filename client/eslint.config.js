@@ -13,6 +13,9 @@ export default tseslint.config(
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    content: [
+      './src/**/*.{html,js,ts,jsx,tsx}', // Đảm bảo đúng đường dẫn các file trong src
+    ],
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,

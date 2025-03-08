@@ -1,5 +1,5 @@
-"use strict";
-
+ 
+"use strict"; 
 const UserVoucherService = require("../services/userVoucher.service");
 
 const UserVoucherController = {
@@ -20,5 +20,5 @@ const UserVoucherController = {
         res.status(200).json({ success: true, data: vouchers });
     },
 };
-
-module.exports = UserVoucherController;
+ 
+module.exports = UserVoucherController; 

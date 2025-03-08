@@ -5,70 +5,44 @@ const bcrypt = require("bcrypt");
 const userModel = require("../models/user.model");
 const RoleModel = require("../models/role.model");
 
-class UserService {
+class UserService { 
+
     static async addUser(payload) {
-        const { user_name, user_email, user_password, user_mobile, user_type, user_role } = payload;
-    
+        const { user_name, user_email, user_password, user_mobile, user_type } = payload;
+        // Kiểm tra dữ liệu đầu vào
         if (!user_name || !user_email || !user_password || !user_mobile || !user_type) {
-            throw new BadRequestError("Thiếu thông tin bắt buộc!", 400);
+            return res.status(400).json({ success: false, message: "Thiếu thông tin bắt buộc!" });
         }
-    
         // Kiểm tra email đã tồn tại chưa
-        const existingUser = await userModel.findOne({ user_email });
-        if (existingUser) {
-            throw new BadRequestError("Email đã tồn tại!", 400);
-        }
-    
+        const existingUser = await User.findOne({ user_email });
+        if (existingUser) { throw new BadRequestError("Email đã tồn tại!", 400); }
         // Kiểm tra số điện thoại đã tồn tại chưa
-        const existingMobile = await userModel.findOne({ user_mobile });
-        if (existingMobile) {
-            throw new BadRequestError("Số điện thoại đã tồn tại!", 400);
-        }
-    
-        // Kiểm tra Role có tồn tại không
-        let roles = [];
-        if (user_role) {
-            const role = await RoleModel.findById(user_role);
-            if (!role) {
-                throw new BadRequestError("Role không hợp lệ!", 400);
-            }
-            roles.push(user_role); // Thêm ID role vào mảng user_roles
-        }
-    
+        const existingMobile = await User.findOne({ user_mobile });
+        if (existingMobile) { throw new BadRequestError("Số điện thoại đã tồn tại!", 400); }
         // Mã hóa mật khẩu
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(user_password, salt);
-    
         // Tạo user mới
-        const newUser = new userModel({
-            user_name,
-            user_email,
+        const newUser = new User({
             user_password: hashedPassword,
-            user_mobile,
-            user_type,
-            user_roles: roles  // Gán danh sách roles
+            ...payload
         });
-    
+        // Lưu user vào database
         return await newUser.save();
     }
-    
-
     static async updateUser(uid, payload) {
+        // Bỏ email ra khỏi payload để tránh cập nhật
         const { user_email, user_password, user_mobile, ...dataUser } = payload;
-
+        // Tìm user theo ID
         const user = await userModel.findById(uid);
-        if (!user) {
-            throw new BadRequestError("Người dùng không tồn tại!", 404);
-        }
-
+        if (!user) { throw new BadRequestError("Người dùng không tồn tại!", 404) }
+        // Kiểm tra số điện thoại đã tồn tại (nếu có cập nhật số điện thoại)
         if (user_mobile && user_mobile !== user.user_mobile) {
             const existingMobile = await userModel.findOne({ user_mobile });
-            if (existingMobile) {
-                throw new BadRequestError("Số điện thoại đã tồn tại!", 400);
-            }
+            if (existingMobile) { throw new BadRequestError("Số điện thoại đã tồn tại!", 400); }
             dataUser.user_mobile = user_mobile;
         }
-
+ 
         // Mã hóa mật khẩu nếu có cập nhật
         if (user_password) {
             const salt = await bcrypt.genSalt(10);
@@ -111,5 +85,4 @@ class UserService {
     }
     
 }
-
 module.exports = UserService;

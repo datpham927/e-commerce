@@ -1,6 +1,5 @@
-"use strict";
-
-
+"use strict"; 
+const Voucher = require("../models/voucher.model"); 
 const { BadRequestError, NotFoundError } = require("../core/error.response");
 const userModel = require("../models/user.model");
 const voucherModel = require("../models/voucher.model");
@@ -11,7 +10,6 @@ class VoucherService {
     if (
       !payload.voucher_name ||
       !payload.voucher_description ||
-      !payload.voucher_code ||
       !payload.voucher_start_date ||
       !payload.voucher_end_date ||
       !payload.voucher_method ||

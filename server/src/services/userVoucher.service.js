@@ -7,6 +7,7 @@ const userVoucherModel = require("../models/userVoucher.model"); // Thêm đúng
 
 class userVoucherService {
 
+
   // Lưu voucher cho user
   static async saveVoucherForUser(userId, voucherId) {
     if (!userId || !voucherId) throw new BadRequestError("Thiếu thông tin")
@@ -116,4 +117,4 @@ class userVoucherService {
   }
 }
 
-module.exports = userVoucherService;
+module.exports = userVoucherService; 

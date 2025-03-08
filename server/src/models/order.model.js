@@ -1,5 +1,7 @@
-const mongoose = require("mongoose");
+"use strict";
 
+const mongoose = require("mongoose");
+const { Schema } = mongoose; 
 const orderSchema = new mongoose.Schema({
     order_type: {
         type: String,
@@ -39,5 +41,6 @@ const orderSchema = new mongoose.Schema({
     }, //Ngày giao hàng dự kiến (có thể để trống)
     order_shipping_company: { type: mongoose.Schema.Types.ObjectId, ref: "ShippingCompany", required: true },
 }, { timestamps: true }); //tự động thêm createdAt và updatedAt
+ 
 
 module.exports = mongoose.model("Order", orderSchema);

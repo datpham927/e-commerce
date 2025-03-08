@@ -1,10 +1,7 @@
-"use strict";
-
 const SupplierService = require("../services/supplier.service");
-const { BadRequestError } = require("../core/error.response");
 
 class SupplierController {
-  // Thêm nhà cung cấp mới
+  // Thêm nhà cung cấp
   static async createSupplier(req, res, next) {
     try {
       const supplier = await SupplierService.createSupplier(req.body);
@@ -14,7 +11,7 @@ class SupplierController {
     }
   }
 
-  // Lấy danh sách nhà cung cấp
+  // Lấy tất cả nhà cung cấp
   static async getAllSuppliers(req, res, next) {
     try {
       const suppliers = await SupplierService.getAllSuppliers();

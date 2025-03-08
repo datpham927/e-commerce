@@ -3,8 +3,9 @@
 const { BadRequestError } = require("../core/error.response");
 const bcrypt = require("bcrypt");
 const userModel = require("../models/user.model");
+const RoleModel = require("../models/role.model");
 
-class UserService {
+class UserService { 
 
     static async addUser(payload) {
         const { user_name, user_email, user_password, user_mobile, user_type } = payload;
@@ -41,6 +42,7 @@ class UserService {
             if (existingMobile) { throw new BadRequestError("Số điện thoại đã tồn tại!", 400); }
             dataUser.user_mobile = user_mobile;
         }
+ 
         // Mã hóa mật khẩu nếu có cập nhật
         if (user_password) {
             const salt = await bcrypt.genSalt(10);
@@ -60,16 +62,6 @@ class UserService {
         if (!user) {
             throw new BadRequestError("Người dùng không tồn tại!", 404);
         }
-        // Cập nhật người dùng
-        const updatedUser = await User.findByIdAndUpdate(uid, dataUser, {
-            new: true, // Trả về user sau khi cập nhật
-            runValidators: true // Kiểm tra validation của schema
-        });
-        return updatedUser
-    }
-    static async deleteUser(uid) {
-        const user = await UserService.findByIdAndDelete(uid);
-        if (!user) { throw new BadRequestError("Người dùng không tồn tại!", 404) }
         return {
             _id: user._id,
             user_name: user.user_name,
@@ -86,6 +78,11 @@ class UserService {
         await user.save();
         return isBlocked ? "Đã chặn người dùng thành công!" : "Đã mở chặn người dùng!";
     }
+    //tất cả tk
+    static async getAllUsers() {
+        const users = await userModel.find({}, "-user_password"); // Ẩn mật khẩu
+        return users;
+    }
+    
 }
 module.exports = UserService;
-

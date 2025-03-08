@@ -50,12 +50,14 @@ class FavoriteProductService {
         if (!userId) {
             throw new BadRequestError("Thiếu thông tin người dùng");
         }
+ 
 
         const favorites = await FavoriteProduct.findOne({ fp_user_id: userId })
             .populate("fp_products")  // Populate toàn bộ mảng fp_product
             .lean();
 
         return favorites || { fp_user_id: userId, fp_product: [] }; // Trả về rỗng nếu không có
+ 
     }
 }
 

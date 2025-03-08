@@ -19,7 +19,7 @@ const data = [
 ]
 const mongoose = require('mongoose');
 const convertArrToObject = require("./convertArrToObject")
-const categories = require("./category.json")
+const categories = require("./category")
 const mobilenet = require("@tensorflow-models/mobilenet");
 const tf = require("@tensorflow/tfjs"); // Sử dụng phiên bản Web
 const sharp = require("sharp");
@@ -29,7 +29,7 @@ const fs = require("fs").promises;
 const axios = require("axios");
 const categoryModel = require("../src/models/category.model")
 const brandModel = require("../src/models/brand.model")
-const productModel = require("../server/src/models/product.model")
+const productModel = require("../src/models/product.model")
 
 const IMAGE_SIZE = 224; // Kích thước chuẩn cho MobileNet
 /** Tải ảnh từ URL và lưu vào thư mục tạm */
@@ -95,7 +95,7 @@ const upsertCategory = async ({ category_name, category_thumb }) => {
     let category = await categoryModel.findOne({ category_name });
     if (!category) {
         category = await categoryModel.create({ category_name, category_thumb });
-        await categoryModel.save();
+        await categoryModell.save();
     }
     console.log("Dữ liệu danh mục:", category);
     return category;
@@ -141,6 +141,10 @@ const insertProductsData = async () => {
                         const featuresArray = Array.from(searchFeatures.dataSync());
                         searchFeatures.dispose();
 
+                        if (featuresArray.length == 0) {
+                            return null
+                        }
+
                         return await productModel.create({
                             product_name: item.title,
                             product_thumb: image_url,
@@ -163,7 +167,6 @@ const insertProductsData = async () => {
                 })
             );
         };
-
         const responses = [];
         for (let i = 0; i < data.length; i++) {
             const category = await upsertCategory(categories[i]);
@@ -186,5 +189,5 @@ const insertProductsData = async () => {
         console.error("Operation failed:", error);
     }
 };
-// insertProductsData()
+insertProductsData()
 

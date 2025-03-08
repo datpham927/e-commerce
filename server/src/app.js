@@ -3,8 +3,15 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const { default: helmet } = require("helmet")
 const morgan = require("morgan")
+const cors = require("cors");
 const cookieParser = require("cookie-parser")
 const app = express()
+
+// ✅ Middleware
+app.use(cors({
+    origin: ["http://127.0.0.1:5173"],
+    credentials: true, 
+})); 
 //init middlewares
 app.use(cookieParser())
 app.use(morgan("dev"))

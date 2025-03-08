@@ -12,7 +12,7 @@ class RoleService {
     return await Role.create(payload);
   }
 
-  // Lấy danh sách tất cả vai trò
+  // Lấy danh sách tất cả vai trò (có phân trang)
   static async getAllRoles({ limit = 10, page = 1 }) {
     const skip = (page - 1) * limit;
     const roles = await Role.find().skip(skip).limit(limit);
@@ -28,6 +28,15 @@ class RoleService {
   // Lấy vai trò theo ID
   static async getRoleById(roleId) {
     const role = await Role.findById(roleId);
+    if (!role) throw new NotFoundError("Không tìm thấy vai trò");
+    return role;
+  }
+  
+  // Lấy vai trò theo tên
+  static async getRoleByName(roleName) {
+    if (!roleName) throw new BadRequestError("Vui lòng cung cấp tên vai trò");
+
+    const role = await Role.findOne({ name: roleName });
     if (!role) throw new NotFoundError("Không tìm thấy vai trò");
     return role;
   }

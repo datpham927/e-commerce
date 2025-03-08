@@ -30,8 +30,15 @@ class ProductController {
       res.status(200).json({ success: true, data: updatedProduct });
     } catch (error) {
       next(error);
+    } 
+  } 
+    static async getListSearchProduct(req, res) {
+        const { keySearch } = req.params
+        res.status(200).json({
+            success: true,
+            data: await ProductService.searchProductsByUser(keySearch)
+        });
     }
-  }
 
   // Xóa sản phẩm
   static async deleteProduct(req, res, next) {
@@ -97,8 +104,17 @@ class ProductController {
       res.status(200).json({ success: true, data: products });
     } catch (error) {
       next(error);
-    }
-  }
+    } 
+  } 
+
+    // gợi ý sản phẩm khi search
+    static async searchProductByImage(req, res) {
+        const { imageUrl } = req.body
+        res.status(200).json({
+            success: true,
+            data: await ProductService.searchProductByImage(imageUrl)
+        });
+    } 
 }
 
 module.exports = ProductController;

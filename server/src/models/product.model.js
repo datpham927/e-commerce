@@ -33,9 +33,9 @@ const productSchema = new Schema({
 });
 
 // Tạo chỉ mục văn bản cho các trường tên và mô tả sản phẩm
-productSchema.index({ product_name: 'text', product_description: 'text' });
+productSchema.index({ product_name: 'text', product_description: 'text' }); 
 
-// Middleware kiểm tra tồn tại của danh mục, thương hiệu và nhà cung cấp
+// Middleware kiểm tra tồn tại của danh mục, thương hiệu và nhà cung cấp  
 productSchema.pre("save", async function (next) {
     // Kiểm tra xem danh mục có tồn tại không
     const category = await mongoose.model("Category").findById(this.product_category_id);

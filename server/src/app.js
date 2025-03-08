@@ -7,14 +7,11 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser")
 const app = express()
 
-// CORS middleware để cho phép yêu cầu từ các cổng khác (như từ frontend)
-const corsOptions = {
-    origin: "http://localhost:5173", // Chỉ định cổng frontend, có thể thay đổi
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-};
-app.use(cors(corsOptions));
-
+// ✅ Middleware
+app.use(cors({
+    origin: ["http://127.0.0.1:5173"],
+    credentials: true, 
+})); 
 //init middlewares
 app.use(cookieParser())
 app.use(morgan("dev"))

@@ -1,10 +1,7 @@
-"use strict";
-
 const SupplierService = require("../services/supplier.service");
-const { BadRequestError } = require("../core/error.response");
-const ImportHistory = require("../models/ImportHistory"); 
+
 class SupplierController {
-  // Thêm nhà cung cấp mới
+  // Thêm nhà cung cấp
   static async createSupplier(req, res, next) {
     try {
       const supplier = await SupplierService.createSupplier(req.body);
@@ -14,7 +11,7 @@ class SupplierController {
     }
   }
 
-  // Lấy danh sách nhà cung cấp
+  // Lấy tất cả nhà cung cấp
   static async getAllSuppliers(req, res, next) {
     try {
       const suppliers = await SupplierService.getAllSuppliers();
@@ -56,28 +53,6 @@ class SupplierController {
       next(error);
     }
   }
-  // Nhập hàng
-  static async restock(req, res) {
-    try {
-        const result = await SupplierService.restockProducts(req.body);
-        return res.status(200).json(result);
-    } catch (error) {
-        return res.status(400).json({ error: error.message });
-    }
-}
-
-// Lấy lịch sử nhập hàng
-static async getImportHistory(req, res) {
-  try {
-      const history = await ImportHistory.find()
-          .populate("supplier_id", "supplier_name")
-          .populate("product_id", "product_name");
-
-      return res.status(200).json({ status: "success", data: history });
-  } catch (error) {
-      return res.status(500).json({ error: error.message });
-  }
-}
 }
 
 module.exports = SupplierController;

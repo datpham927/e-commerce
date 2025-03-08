@@ -10,14 +10,10 @@ class CartService {
     if (!userId || !productId || quantity <= 0) {
       throw new BadRequestError("Thông tin không hợp lệ.");
     }
-
     quantity = Number(quantity); // Ép kiểu để tránh lỗi chuỗi "22"
-
     const product = await Product.findById(productId);
     if (!product) throw new NotFoundError("Sản phẩm không tồn tại.");
-
     let cart = await Cart.findOne({ cart_user: userId });
-
     if (!cart) {
       cart = await Cart.create({
         cart_user: userId,
@@ -27,13 +23,11 @@ class CartService {
       const productIndex = cart.cart_products.findIndex(
         (item) => item.productId.toString() === productId.toString()
       );
-
       if (productIndex > -1) {
         cart.cart_products[productIndex].quantity += quantity; // Cộng số lượng đúng
       } else {
         cart.cart_products.push({ productId, quantity });
       }
-
       await cart.save();
     }
 
@@ -45,7 +39,7 @@ class CartService {
     const cart = await Cart.findOne({ cart_user: userId })
       .populate({
         path: "cart_products.productId",
-        select: "product_name product_thumb product_price product_images",
+        select: "product_name product_thumb product_price",
       })
       .lean();
 

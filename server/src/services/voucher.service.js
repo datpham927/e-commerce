@@ -1,7 +1,6 @@
 "use strict";
 
 const Voucher = require("../models/voucher.model");
-
 const { BadRequestError, NotFoundError } = require("../core/error.response");
 
 class VoucherService {
@@ -10,7 +9,6 @@ class VoucherService {
     if (
       !payload.voucher_name ||
       !payload.voucher_description ||
-      !payload.voucher_code ||
       !payload.voucher_start_date ||
       !payload.voucher_end_date ||
       !payload.voucher_method ||
@@ -57,7 +55,6 @@ class VoucherService {
     const vouchers = await Voucher.find({
       voucher_name: { $regex: new RegExp(name, "i") } // "i" để không phân biệt hoa thường
     });
-
     if (!vouchers.length) throw new NotFoundError("Không tìm thấy voucher phù hợp!");
 
     return vouchers;

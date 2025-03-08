@@ -11,14 +11,13 @@ const VoucherSchema = new Schema({
     voucher_banner_image: { type: String, required: true }, // Hình banner quảng cáo
     voucher_method: { type: String, enum: ["percent", "fixed"], required: true }, // "percent" hoặc "fixed"
     voucher_value: { type: Number, required: true }, // Giá trị giảm giá (VD: 10% hoặc 50,000 VND)
-    voucher_max_price: { type: Number, default: null }, // Mức giảm tối đa (nếu là percent)
-    voucher_code: { type: String, required: true, unique: true }, // Mã giảm giá
     voucher_start_date: { type: Date, required: true },
     voucher_end_date: { type: Date, required: true },
     voucher_max_uses: { type: Number, required: true }, // Số lần tối đa mã giảm giá có thể được sử dụng
     voucher_uses_count: { type: Number, default: 0 }, // Số lần đã sử dụng
     voucher_max_uses_per_user: { type: Number, required: true }, // Giới hạn số lần một người có thể sử dụng voucher này
-    voucher_users_used: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], // danh sách người đã sử dụng
+    voucher_users_used: [{ type: String }], // danh sách người đã sử dụng
+    voucher_max_price: { type: Number, default: null }, // Mức giảm tối đa (nếu là percent)
     voucher_min_order_value: { type: Number, required: true }, // Giá trị đơn hàng tối thiểu để áp dụng voucher
     voucher_is_active: { type: Boolean, default: true },
     voucher_required_points: { type: Number, default: 0 } // Điểm tích lũy cần thiết để đổi voucher

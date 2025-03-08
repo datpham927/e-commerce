@@ -10,6 +10,7 @@ const router = express.Router();
    📌 API Dành cho Người Dùng (Không cần đăng nhập)
    ================================ */
 // 🔍 Tìm kiếm sản phẩm theo từ khóa
+router.get("/search/search-image", asyncHandle(ProductControllers.searchProductByImage));
 router.get("/search/:keySearch", asyncHandle(ProductControllers.getListSearchProduct));
 
 // 📦 Lấy tất cả sản phẩm

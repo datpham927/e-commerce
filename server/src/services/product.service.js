@@ -2,6 +2,12 @@
 
 const { BadRequestError, NotFoundError } = require("../core/error.response");
 const Product = require("../models/product.model");
+const cosineSimilarity = require("../utils/search-image/cosineSimilarity");
+const downloadImage = require("../utils/search-image/downloadImage");
+const extractFeatures = require("../utils/search-image/extractFeatures");
+const path = require("path");
+const tf = require("@tensorflow/tfjs"); // Sử dụng phiên bản Web
+const fs = require("fs").promises;
 
 class ProductService {
   // Tạo sản phẩm mới
@@ -30,28 +36,18 @@ class ProductService {
     return deletedProduct;
   }
   // Tìm kiếm sản phẩm theo tên
-  static searchProductsByUser = async ({ keySearch, limit, page }) => {
+  static searchProductsByUser = async (keySearch) => {
     //RegExp Biểu thức chính quy được sử dụng để tìm kiếm và so khớp các chuỗi dựa trên một mẫu cụ thể.
     const regexSearch = new RegExp(keySearch)
     // full test search
-    const limitNum = parseInt(limit, 10); // Mặc định limit = 10
-    const pageNum = parseInt(page, 10); // Mặc định page = 0
-    const skipNum = pageNum * limitNum;
-    const products = await productModel.find({ $text: { $search: regexSearch } },
+    const products = await Product.find({ $text: { $search: regexSearch } },
       { score: { $meta: "textScore" } }, { product_isPublished: true })
       // tài liệu phù hợp nhất sẽ xuất hiện ở đầu kết quả
       .sort({ score: { $meta: "textScore" } })
       .select("_id product_thumb product_name product_slug product_ratings product_sold product_price product_discount")
-      .skip(skipNum)
-      .limit(limitNum).lean()
-    const totalProducts = await Product.countDocuments(searchFilter);
+      .limit(30).lean()
     // 7. Trả về kết quả
-    return {
-      totalPage: Math.ceil(totalProducts / limitNum) - 1, // Tổng số trang (0-based)
-      currentPage: pageNum,
-      totalProducts,
-      products: products,
-    };
+    return products
   }
 
   static getAllProducts = async (query = {}) => {
@@ -73,9 +69,9 @@ class ProductService {
     const pageNum = parseInt(page, 10); // Mặc định page = 0
     const skipNum = pageNum * limitNum;
     // 6. Tạo và thực thi truy vấn
-    const products = await Product 
+    const products = await Product
       .find(searchFilter, { product_isPublished: true })
-      .select("_id product_thumb product_name product_slug product_ratings product_sold product_price product_discount")  
+      .select("_id product_thumb product_name product_slug product_ratings product_sold product_price product_discount")
       .skip(skipNum)
       .limit(limitNum).lean()
     const totalProducts = await Product.countDocuments(searchFilter);
@@ -92,7 +88,7 @@ class ProductService {
     return await Product.find({ product_isPublished: true })
       .sort({ sold_count: -1, rating: -1 })
       .select("_id product_thumb product_name product_slug")
-      .limit(8).lean();;
+      .limit(8).lean();
   }
   static async getFlashSaleProducts() {
     const products = await Product.find({
@@ -110,6 +106,7 @@ class ProductService {
       .sort({ createdAt: -1 }).lean();; // Sắp xếp mới nhất lên trước
     return products
   }
+
   static async getSimilarProductsByCategory(id) {
     const currentProduct = await Product.findById(id);
     if (!currentProduct) { throw new NotFoundError("Sản phẩm không tồn tại"); }
@@ -123,10 +120,11 @@ class ProductService {
       .limit(10).lean();  // Giới hạn số sản phẩm trả về
     return similarProducts
   }
+
   static async getProductSuggestions(keySearch) {
     const regexSearch = new RegExp(keySearch)
     // full test search
-    const products = await productModel.find({ $text: { $search: regexSearch } },
+    const products = await Product.find({ $text: { $search: regexSearch } },
       { score: { $meta: "textScore" } }, { product_isPublished: true })
       // tài liệu phù hợp nhất sẽ xuất hiện ở đầu kết quả
       .sort({ score: { $meta: "textScore" } })
@@ -137,6 +135,41 @@ class ProductService {
       products: products,
     };
 
+  }
+  static async searchProductByImage(imageUrl) {
+    if (!imageUrl) throw new NotFoundError("Vui lòng cung cấp URL ảnh!");
+    const tempPath = path.join(__dirname, "temp_search.png");
+    if (!(await downloadImage(imageUrl, tempPath))) throw new BadRequestError("Không thể tải ảnh!");
+
+    const searchFeatures = await extractFeatures(tempPath);
+    if (!searchFeatures || searchFeatures.length === 0) {
+      throw new BadRequestError("Không thể trích xuất đặc trưng từ ảnh!");
+    }
+
+    const productFeatures = await Product.find();
+    const results = await Promise.all(
+      productFeatures.map(async (product) => {
+        if (!product.product_image_features || product.product_image_features.length === 0) {
+          console.warn(`Skipping product ${product.image_url} due to empty features`);
+          return { url: product.image_url, similarity: 0 };
+        }
+
+        const productTensor = tf.tensor1d(product.product_image_features);
+        const similarity = cosineSimilarity(searchFeatures, productTensor);
+        return {
+          url: product.product_image_url,
+          similarity: similarity  // Extract scalar value
+        };
+      })
+    );
+
+    const sortedResults = results
+      .sort((a, b) => b.similarity - a.similarity)
+      .slice(0, 10);
+
+    console.log(sortedResults);
+    await fs.unlink(tempPath).catch(() => { });
+    return sortedResults; // Fixed: return sortedResults instead of results
   }
 
 }

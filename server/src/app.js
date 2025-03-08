@@ -12,9 +12,9 @@ const corsOptions = {
     origin: "http://localhost:5173", // Chỉ định cổng frontend, có thể thay đổi
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
-  };
-  app.use(cors(corsOptions));
-  
+};
+app.use(cors(corsOptions));
+
 //init middlewares
 app.use(cookieParser())
 app.use(morgan("dev"))

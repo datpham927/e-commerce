@@ -20,7 +20,7 @@ class ProductController {
         res.status(200).json({ success: true, message: "Sản phẩm đã được xóa", data: deletedProduct });
     }
     static async getListSearchProduct(req, res) {
-        const keySearch = req.params
+        const { keySearch } = req.params
         res.status(200).json({
             success: true,
             data: await ProductService.searchProductsByUser(keySearch)

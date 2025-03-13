@@ -31,29 +31,38 @@ class UserService {
         return await newUser.save();
     }
     static async updateUser(uid, payload) {
-        // Bỏ email ra khỏi payload để tránh cập nhật
-        const { user_email, user_password, user_mobile, ...dataUser } = payload;
+        // Bỏ email và mật khẩu ra khỏi payload để tránh cập nhật
+        const { user_email, user_password, user_mobile, user_reward_points, ...dataUser } = payload;
         // Tìm user theo ID
         const user = await userModel.findById(uid);
-        if (!user) { throw new BadRequestError("Người dùng không tồn tại!", 404) }
+        if (!user) { 
+            throw new BadRequestError("Người dùng không tồn tại!", 404);
+        }
         // Kiểm tra số điện thoại đã tồn tại (nếu có cập nhật số điện thoại)
         if (user_mobile && user_mobile !== user.user_mobile) {
             const existingMobile = await userModel.findOne({ user_mobile });
-            if (existingMobile) { throw new BadRequestError("Số điện thoại đã tồn tại!", 400); }
+            if (existingMobile) { 
+                throw new BadRequestError("Số điện thoại đã tồn tại!", 400);
+            }
             dataUser.user_mobile = user_mobile;
         }
- 
         // Mã hóa mật khẩu nếu có cập nhật
         if (user_password) {
             const salt = await bcrypt.genSalt(10);
             dataUser.user_password = await bcrypt.hash(user_password, salt);
         }
-
+    
+        // Kiểm tra và cập nhật trường user_reward_points nếu có
+        if (user_reward_points !== undefined) {
+            dataUser.user_reward_points = user_reward_points;
+        }
+    
+        // Cập nhật dữ liệu người dùng
         const updatedUser = await userModel.findByIdAndUpdate(uid, dataUser, {
             new: true,
             runValidators: true
         });
-
+    
         return updatedUser;
     }
 

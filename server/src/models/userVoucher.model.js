@@ -9,6 +9,6 @@ const userVoucher = new mongoose.Schema(
 );
 
 // Chỉ mục giúp mỗi user chỉ có thể yêu thích một sản phẩm một lần
-userVoucher.index({ vc_user_id: 1, vc_vouchers: 1 }, { unique: true });
+userVoucher.index({ vc_user_id: 1, vc_vouchers: 1 }, { unique: true }); 
 
-module.exports = mongoose.model("userVoucher", userVoucher);
+module.exports = mongoose.model("userVoucher", userVoucher); 

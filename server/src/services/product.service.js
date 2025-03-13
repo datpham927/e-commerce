@@ -150,38 +150,53 @@ class ProductService {
 
   static async searchProductByImage(imageUrl) {
     if (!imageUrl) throw new NotFoundError("Vui lòng cung cấp URL ảnh!");
-    const tempPath = path.join(__dirname, "temp_search.png");
-    if (!(await downloadImage(imageUrl, tempPath))) throw new BadRequestError("Không thể tải ảnh!");
 
+    const tempPath = path.join(__dirname, "temp_search.png");
+
+    // Tải ảnh từ URL về thư mục tạm
+    if (!(await downloadImage(imageUrl, tempPath))) {
+      throw new BadRequestError("Không thể tải ảnh!");
+    }
+
+    // Trích xuất đặc trưng từ ảnh tìm kiếm
     const searchFeatures = await extractFeatures(tempPath);
     if (!searchFeatures || searchFeatures.length === 0) {
       throw new BadRequestError("Không thể trích xuất đặc trưng từ ảnh!");
     }
 
-    const productFeatures = await Product.find();
+    // Lấy tất cả sản phẩm trong cơ sở dữ liệu (sử dụng `.lean()` để tối ưu hóa hiệu suất)
+    const productFeatures = await Product.find().lean();
+
     const results = await Promise.all(
       productFeatures.map(async (product) => {
+        // Kiểm tra nếu sản phẩm không có đặc trưng hình ảnh
         if (!product.product_image_features || product.product_image_features.length === 0) {
-          console.warn(`Skipping product ${product.image_url} due to empty features`);
-          return { url: product.image_url, similarity: 0 };
+          console.warn(`Skipping product ${product.product_image_url} due to empty features`);
+          return { url: product.product_image_url, similarity: 0, product };
         }
 
+        // Tính toán sự tương đồng cosine giữa ảnh tìm kiếm và sản phẩm
         const productTensor = tf.tensor1d(product.product_image_features);
         const similarity = cosineSimilarity(searchFeatures, productTensor);
+
         return {
-          url: product.product_image_url,
-          similarity: similarity  // Extract scalar value
+          url: product.product_image_url,  // Đường dẫn ảnh sản phẩm
+          similarity: similarity, // Độ tương đồng cosine
+          product: product  // Trả về thông tin sản phẩm
         };
       })
     );
 
+    // Sắp xếp kết quả theo độ tương đồng giảm dần và lấy 10 sản phẩm tương tự nhất
     const sortedResults = results
       .sort((a, b) => b.similarity - a.similarity)
       .slice(0, 10);
 
-    console.log(sortedResults);
-    await fs.unlink(tempPath).catch(() => { });
-    return sortedResults; // Fixed: return sortedResults instead of results
+    // Xóa tệp ảnh tạm sau khi xử lý
+    await fs.unlink(tempPath).catch(() => {});
+
+    // Trả về kết quả tìm kiếm với thông tin sản phẩm
+    return sortedResults;
   }
 
 }

@@ -9,16 +9,20 @@ const orderSchema = new mongoose.Schema({
         required: true,
         default: "online"
     }, // Đơn hàng online hoặc tại quầy
+    order_code: String,
     order_user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // order_user: ID của người dùng liên kết với đơn hàng
     order_products: [
         {
             productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
             quantity: { type: Number, required: true, default: 1 },
-            price: { type: Number, required: true }, // Giá gốc sản phẩm tại thời điểm mua.
-        }],
+            price: { type: Number, required: true }, // Giá sau khi áp dụng giảm giá
+            discount: { type: Number, default: 0 } // % giảm giá tại thời điểm mua (tuỳ chọn)
+        }
+    ],
     // Mã giảm giá (nếu có)
     order_voucher: { type: mongoose.Schema.Types.ObjectId, ref: "voucher" },
     order_total_price: { type: Number, required: true, default: 0, min: 0 }, // order_total_price: Tổng giá trị đơn hàng
+    order_total_apply_discount: { type: Number, required: true, default: 0, min: 0 }, // tổng tiền discount
     order_payment_method: { type: String, required: true, enum: ["cash", "vnpay", 'momo'] }, // order_payment_method: Phương thức thanh toán
     order_status: { type: String, enum: ["pending", "confirm", "shipped", "delivered", "cancelled"], default: "pending" }, // order_status: Trạng thái đơn hàng hiện tại
     // order_status_history: Lịch sử thay đổi trạng thái cùng thời gian thay đổi

@@ -9,7 +9,6 @@ class CategoryService {
         if (!payload.category_name || !payload.category_thumb) {
             throw new BadRequestError("Vui lòng cung cấp đầy đủ dữ liệu");
         }
-
         try {
             // Dùng new Category() thay vì Category.create()
             const category = new Category(payload);

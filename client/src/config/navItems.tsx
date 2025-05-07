@@ -1,3 +1,4 @@
+
 import { PATH } from '../utils/const';
 
 export type NavItem = {
@@ -36,7 +37,7 @@ export const navItems: NavItem[] = [
         ],
         permission: 'offline_order',
     },
-
+    
     {
         icon: <img src="https://img.icons8.com/?size=100&id=zKZc2LIdmO4A&format=png&color=000000" alt="icon" className="w-8 h-8" />,
         name: 'Banner',

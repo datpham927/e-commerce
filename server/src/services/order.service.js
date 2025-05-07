@@ -2,7 +2,7 @@
 
 const Product = require('../models/product.model'); // Mô hình sản phẩm
 const Voucher = require('../models/voucher.model'); // Mô hình mã giảm giá
-const Cart = require('../models/cart.model'); // Mô hình giỏ hàng
+const redisClient = require('../config/redisClient'); // sử dụng Redis client để thao tác
 const userVoucherModel = require('../models/userVoucher.model');
 const shippingCompany = require('../models/shippingCompany.model');
 const { default: mongoose } = require('mongoose');
@@ -266,17 +266,17 @@ class OrderService {
                     { $push: { voucher_users_used: userId } }, // Thêm userId vào danh sách người đã dùng voucher
                 );
             }
-            // Xóa sản phẩm khỏi giỏ hàng của người dùng
-            await Cart.findOneAndUpdate(
-                { cart_user: userId }, // Tìm giỏ hàng của người dùng
-                {
-                    $pull: {
-                        cart_products: {
-                            productId: { $in: order_products.map((item) => item.productId) }, // Xóa các sản phẩm đã đặt
-                        },
-                    },
-                },
-            );
+const cartKey = `cart:${userId}`;
+const cartData = await redisClient.get(cartKey);
+
+if (cartData) {
+    const currentCart = JSON.parse(cartData);
+    const updatedCart = currentCart.filter(
+        item => !order_products.some(op => op.productId.toString() === item.productId.toString())
+    );
+    await redisClient.set(cartKey, JSON.stringify(updatedCart));
+}
+
         }
         return newOrder;
     }

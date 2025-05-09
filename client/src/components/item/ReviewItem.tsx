@@ -22,6 +22,10 @@ const ReviewItem: React.FC<ReviewsProps> = ({ review, handleDelete, handleEdit }
     const { review_comment, review_images, review_rating, review_user, createdAt } = review;
     const { user } = useUserStore();
 
+    const isAuthor = user._id === review_user?._id;
+    const isEditable = moment().diff(moment(createdAt), 'hours') < 24;
+
+
     return (
         <div className="w-full px-6 py-4 border-b border-solid border-slate-200">
             <div className="flex w-full gap-3 tablet:flex-col">
@@ -95,13 +99,9 @@ const ReviewItem: React.FC<ReviewsProps> = ({ review, handleDelete, handleEdit }
                     </div>
 
                     <div className="flex gap-6 mt-3 w-full">
-                        {/* <ButtonOutline className={`${likes.includes(user._id) ? 'bg-bgSecondary border-transparent' : ''}`} onClick={handleLike}>
-                            {likesReviews.includes(user._id) ? <ThumbUpAltIcon fontSize="small" /> : <ThumbUpOffAltIcon fontSize="small" />}
-                            Hữu ích <span>{likesReviews.length}</span>
-                        </ButtonOutline> */}
-                        {user._id === review_user?._id && (
+                        {isAuthor && (
                             <div className="flex gap-6 text-primary">
-                                {user?._id === review_user?._id && (
+                                {isEditable && (
                                     <button className="text-sm hover:opacity-80" onClick={handleEdit}>
                                         Chỉnh sửa
                                     </button>

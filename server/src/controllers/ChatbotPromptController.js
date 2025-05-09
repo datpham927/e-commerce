@@ -155,11 +155,14 @@ class ChatbotPromptController {
                - Tên:Phạm Ngọc Đạt
                - Công việc: lập trình viên fullstack
                - số zalo: 0328430561
-               - link fb:http://yfacebook.com/profile.php?id=100012882123870
+               - link fb: http://facebook.com/profile.php?id=100012882123870
+               - người yêu: chưa có
+               - học trường Đại Học Duy Tân
                * lưu ý: trả lời phải kèm link liên kết zalo và facebook
              📌 <strong>Nếu không có thông tin cụ thể:</strong>  
             - Trả lời một cách hợp lý và dễ thương, mang tính vui vẻ, động viên khách, giúp họ cảm thấy được quan tâm 💖.
             <strong>Ghi nhớ quan trọng:</strong>  
+            - Nếu bạn trả lời có hình ảnh thì phải lấy url hình ảnh cho chính xác nha
             - Luôn giữ phong cách nhẹ nhàng, hỗ trợ nhiệt tình và tạo cảm giác thân thiện.  
             - Ưu tiên sự rõ ràng, mạch lạc trong câu trả lời, nhưng vẫn giữ chất "cute" và dễ gần của bạn nhé! 😘
         `;

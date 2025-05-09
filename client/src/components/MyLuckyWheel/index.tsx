@@ -82,11 +82,11 @@ const LuckyWheel: React.FC<LuckyWheelProps> = ({ setGameModalOpen }) => {
     const [prizeIndex, setPrizeIndex] = useState<number>(0);
     const [showPrize, setShowPrize] = useState<boolean>(false);
     // Lấy hàm và dữ liệu người dùng từ store
-    const { setAddRewardPoints, setAddTicket, user,  setSubtractTicket } = useUserStore() as {
+    const { setAddRewardPoints, setAddTicket, user, setSubtractTicket } = useUserStore() as {
         setAddRewardPoints: (points: number) => void;
         setAddTicket: (tickets: number) => void;
         user: User;
-         setSubtractTicket: () => void;
+        setSubtractTicket: () => void;
     };
     // Lưu tiêu đề phiếu giảm giá
     const [titleVoucher, setTitleVoucher] = useState<string>('');
@@ -95,7 +95,7 @@ const LuckyWheel: React.FC<LuckyWheelProps> = ({ setGameModalOpen }) => {
         // Không cho quay nếu đang quay hoặc hết lượt
         if (isSpinning || user.user_spin_turns === 0) return;
         // Giảm số lượt quay
-         setSubtractTicket();
+        setSubtractTicket();
         // Phát âm thanh quay
         const audio = new Audio(spinAudio);
         audio.play();

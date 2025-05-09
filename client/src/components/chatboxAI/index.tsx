@@ -21,21 +21,17 @@ const ChatBoxAI: React.FC = () => {
         // fixed bottom-1 right-5
         <div className="tablet:hidden">
             <div
-                onClick={() => setIsOpenBox(true)}
-                className="flex flex-col items-center cursor-pointer justify-center  h-12  rounded-md  text-white text-sm   transition duration-200">
-                <span className="mr-2">👤</span> Trợ lý
-            </div>
-            <ChatBoxAIModal
-                isOpenBox={isOpenBox}
-                setIsOpenBox={(e) => {
+                onClick={() => {
                     if (!prompt) {
                         showNotification('⏳ Mình đang xử lý, chờ một chút nhé!');
                     } else {
-                        setIsOpenBox(e);
+                        setIsOpenBox(true);
                     }
                 }}
-                context={prompt}
-            />
+                className="flex flex-col items-center cursor-pointer justify-center  h-12  rounded-md  text-white text-sm   transition duration-200">
+                <span className="mr-2">👤</span> Trợ lý
+            </div>
+            <ChatBoxAIModal isOpenBox={isOpenBox} setIsOpenBox={setIsOpenBox} context={prompt} />
         </div>
     );
 };

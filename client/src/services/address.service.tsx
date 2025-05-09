@@ -26,5 +26,22 @@ const getApiPublicWards = async (districtId: any) => {
         return error;
     }
 };
-
-export { getApiPublicProvince, getApiPublicDistrict, getApiPublicWards };
+const getApiCurrentLocation = async (latitude: number, longitude: number) => {
+    try {
+        const response = await axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
+const getApiCodeLocation = async (placeName: string) => {
+    try {
+        const response = await axios.get(
+            `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(placeName)}&addressdetails=1&language=vi`,
+        );
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
+export { getApiPublicProvince, getApiPublicDistrict, getApiCurrentLocation, getApiCodeLocation, getApiPublicWards };

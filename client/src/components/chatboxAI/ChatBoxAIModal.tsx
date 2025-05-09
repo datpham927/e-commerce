@@ -35,6 +35,14 @@ const ChatBoxAIModal: React.FC<ChatBoxAIModalProps> = ({ context, isOpenBox, set
     }, [messages, isLoading]);
 
     useEffect(() => {
+        if (!prompt) {
+            setIsLoading(true);
+        } else {
+            setIsLoading(false);
+        }
+    }, [prompt]);
+
+    useEffect(() => {
         if (isOpenBox) {
             setIsVisible(true);
         } else {

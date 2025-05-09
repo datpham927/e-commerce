@@ -29,7 +29,7 @@ import useSocketStore from '../../../store/socketStore';
 const PaymentPage: React.FC = () => {
     const navigate = useNavigate();
     const { selectedProducts, setRemoveProductInCart } = useCartStore();
-    const { user } = useUserStore();
+    const { user,setSubtractBalance } = useUserStore();
     const { setIsLoading } = useActionStore();
     const { setOrder } = useOrderStore();
 
@@ -136,10 +136,9 @@ const PaymentPage: React.FC = () => {
         else if (paymentMethod === 'COIN') {
             // Xử lý thanh toán bằng coin
             const userBalance = user?.user_balance || 0;
-            const totalOrderPrice = totalPayment; // Tính toán tổng giá trị đơn hàng cần thanh toán
-    
+            
             // Kiểm tra xem số dư người dùng có đủ để thanh toán bằng coin không
-            if (userBalance < totalOrderPrice) {
+            if (userBalance < totalPayment) {
                 showNotification('Số dư của bạn không đủ để thanh toán bằng COIN.', false);
                 return;
             }
@@ -149,10 +148,9 @@ const PaymentPage: React.FC = () => {
             const res = await apiCreateOrders(data);
             setIsLoading(false);
             showNotification(res.message, res.success);
-    
             // Nếu tạo đơn hàng không thành công, dừng lại
             if (!res.success) return;
-    
+            setSubtractBalance(totalPayment)
             // Trừ số dư người dùng khi thanh toán thành công
             await Promise.all(selectedProducts.map((product) => setRemoveProductInCart(product.productId)));
     

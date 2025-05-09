@@ -82,11 +82,11 @@ const LuckyWheel: React.FC<LuckyWheelProps> = ({ setGameModalOpen }) => {
     const [prizeIndex, setPrizeIndex] = useState<number>(0);
     const [showPrize, setShowPrize] = useState<boolean>(false);
     // Lấy hàm và dữ liệu người dùng từ store
-    const { addRewardPoints, addTicket, user, subtractTicket } = useUserStore() as {
-        addRewardPoints: (points: number) => void;
-        addTicket: (tickets: number) => void;
+    const { setAddRewardPoints, setAddTicket, user,  setSubtractTicket } = useUserStore() as {
+        setAddRewardPoints: (points: number) => void;
+        setAddTicket: (tickets: number) => void;
         user: User;
-        subtractTicket: () => void;
+         setSubtractTicket: () => void;
     };
     // Lưu tiêu đề phiếu giảm giá
     const [titleVoucher, setTitleVoucher] = useState<string>('');
@@ -95,7 +95,7 @@ const LuckyWheel: React.FC<LuckyWheelProps> = ({ setGameModalOpen }) => {
         // Không cho quay nếu đang quay hoặc hết lượt
         if (isSpinning || user.user_spin_turns === 0) return;
         // Giảm số lượt quay
-        subtractTicket();
+         setSubtractTicket();
         // Phát âm thanh quay
         const audio = new Audio(spinAudio);
         audio.play();
@@ -152,16 +152,16 @@ const LuckyWheel: React.FC<LuckyWheelProps> = ({ setGameModalOpen }) => {
             const data = res.data;
             // Cập nhật điểm thưởng, lượt quay hoặc phiếu giảm giá
             if (data.type === 'point' && data.point) {
-                addRewardPoints(data.point);
+                setAddRewardPoints(data.point);
             } else if (data.type === 'ticket' && data.ticket) {
-                addTicket(data.ticket);
+                setAddTicket(data.ticket);
             } else if (data.type === 'voucher' && data.voucher) {
                 setTitleVoucher(data.voucher.voucher_name);
             }
         };
 
         handlePrize();
-    }, [showPrize, prizeIndex, addRewardPoints, addTicket]);
+    }, [showPrize, prizeIndex, setAddRewardPoints, setAddTicket]);
 
     return (
         <>

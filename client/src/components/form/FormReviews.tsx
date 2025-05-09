@@ -48,7 +48,7 @@ const FormReviews: React.FC<FormReviewsProps> = ({
     const [valueInput, setValueInput] = useState('');
     const [imagesUrl, setImagesUrl] = useState<string[]>([]);
     const [rating, setRating] = useState<number | any>(5);
-    const { user, addRewardPoints } = useUserStore();
+    const { user, setAddRewardPoints } = useUserStore();
     const { isUserLoggedIn } = useAuthStore();
     const { setIsLoading, setOpenFeatureAuth } = useActionStore();
     const { purchasedProducts, setIsReviewedPurchasedProduct } = usePurchasedStore();
@@ -119,7 +119,7 @@ const FormReviews: React.FC<FormReviewsProps> = ({
                 ) => [...prev, { _id: res._id, review_rating: rating }],
             );
             setIsReviewedPurchasedProduct(productReview._id);
-            addRewardPoints();
+            setAddRewardPoints();
         }
         setOpenFormReview?.(false);
         setIsLoading(false);

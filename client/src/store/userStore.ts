@@ -6,10 +6,12 @@ import { IUserDetail } from '../interfaces/user.interfaces';
 interface UserState {
     user: IUserDetail;
     setUser: (user: IUserDetail) => void;
-    addRewardPoints: (points?: number) => void;
-    subtractRewardPoints: (points?: number) => void;
-    addTicket: (tickets?: number) => void;
-    subtractTicket: (tickets?: number) => void;
+    setAddRewardPoints: (points?: number) => void;
+    setAddBalance: (balance: number) => void;
+    setSubtractBalance: (balance: number) => void;
+    setSubtractRewardPoints: (points?: number) => void;
+    setAddTicket: (tickets?: number) => void;
+     setSubtractTicket: (tickets?: number) => void;
     setUserRewardPoints: (points: number) => void;
 }
 
@@ -30,6 +32,7 @@ const getStoredUser = (): IUserDetail => {
         user_email: '',
         user_spin_turns: 0,
         user_reward_points: 0,
+        user_balance:0,
         createdAt: '',
     };
 };
@@ -43,7 +46,7 @@ const useUserStore = create<UserState>((set, get) => ({
         set({ user });
     },
 
-    addRewardPoints: (points = 5000) => {
+    setAddRewardPoints: (points = 5000) => {
         const { user } = get();
         const updated = {
             ...user,
@@ -52,8 +55,27 @@ const useUserStore = create<UserState>((set, get) => ({
         localStorage.setItem('user', JSON.stringify(updated));
         set({ user: updated });
     },
+    setAddBalance: (balance:number) => {
+        const { user } = get();
+        const updated = {
+            ...user,
+            user_balance: (user.user_balance || 0) + balance,
+        };
+        localStorage.setItem('user', JSON.stringify(updated));
+        set({ user: updated });
+    },
 
-    subtractRewardPoints: (points = 5000) => {
+    setSubtractBalance: (balance:number) => {
+        const { user } = get();
+        const updated = {
+            ...user,
+            user_balance:  user.user_balance > balance?user.user_balance - balance:0,
+        };
+        localStorage.setItem('user', JSON.stringify(updated));
+        set({ user: updated });
+    },
+
+    setSubtractRewardPoints: (points = 5000) => {
         const { user } = get();
         const newPoints = Math.max((user.user_reward_points || 0) - points, 0);
         const updated = { ...user, user_reward_points: newPoints };
@@ -61,7 +83,7 @@ const useUserStore = create<UserState>((set, get) => ({
         set({ user: updated });
     },
 
-    addTicket: (tickets = 1) => {
+    setAddTicket: (tickets = 1) => {
         const { user } = get();
         const updated = {
             ...user,
@@ -70,7 +92,7 @@ const useUserStore = create<UserState>((set, get) => ({
         localStorage.setItem('user', JSON.stringify(updated));
         set({ user: updated });
     },
-    subtractTicket: (tickets = 1) => {
+     setSubtractTicket: (tickets = 1) => {
         const { user } = get();
         const updated = {
             ...user,

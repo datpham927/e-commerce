@@ -18,5 +18,5 @@ export interface IUserDetail extends IUserProfile {
     user_spin_turns: number;
     user_passwordChangedAt?: Date;
     createdAt: string;
-    user_balance?: number;
+    user_balance: number;
 }

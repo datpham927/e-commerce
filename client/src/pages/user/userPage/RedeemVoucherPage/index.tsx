@@ -16,7 +16,7 @@ const RedeemVoucherPage: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [totalPage, setTotalPage] = useState<number>(0);
     const { userVouchers, setUserVouchers } = useUserVoucherStore();
-    const { user, subtractRewardPoints } = useUserStore();
+    const { user, setSubtractRewardPoints } = useUserStore();
     const { setIsLoading } = useActionStore();
     useEffect(() => {
         const fetchApiDetailUser = async () => {
@@ -32,7 +32,7 @@ const RedeemVoucherPage: React.FC = () => {
         if (!confirm('bạn có muốn đổi phiếu giảm giá này không')) return;
         setIsLoading(true);
         const res = await apiRedeemVoucher(voucher._id);
-        subtractRewardPoints(voucher.voucher_required_points);
+        setSubtractRewardPoints(voucher.voucher_required_points);
         showNotification(res.message, res.success);
         if (res.success) setUserVouchers(res.data.vc_vouchers);
         setIsLoading(false);

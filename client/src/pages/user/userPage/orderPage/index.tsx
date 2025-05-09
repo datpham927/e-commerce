@@ -5,6 +5,7 @@ import { apiCancelOrder, apiGetAllOrdersByUser, apiReorder } from '../../../../s
 import { OrderItem, showNotification, TableSkeleton } from '../../../../components';
 import NotExit from '../../../../components/common/NotExit';
 import { useActionStore } from '../../../../store/actionStore';
+import useUserStore from '../../../../store/userStore';
 
 const OrderPage: React.FC = () => {
     const SELL_TAB = [
@@ -20,6 +21,7 @@ const OrderPage: React.FC = () => {
     const [displayTab, setDisplayTab] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const { setIsLoading } = useActionStore();
+    const { setAddBalance } = useUserStore();
     // Hàm fetch API đã được khai báo bên ngoài useEffect
     const fetchOrders = async () => {
         setLoading(true);
@@ -40,12 +42,15 @@ const OrderPage: React.FC = () => {
         }
         setIsLoading(false);
     };
-    const handleCancelOrder = async (id: string) => {
+    const handleCancelOrder = async (order:IOrder) => {
         setIsLoading(true);
         if (confirm('Bạn có muốn hủy đơn hàng này không?')) {
-            const res = await apiCancelOrder(id);
-            setOrders((prev) => prev.filter((order) => order._id !== id));
+            const res = await apiCancelOrder(order._id);
+            setOrders((prev) => prev.filter((order) => order._id !== order._id));
             showNotification(res.message, res.success);
+            if(!res.success)return;
+            console.log("sđs",order.order_total_price+order.order_shipping_price-order.order_total_apply_discount)
+            setAddBalance(order.order_total_price+order.order_shipping_price-order.order_total_apply_discount)
         }
         setIsLoading(false);
     };
@@ -78,7 +83,7 @@ const OrderPage: React.FC = () => {
                                 viewDetail
                                 view={displayTab === ''}
                                 handleBuy={() => handleBuy(item._id)}
-                                handleCancelOrder={() => handleCancelOrder(item._id)}
+                                handleCancelOrder={() => handleCancelOrder(item)}
                             />
                         ))}
                     </div>

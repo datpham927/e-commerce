@@ -1,6 +1,7 @@
 import React from 'react';
 import { PAYMENT_METHOD } from '../../../utils/const';
 import { formatMoney } from '../../../utils/formatMoney';
+import useUserStore from '../../../store/userStore';
 
 interface OrderSummaryProps {
     totalProductPrice: number;
@@ -22,13 +23,27 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
     deliveryMethod,
     paymentMethod,
     onPlaceOrder,
-}) => (
+}) => {
+const {user}=useUserStore()
+return (
     <div className="w-full mx-auto bg-white border rounded-md shadow-sm text-sm">
         <div className="px-4 py-4 border-b">
             <div className="flex items-center justify-between mb-2">
                 <span className="text-gray-800 font-medium">Phương thức thanh toán</span>
             </div>
-            <span className="text-gray-800">{PAYMENT_METHOD.method.find((m) => m.code === selectedPaymentMethod)?.label || 'Chưa chọn'}</span>
+           {!(selectedPaymentMethod==="COIN")? <span className="text-gray-800">{PAYMENT_METHOD.method.find((m) => m.code === selectedPaymentMethod)?.label || 'Chưa chọn'}</span>
+         :<div className="flex items-center space-x-4 border p-4 rounded-md shadow-sm">
+      <img
+        src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/paymentfe/cb78f1ca161d1694.png" // Thay bằng đường dẫn icon thực tế
+        alt="Coin"
+        className="w-12 h-12 rounded-full"
+      />
+      <div className="flex flex-col">
+        <span className="text-gray-700 font-medium">Số dư trong ví</span>
+        <span className="text-gray-600 text-sm">{formatMoney(user.user_balance)}</span>
+      </div>
+    </div>
+         }
         </div>
         <div className="px-4 py-4 bg-[#fefdf9] border-b">
             <div className="flex justify-between mb-2">
@@ -47,7 +62,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
             )}
             <div className="flex justify-between font-semibold text-lg text-red-600">
                 <span>Tổng thanh toán</span>
-                <span>{formatMoney(totalPayment)}</span>
+                <span>{formatMoney(selectedPaymentMethod==="COIN"?Math.abs(user?.user_balance - totalPayment):totalPayment)}</span>
             </div>
         </div>
         <div className="flex justify-end p-4">
@@ -60,5 +75,6 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
         </div>
     </div>
 );
+}
 
 export default OrderSummary;

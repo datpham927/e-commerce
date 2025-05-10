@@ -36,14 +36,19 @@ export const Sidebar: React.FC = () => {
                 </div>
             </div>
             {/* Display user balance */}
-            <div className="flex flex-col items-center text-center mx-4 justify-center py-2 px-3 bg-blue-50 rounded-xl border border-blue-400 shadow-sm mt-4">
+            <div className="flex flex-col items-center text-center mx-4 justify-center py-2 px-3 bg-yellow-50 rounded-xl border border-yellow-400 shadow-sm">
                 <span className="text-[14px] text-gray-900">Số dư tài khoản</span>
                 <div className="flex items-center gap-1 text-blue-500 font-semibold text-sm mt-1">
-                    {user.user_balance?.toLocaleString('vi-VN')} VNĐ
-                    <PaidIcon fontSize="small" />
-                </div>
+                {user.user_balance?.toLocaleString('vi-VN')} VNĐ
+            <img
+            src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/paymentfe/cb78f1ca161d1694.png"
+            alt="coin"
+            className="w-5 h-5 object-contain ml-1"
+             />
+             </div>
             </div>
-            <div className="flex flex-col items-center text-center mx-4 justify-center py-2 px-3 bg-yellow-50 rounded-xl border border-yellow-400 shadow-sm">
+
+            <div className="flex flex-col items-center text-center mx-4 justify-center py-2 px-3 bg-blue-50 rounded-xl border border-blue-400 shadow-sm mt-4">
                 <span className="text-[14px] text-gray-900">Điểm hiện có</span>
                 <div className="flex items-center gap-1 text-amber-500 font-semibold text-sm mt-1">
                     {user.user_reward_points?.toLocaleString('vi-VN')}

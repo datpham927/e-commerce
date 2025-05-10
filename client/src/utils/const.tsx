@@ -213,9 +213,10 @@ export const PAYMENT_METHOD = {
             img: vnpay,
         },
         {
-            code: 'COIN',
-            label: 'Thanh toán bằng số dư',
-        },
+        code: 'COIN',
+        label: 'Thanh toán bằng số dư',
+        img: 'https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/paymentfe/cb78f1ca161d1694.png',
+    },
     ],
 };
 export const DELIVERY_METHOD = {

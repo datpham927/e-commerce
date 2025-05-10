@@ -11,40 +11,57 @@ interface BrandListProps {
 
 const BrandTable: React.FC<BrandListProps> = ({ brands, onEdit, onDelete }) => {
     return (
-        <div className="overflow-hidden rounded-xl my-4 border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-            <div className="max-w-full overflow-x-auto">
-                <Table>
+        <div className="overflow-hidden rounded-xl my-6 border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
+            <div className="w-full overflow-x-auto">
+                <Table className="min-w-full">
                     {/* Table Header */}
-                    <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+                    <TableHeader className="bg-gray-100 dark:bg-gray-700">
                         <TableRow>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                            <TableCell isHeader className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-200">
                                 Tên thương hiệu
                             </TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                            <TableCell isHeader className="px-6 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-200">
                                 Banner
                             </TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
+                            <TableCell isHeader className="px-6 py-4 text-center text-sm font-semibold text-gray-600 dark:text-gray-200">
                                 Thao tác
                             </TableCell>
                         </TableRow>
                     </TableHeader>
+
                     {/* Table Body */}
-                    <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                        {brands?.map((c) => (
-                            <TableRow key={c._id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
-                                <TableCell className="px-5 py-3 text-gray-700 dark:text-gray-300">{c.brand_name}</TableCell>
-                                <TableCell className="px-5 py-3">
-                                    <div className="w-[100px]  overflow-hidden   flex items-center justify-center">
-                                        <img src={c.brand_banner} alt={c.brand_name} className="w-full h-full object-cover rounded-md" />
+                    <TableBody className="divide-y divide-gray-100 dark:divide-gray-700">
+                        {brands?.map((brand) => (
+                            <TableRow key={brand._id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                                <TableCell className="px-6 py-4 text-gray-800 dark:text-gray-100 font-medium">
+                                    {brand.brand_name}
+                                </TableCell>
+                                <TableCell className="px-6 py-4">
+                                    <div className="w-[120px] h-[60px] overflow-hidden rounded-lg shadow-sm border border-gray-200">
+                                        <img
+                                            src={brand.brand_banner}
+                                            alt={brand.brand_name}
+                                            className="w-full h-full object-cover"
+                                        />
                                     </div>
                                 </TableCell>
-                                <TableCell className="px-5 py-3 text-center flex gap-3 justify-center">
-                                    <button onClick={() => onEdit(c)} className="text-blue-500 hover:text-blue-700 transition">
-                                        <EditIcon />
-                                    </button>
-                                    <button onClick={() => onDelete(c?._id)} className="text-red-500 hover:text-red-700 transition">
-                                        <DeleteIcon />
-                                    </button>
+                                <TableCell className="px-6 py-4">
+                                    <div className="flex justify-center items-center gap-4">
+                                        <button
+                                            onClick={() => onEdit(brand)}
+                                            className="text-indigo-600 hover:text-indigo-800 transition-transform hover:scale-110"
+                                            title="Chỉnh sửa"
+                                        >
+                                            <EditIcon />
+                                        </button>
+                                        <button
+                                            onClick={() => onDelete(brand._id)}
+                                            className="text-red-500 hover:text-red-700 transition-transform hover:scale-110"
+                                            title="Xóa"
+                                        >
+                                            <DeleteIcon />
+                                        </button>
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         ))}

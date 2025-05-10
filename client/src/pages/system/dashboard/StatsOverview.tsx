@@ -6,12 +6,13 @@ interface StatsOverviewProps {
   onUserClick: () => void;
   onOrderClick: () => void;
   onOrderoffClick: () => void;
+  onReviewClick: () => void;
   onRevenueMouseEnter: () => void;
   onRevenueMouseLeave: () => void;
   showTooltip: boolean;
   revenuePerMonth: { _id: string; total: number }[];
 }
-
+  
 const statLabels = {
   totalProducts: 'Tổng sản phẩm',
   totalUsers: 'Tổng người dùng',
@@ -35,6 +36,7 @@ export default function StatsOverview({
   onUserClick,
   onOrderClick,
   onOrderoffClick,
+  onReviewClick,
   onRevenueMouseEnter,
   onRevenueMouseLeave,
   showTooltip,
@@ -113,6 +115,7 @@ export default function StatsOverview({
           key: 'totalReviews',
           label: statLabels.totalReviews,
           value: stats.totalApprovedReviews + stats.totalPendingReviews,
+          onClick: onReviewClick,
           detail: [
             {
               icon: '✅',

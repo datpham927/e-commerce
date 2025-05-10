@@ -11,48 +11,63 @@ interface CategoryListProps {
 
 const CategoryTable: React.FC<CategoryListProps> = ({ categories, onEdit, onDelete }) => {
     return (
-        <div className="overflow-hidden rounded-xl my-4 border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-            <div className="max-w-full overflow-x-auto">
-                <Table>
-                    {/* Table Header */}
-                    <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+        <div className="overflow-hidden rounded-xl my-6 border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
+            <div className="w-full overflow-x-auto">
+                <Table className="min-w-full">
+                    {/* Header */}
+                    <TableHeader className="bg-gray-100 dark:bg-gray-700">
                         <TableRow>
-                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-600 text-start text-theme-xs dark:text-gray-400">
-                                Code
+                            <TableCell isHeader className="px-6 py-4 text-sm font-semibold text-gray-700 dark:text-white">
+                                Mã danh mục
                             </TableCell>
-                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-600 text-start text-theme-xs dark:text-gray-400">
+                            <TableCell isHeader className="px-6 py-4 text-sm font-semibold text-gray-700 dark:text-white">
                                 Tên danh mục
                             </TableCell>
-                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-600 text-start text-theme-xs dark:text-gray-400">
+                            <TableCell isHeader className="px-6 py-4 text-sm font-semibold text-gray-700 dark:text-white text-center">
                                 Hình ảnh
                             </TableCell>
-                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-600 text-center text-theme-xs dark:text-gray-400">
+                            <TableCell isHeader className="px-6 py-4 text-sm font-semibold text-gray-700 dark:text-white text-center">
                                 Thao tác
                             </TableCell>
                         </TableRow>
                     </TableHeader>
-                    {/* Table Body */}
-                    <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+
+                    {/* Body */}
+                    <TableBody className="divide-y divide-gray-200 dark:divide-gray-700">
                         {categories.map((c) => (
-                            <TableRow key={c._id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
-                                <TableCell className="px-6 py-4 text-gray-700 dark:text-gray-300">{c.category_code}</TableCell>
-                                <TableCell className="px-6 py-4 text-gray-700 dark:text-gray-300">
-                                    <span className="truncate-trailing line-clamp-1 w-[200px] font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                                        {c.category_name}
-                                    </span>
+                            <TableRow key={c._id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                                <TableCell className="px-6 py-4 text-gray-800 dark:text-gray-100 font-medium">
+                                    {c.category_code}
                                 </TableCell>
-                                <TableCell className="px-6 py-4 text-center">
-                                    <div className="w-20 h-20 mx-auto overflow-hidden rounded-lg border-2 border-gray-200 dark:border-gray-700 flex items-center justify-center shadow-lg">
-                                        <img src={c.category_thumb} alt={c.category_name} className="w-full h-full object-cover" />
+                                <TableCell className="px-6 py-4 text-gray-800 dark:text-gray-100">
+                                    <div className="truncate w-[220px] font-medium">{c.category_name}</div>
+                                </TableCell>
+                                <TableCell className="px-6 py-4">
+                                    <div className="w-20 h-20 mx-auto overflow-hidden rounded-lg border border-gray-300 dark:border-gray-600 shadow-md">
+                                        <img
+                                            src={c.category_thumb}
+                                            alt={c.category_name}
+                                            className="w-full h-full object-cover"
+                                        />
                                     </div>
                                 </TableCell>
-                                <TableCell className="px-6 py-4 text-center flex gap-4 justify-center">
-                                    <button onClick={() => onEdit(c)} className="text-blue-500 hover:text-blue-700 transition">
-                                        <EditIcon />
-                                    </button>
-                                    <button onClick={() => onDelete(c._id)} className="text-red-500 hover:text-red-700 transition">
-                                        <DeleteIcon />
-                                    </button>
+                                <TableCell className="px-6 py-4">
+                                    <div className="flex justify-center gap-4">
+                                        <button
+                                            onClick={() => onEdit(c)}
+                                            className="text-indigo-600 hover:text-indigo-800 transition-transform hover:scale-110"
+                                            title="Chỉnh sửa"
+                                        >
+                                            <EditIcon />
+                                        </button>
+                                        <button
+                                            onClick={() => onDelete(c._id)}
+                                            className="text-red-500 hover:text-red-700 transition-transform hover:scale-110"
+                                            title="Xóa"
+                                        >
+                                            <DeleteIcon />
+                                        </button>
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         ))}

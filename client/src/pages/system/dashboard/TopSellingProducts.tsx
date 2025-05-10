@@ -17,7 +17,7 @@ export default function TopSellingProducts({ topSellingProducts }: TopSellingPro
                     </thead>
                     <tbody>
                         {topSellingProducts.slice(0, 5).map((product, index) => (
-                            <tr key={product._id} className="border-t border-gray-200 dark:border-gray-600">
+                            <tr key={product._id} className="border-t border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                                 <td className="px-4 py-2 text-gray-800 dark:text-white">
                                     {index === 0 ? (
                                         <span className="text-yellow-500">🥇</span>

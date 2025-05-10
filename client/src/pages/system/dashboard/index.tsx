@@ -54,6 +54,7 @@ export default function DashboardManage() {
                 onUserClick={() => navigate('/quan-ly/nguoi-dung')}
                 onOrderClick={() => navigate('/quan-ly/don-hang')}
                 onOrderoffClick={() => navigate('/quan-ly/hoa-don')}
+                onReviewClick={() => navigate('/quan-ly/danh-gia')}
                 onRevenueMouseEnter={() => setShowTooltip(true)}
                 onRevenueMouseLeave={() => setShowTooltip(false)}
                 showTooltip={showTooltip}

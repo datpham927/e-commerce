@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Table, TableBody, TableCell, TableHeader, TableRow } from '../../../components/ui/table';
 import DoneIcon from '@mui/icons-material/Done';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Table, TableBody, TableCell, TableHeader, TableRow } from '../../../components/ui/table';
 import { IReview } from '../../../interfaces/review.interfaces';
 
 interface ReviewListProps {
@@ -12,66 +11,78 @@ interface ReviewListProps {
 
 const ReviewTable: React.FC<ReviewListProps> = ({ Reviews, onDelete, onApprove }) => {
     return (
-        <div className="overflow-hidden rounded-xl my-4 border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-            <div className="max-w-full overflow-x-auto">
+        <div className="overflow-hidden rounded-xl my-6 border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
+            <div className="w-full overflow-x-auto">
                 <Table>
-                    {/* Table Header */}
-                    <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+                    <TableHeader className="bg-gray-100 dark:bg-gray-700">
                         <TableRow>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
-                                Tên người dùng
-                            </TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
-                                Bình luận
-                            </TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
-                                Hình ảnh
-                            </TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
-                                Trạng thái
-                            </TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
-                                Thao tác
-                            </TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white text-center">Người dùng</TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white text-center">Bình luận</TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white text-center">Hình ảnh</TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white text-center">Trạng thái</TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white text-center">Thao tác</TableCell>
                         </TableRow>
                     </TableHeader>
-                    {/* Table Body */}
-                    <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+
+                    <TableBody className="divide-y divide-gray-200 dark:divide-gray-600">
                         {Reviews?.map((review) => (
-                            <TableRow key={review?._id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
-                                <TableCell className="px-5 py-3 text-gray-700 text-center dark:text-gray-300">
-                                    <span className="truncate-trailing line-clamp-2 font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                                        {review?.review_user?.user_name}
-                                    </span>
+                            <TableRow key={review?._id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                                <TableCell className="px-6 py-4 text-center text-gray-900 dark:text-gray-100 font-medium">
+                                    {review?.review_user?.user_name || 'Ẩn danh'}
                                 </TableCell>
-                                <TableCell className="px-5 py-3 text-gray-700 text-center dark:text-gray-300">
-                                    <span className="truncate-trailing line-clamp-2 font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                                        {review?.review_comment}
-                                    </span>
+
+                                <TableCell className="px-6 py-4 text-center text-gray-700 dark:text-gray-300 max-w-[300px]">
+                                    <span className="block truncate">{review?.review_comment}</span>
                                 </TableCell>
-                                <TableCell className="px-5 py-3 text-gray-700 text-center dark:text-gray-300">
-                                    {review?.review_images?.length > 0
-                                        ? review?.review_images.map((i: string) => (
-                                            <div key={i} className="w-20 h-20 m-auto overflow-hidden rounded-lg border-2 border-gray-200 dark:border-gray-700 flex items-center justify-center shadow-lg">
-                                                <img src={i} alt="Review image" className="w-full h-full object-cover" />
-                                            </div>
-                                        ))
-                                        : 'Không có ảnh'}
-                                </TableCell>
-                                <TableCell className="px-5 py-3 text-gray-700 text-center dark:text-gray-300">
-                                    <span className="truncate-trailing line-clamp-2 font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                                        {review?.isApproved ? 'Đã duyệt' : 'Chưa duyệt'}
-                                    </span>
-                                </TableCell>
-                                <TableCell className="px-5 py-3 text-gray-700 text-center dark:text-gray-300">
-                                    {!review.isApproved && (
-                                        <button onClick={() => onApprove(review?._id)} className="text-blue-500 hover:text-blue-700 transition">
-                                            <DoneIcon />
-                                        </button>
+
+                                <TableCell className="px-6 py-4 text-center">
+                                    {review?.review_images?.length > 0 ? (
+                                        <div className="flex gap-2 justify-center flex-wrap">
+                                            {review?.review_images.map((img, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="w-16 h-16 border border-gray-300 dark:border-gray-600 rounded-md overflow-hidden shadow-sm"
+                                                >
+                                                    <img src={img} alt="Hình ảnh đánh giá" className="w-full h-full object-cover" />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <span className="text-sm text-gray-500 dark:text-gray-400 italic">Không có ảnh</span>
                                     )}
-                                    <button onClick={() => onDelete(review?._id)} className="text-red-500 hover:text-red-700 transition">
-                                        <DeleteIcon />
-                                    </button>
+                                </TableCell>
+
+                                <TableCell className="px-6 py-4 text-center">
+                                    {review?.isApproved ? (
+                                        <span className="inline-block px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-medium dark:bg-green-700/30 dark:text-green-300">
+                                            Đã duyệt
+                                        </span>
+                                    ) : (
+                                        <span className="inline-block px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-medium dark:bg-yellow-700/30 dark:text-yellow-300">
+                                            Chưa duyệt
+                                        </span>
+                                    )}
+                                </TableCell>
+
+                                <TableCell className="px-6 py-4 text-center">
+                                    <div className="flex justify-center gap-3">
+                                        {!review?.isApproved && (
+                                            <button
+                                                onClick={() => onApprove(review._id)}
+                                                className="text-indigo-600 hover:text-indigo-800 hover:scale-110 transition-transform"
+                                                title="Duyệt"
+                                            >
+                                                <DoneIcon />
+                                            </button>
+                                        )}
+                                        <button
+                                            onClick={() => onDelete(review._id)}
+                                            className="text-red-500 hover:text-red-700 hover:scale-110 transition-transform"
+                                            title="Xóa"
+                                        >
+                                            <DeleteIcon />
+                                        </button>
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         ))}

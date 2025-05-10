@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '../../../components/ui/table';
@@ -13,70 +12,68 @@ interface BannerListProps {
 
 const BannerTable: React.FC<BannerListProps> = ({ banners, onEdit, onDelete }) => {
     return (
-        <div className="overflow-hidden rounded-xl my-4 border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-            <div className="max-w-full overflow-x-auto">
+        <div className="overflow-hidden rounded-xl my-6 border border-gray-200 bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
+            <div className="w-full overflow-x-auto">
                 <Table>
-                    {/* Table Header */}
-                    <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+                    <TableHeader className="bg-gray-100 dark:bg-gray-700">
                         <TableRow>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                                Tiêu đề
-                            </TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                                Hình ảnh
-                            </TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
-                                Liên kết
-                            </TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
-                                Ngày bắt đầu
-                            </TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
-                                Ngày kết thúc
-                            </TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
-                                Thao tác
-                            </TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white">Tiêu đề</TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white">Hình ảnh</TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 text-center dark:text-white">Liên kết</TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 text-center dark:text-white">Bắt đầu</TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 text-center dark:text-white">Kết thúc</TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 text-center dark:text-white">Thao tác</TableCell>
                         </TableRow>
                     </TableHeader>
-                    {/* Table Body */}
-                    <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                        {banners?.map((c) => (
-                            <TableRow key={c._id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
-                                <TableCell className="px-5 py-3 text-gray-700 dark:text-gray-300">
-                                    <span className="font-medium text-gray-800 text-theme-sm dark:text-white/90">{c.banner_title}</span>
+
+                    <TableBody className="divide-y divide-gray-200 dark:divide-gray-700">
+                        {banners?.map((banner) => (
+                            <TableRow key={banner._id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                                <TableCell className="px-6 py-4 text-gray-800 dark:text-gray-100 font-medium">
+                                    {banner.banner_title}
                                 </TableCell>
-                                <TableCell className="px-5 py-3">
-                                    <div className="w-[150px]   overflow-hidden border border-gray-200 dark:border-gray-700 flex items-center justify-center">
-                                        <img src={c.banner_imageUrl} alt={c.banner_imageUrl} className="w-full h-full object-cover" />
+                                <TableCell className="px-6 py-4">
+                                    <div className="w-40 h-20 overflow-hidden rounded-md border border-gray-300 dark:border-gray-600 shadow-sm">
+                                        <img
+                                            src={banner.banner_imageUrl}
+                                            alt={banner.banner_title}
+                                            className="w-full h-full object-cover"
+                                        />
                                     </div>
                                 </TableCell>
-                                <TableCell className="px-5 text-gray-700 text-center dark:text-gray-300">
+                                <TableCell className="px-6 py-4 text-center">
                                     <a
-                                        href={c.banner_link}
+                                        href={banner.banner_link}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="w-[100px] underline truncate-trailing line-clamp-1 font-medium text-blue-500 text-theme-sm">
-                                        {c.banner_link}
+                                        className="text-blue-500 hover:underline truncate block max-w-[180px] mx-auto dark:text-blue-400"
+                                    >
+                                        {banner.banner_link}
                                     </a>
                                 </TableCell>
-                                <TableCell className="px-5 py-3 text-gray-700 text-center dark:text-gray-300">
-                                    <span className="truncate-trailing line-clamp-1 font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                                        {formatDate(c.banner_startDate)}
-                                    </span>
+                                <TableCell className="px-6 py-4 text-center text-gray-700 dark:text-gray-200">
+                                    {formatDate(banner.banner_startDate)}
                                 </TableCell>
-                                <TableCell className="px-5 py-3 text-gray-700 text-center dark:text-gray-300">
-                                    <span className="truncate-trailing line-clamp-1 font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                                        {formatDate(c.banner_endDate)}
-                                    </span>
+                                <TableCell className="px-6 py-4 text-center text-gray-700 dark:text-gray-200">
+                                    {formatDate(banner.banner_endDate)}
                                 </TableCell>
-                                <TableCell className="px-5 py-3 text-center flex gap-3 justify-center">
-                                    <button onClick={() => onEdit(c)} className="text-blue-500 hover:text-blue-700 transition">
-                                        <EditIcon />
-                                    </button>
-                                    <button onClick={() => onDelete(c?._id)} className="text-red-500 hover:text-red-700 transition">
-                                        <DeleteIcon />
-                                    </button>
+                                <TableCell className="px-6 py-4 text-center">
+                                    <div className="flex justify-center gap-3">
+                                        <button
+                                            onClick={() => onEdit(banner)}
+                                            className="text-indigo-600 hover:text-indigo-800 hover:scale-110 transition-transform"
+                                            title="Chỉnh sửa"
+                                        >
+                                            <EditIcon />
+                                        </button>
+                                        <button
+                                            onClick={() => onDelete(banner._id)}
+                                            className="text-red-500 hover:text-red-700 hover:scale-110 transition-transform"
+                                            title="Xóa"
+                                        >
+                                            <DeleteIcon />
+                                        </button>
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         ))}

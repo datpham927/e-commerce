@@ -56,7 +56,7 @@ export default function TabsTable({ newUsers, potentialCustomers }: TabsTablePro
                         </thead>
                         <tbody>
                             {sortedPotentialCustomers.map((user) => (
-                                <tr key={user._id} className="border-t border-gray-200 dark:border-gray-600">
+                                <tr key={user._id} className="border-t border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                                     <td className="px-4 py-2 text-gray-800 dark:text-white">{user.user_name}</td>
                                     <td className="px-4 py-2 text-gray-800 dark:text-white">{user.user_email}</td>
                                     <td className="px-4 py-2 text-gray-800 dark:text-white">{user.user_mobile}</td>
@@ -76,8 +76,8 @@ export default function TabsTable({ newUsers, potentialCustomers }: TabsTablePro
                 {TAB_LIST.map((tabItem) => (
                     <button
                         key={tabItem.tab}
-                        className={`px-4 py-2 rounded-md ${
-                            selectedTab === tabItem.tab ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'
+                        className={`px-4 py-2 rounded-md font-semibold transition-all duration-300 ease-in-out ${
+                            selectedTab === tabItem.tab ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800 hover:bg-blue-500 hover:text-white'
                         }`}
                         onClick={() => setSelectedTab(tabItem.tab)}
                     >

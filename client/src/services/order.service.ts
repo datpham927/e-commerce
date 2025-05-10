@@ -108,9 +108,9 @@ const apiCancelOrder = async (id: string) => {
         };
     }
 };
-const apiReorder = async (id: string) => {
+const apiReorder = async (id: string, address: any) => {
     try {
-        const res = await authClient.put(`/v1/api/order/${id}/re-order`);
+        const res = await authClient.put(`/v1/api/order/${id}/re-order`, { address });
         return res.data;
     } catch (error) {
         return {

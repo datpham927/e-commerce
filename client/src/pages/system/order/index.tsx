@@ -41,6 +41,7 @@ const OrderManage: React.FC = () => {
     useEffect(() => {
         if (!isConnected) connect();
     }, [isConnected, connect]);
+
     // Hàm fetch API đã được khai báo bên ngoài useEffect
     const fetchOrders = async () => {
         setLoading(true);
@@ -69,20 +70,19 @@ const OrderManage: React.FC = () => {
     const handleSearch = async () => {
         setLoading(true);
         if (!searchQuery.trim()) {
-            // Hiển thị thông báo nếu từ khóa tìm kiếm trống
-            showNotification('Vui lòng nhập từ khoá tìm kiếm', false); // Thông báo lỗi khi không có từ khoá
+            showNotification('Vui lòng nhập từ khoá tìm kiếm', false);
             setLoading(false);
             return;
         }
 
-        const res = await apiGetOrderByCode(searchQuery.trim()); // Sử dụng apiGetOrderByCode để tìm kiếm
+        const res = await apiGetOrderByCode(searchQuery.trim());
         if (res.success) {
             const result = Array.isArray(res.data) ? res.data : [res.data];
-            setOrders(result); // Cập nhật danh sách đơn hàng với kết quả tìm kiếm
+            setOrders(result);
             setIsSearching(true);
         } else {
             console.error('Không tìm thấy đơn hàng:', res.message);
-            setOrders([]); // Nếu không tìm thấy đơn hàng, cập nhật danh sách là rỗng
+            setOrders([]);
         }
         setLoading(false);
     };
@@ -119,6 +119,10 @@ const OrderManage: React.FC = () => {
                 'Địa chỉ nhận hàng': or.order_shipping_address.detailAddress,
                 'Số điện thoại': or.order_shipping_address.phone,
                 'Trạng thái': statusOrder(or)?.title,
+                'Phương thức thanh toán': or.order_payment_method,
+                'Số tiền cần trả': formatMoney(or.order_amount_due),
+                'Số tiền đã trả': formatMoney(or.order_amount_paid),
+                'Số tiền còn lại': formatMoney(or.order_amount_due - or.order_amount_paid),
                 'Tên hàng/số lượng': titleProducts.join(', '),
                 'Tổng tiền': formatMoney(or.order_total_price),
             };

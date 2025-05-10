@@ -22,6 +22,9 @@ const OrderDetailPage: React.FC = () => {
 
     if (!order) return <SkeletonViewOrder />;
 
+    // Tính toán số tiền còn lại cần trả
+    const amountDueRemaining = order.order_amount_due - order.order_amount_paid;
+
     return (
         <div className="w-full p-4 max-w-6xl mx-auto">
             {/* Header */}
@@ -64,7 +67,20 @@ const OrderDetailPage: React.FC = () => {
                 {/* Hình thức thanh toán */}
                 <div className="bg-white shadow rounded-xl p-4">
                     <h2 className="text-sm font-semibold text-secondary mb-2 uppercase">Hình thức thanh toán</h2>
-                    <p className="text-sm text-gray-600">{order.order_payment_method}</p>
+                    <p className="text-sm text-gray-600">
+                        Phương thức: <span className="text-primary">{order.order_payment_method}</span>
+                    </p>
+                    <p className="text-sm text-gray-600 mt-1">
+                        Số tiền cần trả: <span className="text-primary font-semibold">{formatMoney(order.order_amount_due)}</span>
+                    </p>
+                    <p className="text-sm text-gray-600 mt-1">
+                        Số tiền đã trả: <span className="text-green-500 font-semibold">{formatMoney(order.order_amount_paid)}</span>
+                    </p>
+                    {amountDueRemaining > 0 && (
+                        <p className="text-sm text-gray-600 mt-1">
+                            Số tiền còn lại (trả bằng tiền mặt): <span className="text-red-500 font-semibold">{formatMoney(amountDueRemaining)}</span>
+                        </p>
+                    )}
                 </div>
             </div>
 
@@ -76,7 +92,7 @@ const OrderDetailPage: React.FC = () => {
             {/* Back link */}
             <div className="mt-6">
                 <Link className="text-sm text-primary hover:underline flex items-center gap-1" to={PATH.PAGE_ORDER}>
-                    <span>&laquo;</span> Quay lại danh sách đơn hàng
+                    <span>«</span> Quay lại danh sách đơn hàng
                 </Link>
             </div>
         </div>

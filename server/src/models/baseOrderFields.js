@@ -14,7 +14,7 @@ const baseOrderFields = {
     order_voucher: { type: Schema.Types.ObjectId, ref: 'Voucher' },
     order_total_price: { type: Number, required: true, default: 0, min: 0 },
     order_total_apply_discount: { type: Number, required: true, default: 0, min: 0 },
-    order_payment_method: { type: String, required: true, enum: ['CASH', 'VNPAY', 'ONLINE','COIN'] },
+    order_payment_method: { type: String, required: true, enum: ['CASH', 'VNPAY', 'ONLINE', 'COIN', 'COIN+CASH'] },
     order_code: { type: String },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },

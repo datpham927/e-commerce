@@ -29,7 +29,7 @@ import useSocketStore from '../../../store/socketStore';
 const PaymentPage: React.FC = () => {
     const navigate = useNavigate();
     const { selectedProducts, setRemoveProductInCart } = useCartStore();
-    const { user,setSubtractBalance } = useUserStore();
+    const { user, setSubtractBalance } = useUserStore();
     const { setIsLoading } = useActionStore();
     const { setOrder } = useOrderStore();
 
@@ -100,20 +100,20 @@ const PaymentPage: React.FC = () => {
             showNotification('Vui lòng chọn phương thức thanh toán và giao hàng', false);
             return;
         }
-    
+
         // Tạo dữ liệu đơn hàng
         const data = createOrderData();
-    
+
         if (paymentMethod === 'CASH') {
             // Xử lý thanh toán bằng tiền mặt
             setIsLoading(true);
             const res = await apiCreateOrders(data);
             setIsLoading(false);
             showNotification(res.message, res.success);
-    
+
             // Nếu tạo đơn hàng không thành công, dừng lại
             if (!res.success) return;
-    
+
             // Gửi thông báo cho admin về đơn hàng mới
             const notification: INotification = {
                 notification_title: '🛒 Đơn hàng mới vừa được tạo!',
@@ -121,28 +121,18 @@ const PaymentPage: React.FC = () => {
                 notification_imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuxPDt8O4FtLGH2odJdU8Udg6KJpdvQ1fGMw&s',
                 notification_link: '/quan-ly/don-hang',
             };
-    
+
             const response = await sendNotificationToAdmin(notification);
             socket.emit('sendNotificationForAdminOnline', {
                 ...response.data,
             });
-    
+
             // Xóa sản phẩm khỏi giỏ hàng
             await Promise.all(selectedProducts.map((product) => setRemoveProductInCart(product.productId)));
-    
+
             // Điều hướng tới trang đơn hàng
             navigate(PATH.PAGE_ORDER);
-        } 
-        else if (paymentMethod === 'COIN') {
-            // Xử lý thanh toán bằng coin
-            const userBalance = user?.user_balance || 0;
-            
-            // Kiểm tra xem số dư người dùng có đủ để thanh toán bằng coin không
-            if (userBalance < totalPayment) {
-                showNotification('Số dư của bạn không đủ để thanh toán bằng COIN.', false);
-                return;
-            }
-    
+        } else if (paymentMethod === 'COIN') {
             // Giảm số dư người dùng bằng số tiền thanh toán
             setIsLoading(true);
             const res = await apiCreateOrders(data);
@@ -150,20 +140,17 @@ const PaymentPage: React.FC = () => {
             showNotification(res.message, res.success);
             // Nếu tạo đơn hàng không thành công, dừng lại
             if (!res.success) return;
-            setSubtractBalance(totalPayment)
+            setSubtractBalance(totalPayment);
             // Trừ số dư người dùng khi thanh toán thành công
             await Promise.all(selectedProducts.map((product) => setRemoveProductInCart(product.productId)));
-    
             // Điều hướng đến trang đơn hàng
             navigate(PATH.PAGE_ORDER);
-        } 
-        else {
+        } else {
             // Xử lý thanh toán qua VNPay
             setOrder(data);
             handleVNPayPayment();
         }
     };
-    
 
     const handleVNPayPayment = () => {
         const { vnp_TmnCode, vnp_HashSecret, vnp_Url, BASE_URL } = ENV;

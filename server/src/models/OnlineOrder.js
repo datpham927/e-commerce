@@ -1,4 +1,3 @@
-// models/OnlineOrder.js
 'use strict';
 
 const mongoose = require('mongoose');
@@ -33,6 +32,8 @@ const onlineOrderSchema = new Schema(
             default: 'pending',
         },
         order_refunded: { type: Boolean, default: false }, // ✅ Đã hoàn tiền hay chưa
+        order_amount_paid: { type: Number, required: true, min: 0 }, // Số tiền đã trả
+        order_amount_due: { type: Number, required: true, min: 0 }, // Thêm trường số tiền cần trả
     },
     { timestamps: true },
 );

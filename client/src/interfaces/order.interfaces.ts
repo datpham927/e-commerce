@@ -19,6 +19,8 @@ export interface IOrder {
     order_products: OrderProduct[];
     order_total_price: number;
     order_total_apply_discount: number;
+    order_amount_paid: number; // Số tiền đã trả
+    order_amount_due: number; // Thêm trường số tiền cần trả
     order_status: 'pending' | 'confirm' | 'shipped' | 'delivered' | 'cancelled';
     order_code: string;
     order_shipping_address: {

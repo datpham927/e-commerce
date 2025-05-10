@@ -13,7 +13,7 @@ import MapComponent from '../MapComponent';
 import { useActionStore } from '../../store/actionStore';
 
 interface FormEditAddressProps {
-    payload: IUserProfile;
+    payload: IUserProfile | any;
     setPayload?: (e: any) => void;
     setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
     isEdit?: boolean;
@@ -97,45 +97,65 @@ const FormEditAddress: React.FC<FormEditAddressProps> = ({ payload, setPayload, 
         }
         setIsOpen?.(false);
     };
-    console.log({ usingLocation });
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSpecificAddress(e.target.value);
     };
-
     const handleGetLocationAndPlaceName = async () => {
         if (!navigator.geolocation) {
             showNotification('Trình duyệt không hỗ trợ định vị.', false);
             return;
         }
         setUsingLocation(true);
+
         navigator.geolocation.getCurrentPosition(
             async ({ coords: { latitude, longitude } }) => {
                 setIsLoading(true);
                 try {
                     const res = await getApiCurrentLocation(latitude, longitude);
                     setIsLoading(false);
-
                     const addr = res?.address;
                     if (addr) {
-                        const detailAddress = [addr.road, addr.quarter, addr.suburb?.replace('District', '')?.trim(), addr.city || addr.state || addr.province]
-                            .filter(Boolean)
-                            .join(', ');
-                        setProvinceId(null);
-                        setDistrictId(null);
-                        setWardsId(null);
-                        setSpecificAddress(null);
+                        const provinceName = addr.city || addr.state || addr.province;
+                        const districtName = addr.suburb?.replace('District', '')?.trim();
+                        const wardName = addr.quarter;
+                        // --- Tìm province ---
+                        const matchedProvince = provinces?.find((p) => p.name.toLowerCase().includes(provinceName?.toLowerCase()));
+                        if (matchedProvince) {
+                            setProvinceId(matchedProvince.code);
+                            // --- Lấy danh sách quận/huyện ---
+                            const districtsRes = await getApiPublicDistrict(matchedProvince.code);
+                            const matchedDistrict = districtsRes.districts?.find((d: any) => d.name.toLowerCase().includes(districtName?.toLowerCase()));
+                            if (matchedDistrict) {
+                                setDistrictId(matchedDistrict.code);
+                                // --- Lấy danh sách phường/xã ---
+                                const wardsRes = await getApiPublicWards(matchedDistrict.code);
+                                const matchedWard = wardsRes.wards?.find((w: any) => w.name.toLowerCase().includes(wardName?.toLowerCase()));
+                                if (matchedWard) {
+                                    setWardsId(matchedWard.code);
+                                }
+                                setWards(wardsRes.wards || []);
+                            }
+                            setDistricts(districtsRes.districts || []);
+                        }
+
+                        // Cập nhật địa chỉ chi tiết
+                        const detailAddress = [addr.road, wardName, districtName, provinceName].filter(Boolean).join(', ');
+                        setSpecificAddress(addr.road || '');
                         setAddress(detailAddress);
+
                         showNotification('Đã lấy vị trí trên bản đồ', true);
                     } else {
                         showNotification('Không lấy được thông tin vị trí.', false);
                     }
                 } catch (error) {
                     console.error('Lỗi khi gọi API địa chỉ:', error);
+                    setIsLoading(false);
                     showNotification('Đã xảy ra lỗi khi lấy địa chỉ.', false);
                 }
             },
             (error) => {
                 console.error('Lỗi khi lấy vị trí:', error);
+                setIsLoading(false);
                 showNotification('Vui lòng bật định vị để sử dụng tính năng này.', false);
             },
         );

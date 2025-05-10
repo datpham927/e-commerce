@@ -5,51 +5,49 @@ const OrderService = require('../services/order.service');
 class OrderController {
     static async createOrder(req, res) {
         const { order, message } = await OrderService.createOrder({ userId: req.user._id, ...req.body });
-    
         res.status(201).json({
             success: true,
             data: order,
             message, // Thông báo được trả về từ service
         });
     }
-    
+
     static async cancelOrder(req, res) {
+        const { address } = req.body;
         const result = await OrderService.cancelOrder({
             userId: req.user._id,
             orderId: req.params.id,
+            address,
         });
-    
         let message = 'Đơn hàng đã được hủy';
         if (['COIN', 'VNPAY'].includes(result.paymentMethod)) {
             message += `, số dư của bạn được +${result.refundedAmount.toLocaleString()}đ`;
         }
-    
         res.status(201).json({
             success: true,
             data: result,
             message,
         });
     }
-    
-    
+
     static async reorder(req, res) {
         const result = await OrderService.reorder({
             userId: req.user._id,
             orderId: req.params.id,
         });
-    
+
         let message = 'Đơn hàng đã được đặt lại thành công';
         if (result.paymentMethod === 'COIN') {
             message += `, số dư của bạn đã bị trừ -${result.totalOrderPrice.toLocaleString()}đ`;
         }
-    
+
         res.status(201).json({
             success: true,
             data: result,
             message,
         });
     }
-    
+
     static async createOfflineOrder(req, res) {
         res.status(201).json({
             success: true,

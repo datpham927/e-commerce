@@ -3,13 +3,22 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
 import { getApiCodeLocation, getApiCurrentLocation } from '../../services/address.service';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 interface MapComponentProps {
     placeName?: string | any;
     height?: string;
     width?: string;
 }
-
+const customIcon = new L.Icon({
+    iconUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png', // Đường dẫn icon mặc định
+    iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon-2x.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png',
+    iconSize: [25, 41], // Kích thước icon
+    iconAnchor: [12, 41], // Điểm neo của icon
+    popupAnchor: [1, -34], // Điểm neo của popup
+    shadowSize: [41, 41], // Kích thước bóng
+});
 const MapComponent: React.FC<MapComponentProps> = ({ placeName, height = '200px', width = '300px' }) => {
     const [position, setPosition] = useState<LatLngExpression | any>(null); // Lưu tọa độ của vị trí
     const [displayName, setDisplayName] = useState<LatLngExpression | any>(placeName); // Lưu tọa độ của vị trí
@@ -60,13 +69,16 @@ const MapComponent: React.FC<MapComponentProps> = ({ placeName, height = '200px'
 
     return (
         <MapContainer
-            center={position} // Sử dụng vị trí đã lấy từ geocodeLocation hoặc geolocation
+            center={position} // Vị trí trung tâm bản đồ [lat, lng]
             zoom={13}
             style={{ height: height, width: width }}
-            key={position?.join(',')} // Dùng key để tái tạo MapContainer mỗi khi vị trí thay đổi
+            key={position.join(',')} // Key để tái tạo bản đồ khi vị trí thay đổi
         >
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <Marker position={position}>
+            <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            <Marker position={position} icon={customIcon}>
                 <Popup>{placeName ? placeName : displayName}</Popup>
             </Marker>
         </MapContainer>

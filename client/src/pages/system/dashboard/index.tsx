@@ -51,7 +51,7 @@ export default function DashboardManage() {
             <StatsOverview
                 stats={dashboardData.stats}
                 onProductClick={() => navigate('/quan-ly/san-pham')}
-                onUserClick={() => navigate('/quan-ly/nguoi-dung')}
+                onUserClick={() => navigate ('/quan-ly/nguoi-dung')}
                 onOrderClick={() => navigate('/quan-ly/don-hang')}
                 onOrderoffClick={() => navigate('/quan-ly/hoa-don')}
                 onReviewClick={() => navigate('/quan-ly/danh-gia')}

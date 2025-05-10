@@ -116,8 +116,8 @@ const FormEditAddress: React.FC<FormEditAddressProps> = ({ payload, setPayload, 
                     const addr = res?.address;
                     if (addr) {
                         const provinceName = addr.city || addr.state || addr.province;
-                        const districtName = addr.suburb?.replace('District', '')?.trim();
-                        const wardName = addr.quarter;
+                        const districtName = addr.suburb?.replace('District', '')?.trim()|| addr.city_district;
+                        const wardName = addr.quarter||addr.village;
                         // --- Tìm province ---
                         const matchedProvince = provinces?.find((p) => p.name.toLowerCase().includes(provinceName?.toLowerCase()));
                         if (matchedProvince) {
@@ -156,7 +156,6 @@ const FormEditAddress: React.FC<FormEditAddressProps> = ({ payload, setPayload, 
             (error) => {
                 console.error('Lỗi khi lấy vị trí:', error);
                 setIsLoading(false);
-                showNotification('Vui lòng bật định vị để sử dụng tính năng này.', false);
             },
         );
     };

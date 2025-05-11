@@ -7,13 +7,14 @@ import { IUserDetail } from '../../../../interfaces/user.interfaces';
 import { apiGetDetailUser, apiUpdateProfile } from '../../../../services/user.service';
 import { ButtonOutline, InputForm, InputReadOnly, showNotification } from '../../../../components';
 import FormEditAddress from '../../../../components/form/FormEditAddress';
+import { useActionStore } from '../../../../store/actionStore';
 
 const UserProfilePage: React.FC = () => {
     const { user, setUser } = useUserStore();
     const [payload, setPayload] = useState<IUserDetail>(user);
     const [activeTab, setActiveTab] = useState<string>('info');
     const [isOpenEditAddress, setIsOpenEditAddress] = useState<boolean>(false);
-    const mobile_ui = false;
+    const { mobile_ui } = useActionStore();
 
     const fetchUserDetail = async () => {
         const res = await apiGetDetailUser();

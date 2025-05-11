@@ -14,7 +14,7 @@ interface ChatMessage {
 interface ChatBoxAIModalProps {
     context: string;
     isOpenBox: boolean;
-    setIsOpenBox: (open: boolean) => void;
+    setIsOpenBox?: (open: boolean) => void;
 }
 
 const ChatBoxAIModal: React.FC<ChatBoxAIModalProps> = ({ context, isOpenBox, setIsOpenBox }) => {
@@ -84,15 +84,15 @@ const ChatBoxAIModal: React.FC<ChatBoxAIModalProps> = ({ context, isOpenBox, set
     };
 
     if (!isVisible) return null;
-
+    console.log({ context });
     return (
         <div
-            className={`tablet:fixed tablet:top-0 tablet:right-0 tablet:left-0 tablet:w-full tablet:h-full absolute bottom-0 right-0 w-auto h-[500px] bg-white shadow-search rounded-md duration-1000 origin-bottom-right z-[1000] ${
+            className={`tablet:w-full tablet:h-[78vh] laptop:absolute bottom-0 right-0 w-auto laptop:h-[500px] bg-white shadow-search rounded-md duration-1000 origin-bottom-right z-[1000] ${
                 isOpenBox ? 'laptop:animate-active-openChat' : 'laptop:animate-active-openChatOff'
             }`}>
-            <div className="flex h-full w-[400px] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800">
+            <div className=" flex h-full laptop:w-[400px] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800">
                 {/* Header */}
-                <div className="flex items-center justify-between border-b px-5 py-4">
+                <div className="tablet:hidden flex items-center justify-between border-b px-5 py-4">
                     <div className="flex items-center gap-3">
                         <div className="relative h-12 w-12 rounded-full">
                             <img
@@ -104,7 +104,7 @@ const ChatBoxAIModal: React.FC<ChatBoxAIModalProps> = ({ context, isOpenBox, set
                         </div>
                         <h5 className="text-sm font-medium text-gray-500">Trợ lý AI</h5>
                     </div>
-                    <button onClick={() => setIsOpenBox(false)} className="text-secondary">
+                    <button onClick={() => setIsOpenBox?.(false)} className="text-secondary tablet:hidden">
                         <ExpandMoreIcon fontSize="large" />
                     </button>
                 </div>

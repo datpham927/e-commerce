@@ -27,9 +27,14 @@ import CartPage from '../pages/user/cartPage';
 import VoucherPage from '../pages/user/voucherPage';
 import PaymentPage from '../pages/user/PaymentPage';
 import PaymentConfirmPage from '../pages/user/PaymentConfirmPage';
+import MenuUserOption from '../components/mobile/MenuUserOption';
+import ChatPage from '../pages/mobile/ChatPage';
+import { useActionStore } from '../store/actionStore';
+import CategoriesListPage from '../pages/mobile/CategoriesListPage';
 
 const RouterPage = () => {
     const { isAdminLoggedIn, isUserLoggedIn } = useAuthStore();
+    const { mobile_ui } = useActionStore();
 
     return (
         <Routes>
@@ -59,6 +64,14 @@ const RouterPage = () => {
                     <Route path={PATH.PAGE_REDEEM_VOUCHER} element={<RedeemVoucherPage />} />
                     <Route path={PATH.PAGE_ORDER_DETAIL} element={<OrderDetailPage />} />
                 </Route>
+                <Route path={PATH.PAGE_USER_MOBILE} element={<MenuUserOption />} />
+                {mobile_ui && (
+                    <>
+                        <Route path={PATH.PAGE_CHAT_MOBILE} element={<ChatPage />} />
+                        <Route path={PATH.PAGE_USER_MOBILE} element={<MenuUserOption />} />
+                        <Route path={PATH.PAGE_CATEGORY_MOBILE} element={<CategoriesListPage />} />
+                    </>
+                )}
             </Route>
 
             {/* Đặc biệt: không bọc UserProfile trong DefaultLayout */}
@@ -90,6 +103,7 @@ const RouterPage = () => {
                 <Route path={PATH.MANAGE_PROFILE} element={<AdminProfile />} />
                 <Route path="*" element={<Navigate to={PATH.MANAGE_DASHBOARD} />} />
             </Route>
+            <Route path="*" element={<Navigate to={PATH.HOME} />} />
             {/* Trang đăng nhập admin */}
             <Route path={PATH.ADMIN_LOGIN} element={isAdminLoggedIn ? <Navigate to={PATH.ADMIN_DASHBOARD} /> : <AdminLogin />} />
         </Routes>

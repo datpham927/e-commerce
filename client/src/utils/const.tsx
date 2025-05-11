@@ -21,6 +21,10 @@ export const PATH = {
     PAGE_USER_VOUCHER: '/nguoi-dung/voucher-cua-ban',
     PAGE_REDEEM_VOUCHER: '/nguoi-dung/doi-phieu-mua-hang',
     PAGE_ORDER_DETAIL: '/nguoi-dung/chi-tiet-don-hang/:oid',
+    //=============== mobile =============
+    PAGE_USER_MOBILE: '/danh-muc-nguoi-dung',
+    PAGE_CATEGORY_MOBILE: 'danh-muc-san-pham',
+    PAGE_CHAT_MOBILE: 'chat',
     // =========== ADMIN ==============
     ADMIN_DASHBOARD: '/quan-ly',
     MANAGE_DASHBOARD: '/quan-ly/dashboard',
@@ -213,10 +217,10 @@ export const PAYMENT_METHOD = {
             img: vnpay,
         },
         {
-        code: 'COIN',
-        label: 'Thanh toán bằng số dư',
-        img: 'https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/paymentfe/cb78f1ca161d1694.png',
-    },
+            code: 'COIN',
+            label: 'Thanh toán bằng số dư',
+            img: 'https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/paymentfe/cb78f1ca161d1694.png',
+        },
     ],
 };
 export const DELIVERY_METHOD = {
@@ -269,21 +273,16 @@ export const BOTTOM_NAVIGATE_MOBILE = [
     {
         label: 'Danh mục',
         logo: 'https://frontend.tikicdn.com/_mobile-next/static/img/home/navigation/cate.png',
-        link: PATH.PAGE_LIST_CATEGORY,
-    },
-    {
-        label: 'Theo dõi',
-        logo: 'https://frontend.tikicdn.com/_mobile-next/static/img/home/navigation/account.png',
-        link: '/follow',
+        link: PATH.PAGE_CATEGORY_MOBILE,
     },
     {
         label: 'Chat',
         logo: 'https://salt.tikicdn.com/ts/upload/b6/cb/1d/34cbe52e6c2566c5033103c847a9d855.png',
-        link: '/message',
+        link: PATH.PAGE_CHAT_MOBILE,
     },
     {
         label: 'Cá nhân',
         logo: 'https://frontend.tikicdn.com/_mobile-next/static/img/home/navigation/account.png',
-        link: PATH.PAGE_USER,
+        link: PATH.PAGE_USER_MOBILE,
     },
 ];

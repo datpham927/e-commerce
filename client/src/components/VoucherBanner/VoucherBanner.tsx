@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
@@ -66,9 +67,7 @@ const VoucherBanner: React.FC = () => {
 
             // Remove after 1s
             setTimeout(() => {
-                setExplosions((prev) =>
-                    prev.filter((p) => !newExplosion.find((np) => np.id === p.id))
-                );
+                setExplosions((prev) => prev.filter((p) => !newExplosion.find((np) => np.id === p.id)));
             }, 1000);
         }, 700);
 
@@ -78,15 +77,14 @@ const VoucherBanner: React.FC = () => {
     // Thêm keyframes động sparkle
     useEffect(() => {
         const styleSheet = document.styleSheets[0];
-        const keyframes =
-            `@keyframes sparkle {
+        const keyframes = `@keyframes sparkle {
                 0% { opacity: 1; transform: translate(0, 0) scale(1); }
                 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.5); }
             }`;
         try {
             styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
         } catch (e) {
-            console.error("Failed to insert sparkle keyframes:", e);
+            console.error('Failed to insert sparkle keyframes:', e);
         }
     }, []);
 
@@ -112,14 +110,12 @@ const VoucherBanner: React.FC = () => {
     return (
         <Overlay className="z-[999]" onClick={handleCloseBanner}>
             <div
-                className="relative max-w-[390px] h-[500px] mx-4 sm:mx-6 lg:mx-auto bg-white rounded-lg shadow-2xl"
-                onClick={(e) => e.stopPropagation()}
-            >
+                className="relative tablet:h-auto tablet:max-w-[60%] max-w-[390px] h-[500px] mx-4 sm:mx-6 lg:mx-auto bg-white rounded-lg shadow-2xl"
+                onClick={(e) => e.stopPropagation()}>
                 <button
                     onClick={handleCloseBanner}
                     className="absolute -top-4 -right-4 bg-gray-800 text-white p-2 rounded-full hover:bg-red-500 transition-colors duration-300"
-                    aria-label="Close voucher banner"
-                >
+                    aria-label="Close voucher banner">
                     <FaTimes className="text-xl" />
                 </button>
 
@@ -159,8 +155,7 @@ const VoucherBanner: React.FC = () => {
                             navigate('/voucher');
                         }}
                         style={fireStyle}
-                        className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-xl transition duration-300"
-                    >
+                        className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-xl transition duration-300">
                         🎁 Nhận voucher
                     </button>
                 </div>

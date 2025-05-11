@@ -13,7 +13,7 @@ const Chat: React.FC = () => {
     // const { socketRef } = useAppSelector((state) => state.action);
     const { isUserLoggedIn } = useAuthStore();
     const [conversationId, setConversationId] = useState<string>('');
-    const [unreadMessages, SetUnreadMessages] = useState<number>(0);
+    const [unreadMessages, setUnreadMessages] = useState<number>(0);
     const { setIsOpenChat, setOpenFeatureAuth } = useActionStore();
     const { socket, connect, isConnected } = useSocketStore();
     useEffect(() => {
@@ -23,18 +23,18 @@ const Chat: React.FC = () => {
         if (!isConnected || !isUserLoggedIn) return;
 
         // Handle 'getMessage' event to increment unread messages
-        const handleSetUnreadMessages = () => {
+        const handlesetUnreadMessages = () => {
             const audio = new Audio(notificationAudio);
             audio.play().catch((err) => {
                 console.warn('🔇 Không thể phát âm thanh:', err);
             });
-            SetUnreadMessages((prev) => prev + 1);
+            setUnreadMessages((prev) => prev + 1);
         };
         // Register socket event listener
-        socket.on('getMessage', handleSetUnreadMessages);
+        socket.on('getMessage', handlesetUnreadMessages);
         // Cleanup: Remove event listener on unmount or dependency change
         return () => {
-            socket.off('getMessage', handleSetUnreadMessages);
+            socket.off('getMessage', handlesetUnreadMessages);
         };
     }, [isConnected, isUserLoggedIn, socket]);
     useEffect(() => {
@@ -42,7 +42,7 @@ const Chat: React.FC = () => {
         const fetchApi = async () => {
             const res = await apiGetUnreadMessagesCount(conversationId);
             if (res?.success) {
-                SetUnreadMessages(res?.data?.unreadCount);
+                setUnreadMessages(res?.data?.unreadCount);
             }
         };
         fetchApi();
@@ -77,7 +77,7 @@ const Chat: React.FC = () => {
                     </span>
                 )}
             </div>
-            <ChatModal conversationId={conversationId} SetUnreadMessages={SetUnreadMessages} />
+            <ChatModal conversationId={conversationId} setUnreadMessages={setUnreadMessages} />
         </div>
     );
 };

@@ -8,8 +8,9 @@ import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import CategoryItem from '../../../../components/item/CategoryItem';
 import { SkeletonCategory } from '../../../../components';
 import { useCategoriesStore } from '../../../../store/categoryStore';
+import { useActionStore } from '../../../../store/actionStore';
 const Categories: React.FC = () => {
-    // const { mobile_ui } = useAppSelector((state) => state.action);
+    const { mobile_ui } = useActionStore();
     const { categories } = useCategoriesStore();
     return (
         <div className="flex w-full h-full bg-white py-3 rounded-md overflow-hidden ">
@@ -44,8 +45,7 @@ const Categories: React.FC = () => {
                     })}
                 </Swiper>
             ) : (
-                // <SkeletonCategory index={mobile_ui ? 4 : 10} />
-                <SkeletonCategory index={10} />
+                <SkeletonCategory index={mobile_ui ? 4 : 10} />
             )}
         </div>
     );

@@ -79,16 +79,16 @@ const OrderPage: React.FC = () => {
 
     return (
         <>
-            <div className="fixed-mobile w-full dark:border-white/[0.05] dark:bg-white/[0.03] h-full overflow-y-scroll tablet:overflow-y-scroll">
+            <div className="fixed-mobile w-full bg-white dark:border-white/[0.05] dark:bg-white/[0.03] h-full overflow-y-scroll tablet:overflow-y-scroll">
                 <div className="py-4 px-4 tablet:px-6 laptop:px-8 bg-white dark:bg-white/[0.03] border-b dark:border-white/[0.05]">
                     <h1 className="text-lg font-semibold text-gray-800 dark:text-white">Đơn hàng của tôi</h1>
                 </div>
-                <div className="tablet:flex tablet:bg-white laptop:w-full sticky top-0 grid grid-cols-6 dark:border-white/[0.05] dark:bg-white/[0.03] bg-white rounded-sm overflow-hidden">
+                <div className="flex overflow-x-auto w-full sticky top-0 laptop:grid laptop:grid-cols-6 bg-white rounded-sm overflow-hidden">
                     {SELL_TAB.map((e, idx) => (
                         <div
                             key={idx}
-                            className={`flex tablet:w-4/12 laptop:w-full justify-center text-sm items-center py-2 border-b-[2px] cursor-pointer
-                            ${displayTab === e.tab ? 'text-primary border-primary' : 'text-secondary border-transparent'}`}
+                            className={`flex shrink-0 tablet:w-4/12 laptop:w-full justify-center text-sm items-center py-2 border-b-[2px] cursor-pointer
+            ${displayTab === e.tab ? 'text-primary border-primary' : 'text-secondary border-transparent'}`}
                             onClick={() => setDisplayTab(e.tab)}>
                             {e.title}
                         </div>

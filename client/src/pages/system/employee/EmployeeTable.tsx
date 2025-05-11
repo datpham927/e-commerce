@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '../../../components/ui/table';
@@ -17,28 +18,34 @@ const EmployeeTable: React.FC<EmployeeListProps> = ({ employees, onEdit, onDelet
                 <Table>
                     <TableHeader className="bg-gray-100 dark:bg-gray-700">
                         <TableRow>
-                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white">Tên nhân viên</TableCell>
-                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white">Ảnh đại diện</TableCell>
-                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white">Vai trò</TableCell>
-                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white">SĐT</TableCell>
-                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white text-center">Email</TableCell>
-                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white text-center">Thao tác</TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white">
+                                Tên nhân viên
+                            </TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white">
+                                Ảnh đại diện
+                            </TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white">
+                                Vai trò
+                            </TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white">
+                                SĐT
+                            </TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white text-center">
+                                Email
+                            </TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white text-center">
+                                Thao tác
+                            </TableCell>
                         </TableRow>
                     </TableHeader>
 
                     <TableBody className="divide-y divide-gray-200 dark:divide-gray-600">
                         {employees?.map((c) => (
                             <TableRow key={c._id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                                <TableCell className="px-6 py-4 text-gray-900 dark:text-gray-100 font-medium">
-                                    {c.admin_name}
-                                </TableCell>
+                                <TableCell className="px-6 py-4 text-gray-900 dark:text-gray-100 font-medium">{c.admin_name}</TableCell>
                                 <TableCell className="px-6 py-4">
                                     <div className="w-12 h-12 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 shadow">
-                                        <img
-                                            src={c?.admin_avatar_url || LogoAdmin}
-                                            alt={c.admin_name}
-                                            className="w-full h-full object-cover"
-                                        />
+                                        <img src={c?.admin_avatar_url || LogoAdmin} alt={c.admin_name} className="w-full h-full object-cover" />
                                     </div>
                                 </TableCell>
                                 <TableCell className="px-6 py-4 text-gray-800 dark:text-gray-200">
@@ -61,15 +68,13 @@ const EmployeeTable: React.FC<EmployeeListProps> = ({ employees, onEdit, onDelet
                                         <button
                                             onClick={() => onEdit(c)}
                                             className="text-indigo-600 hover:text-indigo-800 hover:scale-110 transition-transform"
-                                            title="Chỉnh sửa"
-                                        >
+                                            title="Chỉnh sửa">
                                             <EditIcon />
                                         </button>
                                         <button
                                             onClick={() => onDelete(c._id)}
                                             className="text-red-500 hover:text-red-700 hover:scale-110 transition-transform"
-                                            title="Xóa"
-                                        >
+                                            title="Xóa">
                                             <DeleteIcon />
                                         </button>
                                     </div>

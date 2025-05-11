@@ -20,7 +20,7 @@ export default function EmployeeManage() {
     const [searchQuery, setSearchQuery] = useState<string>(''); // Ô tìm kiếm
     const [isSearching, setIsSearching] = useState<boolean>(false); // Trạng thái tìm kiếm
     const { openModal, isOpen, closeModal } = useModal();
-    const { setIsLoading } = useActionStore();
+    const { setIsLoading, isLoading } = useActionStore();
 
     // Fetch dữ liệu người dùng
     const fetchApi = async () => {
@@ -109,7 +109,7 @@ export default function EmployeeManage() {
         }
     };
 
-    if (employees.length === 0 && !isSearching) return <TableSkeleton />;
+    if (isLoading) return <TableSkeleton />;
 
     return (
         <>
@@ -129,13 +129,13 @@ export default function EmployeeManage() {
                 </div>
 
                 {/* Danh sách nhân viên */}
-                {employees.length === 0 ? (
-                    <NotExit label="Không có nhân viên nào" />
-                ) : (
+                {employees.length > 0 ? (
                     <>
                         <EmployeeTable employees={employees} onEdit={handleEdit} onDelete={handleDelete} />
                         {!isSearching && totalPage > 1 && <Pagination currentPage={currentPage} totalPage={totalPage - 1} setCurrentPage={setCurrentPage} />}
                     </>
+                ) : (
+                    <NotExit label="Không có nhân viên nào" />
                 )}
             </div>
 

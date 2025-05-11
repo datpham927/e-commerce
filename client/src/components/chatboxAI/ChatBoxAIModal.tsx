@@ -87,7 +87,7 @@ const ChatBoxAIModal: React.FC<ChatBoxAIModalProps> = ({ context, isOpenBox, set
     console.log({ context });
     return (
         <div
-            className={`tablet:w-full tablet:h-[78vh] laptop:absolute bottom-0 right-0 w-auto laptop:h-[500px] bg-white shadow-search rounded-md duration-1000 origin-bottom-right z-[1000] ${
+            className={`tablet:w-full tablet:h-[75vh] laptop:absolute bottom-0 right-0 w-auto laptop:h-[500px] bg-white shadow-search rounded-md duration-1000 origin-bottom-right z-[1000] ${
                 isOpenBox ? 'laptop:animate-active-openChat' : 'laptop:animate-active-openChatOff'
             }`}>
             <div className=" flex h-full laptop:w-[400px] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800">

@@ -77,15 +77,15 @@ const Banner: React.FC = () => {
                         {products?.map((i) => {
                             return (
                                 <SwiperSlide key={i._id}>
-                                    <Link to={`/${i?.product_slug}/${i?._id}`} className="w-full object-fill  overflow-hidden ">
-                                        <img className="w-full object-fill rounded-[4px]" src={i?.product_thumb} />
+                                    <Link to={`/${i?.product_slug}/${i?._id}`} className="w-full h-full object-fill  overflow-hidden ">
+                                        <img className="w-full  h-full  object-fill rounded-[4px]" src={i?.product_thumb} />
                                     </Link>
                                 </SwiperSlide>
                             );
                         })}
                     </Swiper>
                 ) : (
-                    <Skeleton variant={'rectangular'} width={'100%'} height={'274px'} />
+                    <Skeleton variant={'rectangular'} width={'100%'} height={'304px'} />
                 )}
             </div>
         </div>

@@ -36,7 +36,7 @@ const brandModel = require('../src/models/brand.model');
 const productModel = require('../src/models/product.model');
 const suppliers = require('./nhacungcap');
 const supplierModel = require('../src/models/supplier.model');
-const BRAND = require('../dataInsert/brand/b');
+const BRAND = require('../dataInsert/brand/index');
 const autoCode = require('../src/utils/autoCode');
 
 const IMAGE_SIZE = 224; // Kích thước chuẩn cho MobileNet
@@ -131,7 +131,7 @@ const upsertSupplier = async ({ supplier_name, supplier_contact, supplier_addres
 const upsertBrand = async (brand_name) => {
     let brand = await brandModel.findOne({ brand_name });
     if (!brand) {
-        brand = await brandModel.create({ brand_name, brand_banner: BRAND[Math.floor(Math.random() * BRAND.length)].brand_banner });
+        brand = await brandModel.create({ brand_name, brand_banner: BRAND[Math.floor(Math.random() * BRAND.length)] });
     } else {
         await brand.save();
     }
@@ -164,15 +164,12 @@ const insertProductsData = async () => {
                             errors.push(`Image download failed: ${image_url}`);
                             return null;
                         }
-
                         const searchFeatures = await extractFeatures(tempPath);
                         const featuresArray = Array.from(searchFeatures.dataSync());
                         searchFeatures.dispose();
-
                         if (featuresArray.length == 0) {
                             return null;
                         }
-
                         return await productModel.create({
                             product_name: item.title,
                             product_code: autoCode(item.title),
@@ -181,11 +178,11 @@ const insertProductsData = async () => {
                             product_discount: item.discount || 15,
                             product_price: item.oldPrice ? parseInt(item.oldPrice.replace('.', '')) : 150000,
                             product_description: item.description.join(', '),
-                            product_quantity: 1000,
+                            product_quantity: Math.floor(Math.random() * 100) + 1,
                             product_expiry_date: getRandomExpiryDate(),
                             product_attribute: convertArrToObject(item.detail),
-                            product_sold: item.solid ? parseInt(item.solid.replace('.', '')) : 0,
-                            product_views: 10,
+                            product_sold: Math.floor(Math.random() * 100) + 1,
+                            product_views: Math.floor(Math.random() * 10) + 1,
                             product_image_features: featuresArray,
                             product_category_id: item.category_id,
                             product_brand_id: brand._id,

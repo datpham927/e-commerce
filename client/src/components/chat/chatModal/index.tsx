@@ -139,7 +139,7 @@ const ChatModal: React.FC<{ conversationId: string; setUnreadMessages?: (count: 
 
     return (
         <div
-            className={`tablet:w-full tablet:h-[78vh]  laptop:absolute   bottom-0 right-0 w-auto h-[500px] bg-white shadow-search rounded-md duration-1000 origin-bottom-right z-[1000] ${
+            className={`tablet:w-full tablet:h-[75vh]  laptop:absolute   bottom-0 right-0 w-auto h-[500px] bg-white shadow-search rounded-md duration-1000 origin-bottom-right z-[1000] ${
                 isOpenChat ? 'laptop:animate-active-openChat' : 'laptop:animate-active-openChatOff'
             }`}>
             <div className="flex tablet:w-full h-full laptop:w-[400px] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">

@@ -64,11 +64,10 @@ const RouterPage = () => {
                     <Route path={PATH.PAGE_REDEEM_VOUCHER} element={<RedeemVoucherPage />} />
                     <Route path={PATH.PAGE_ORDER_DETAIL} element={<OrderDetailPage />} />
                 </Route>
-                <Route path={PATH.PAGE_USER_MOBILE} element={<MenuUserOption />} />
                 {mobile_ui && (
                     <>
                         <Route path={PATH.PAGE_CHAT_MOBILE} element={<ChatPage />} />
-                        <Route path={PATH.PAGE_USER_MOBILE} element={<MenuUserOption />} />
+                        <Route path={PATH.PAGE_USER_MOBILE} element={isUserLoggedIn ? <MenuUserOption /> : <Navigate to="/" />} />
                         <Route path={PATH.PAGE_CATEGORY_MOBILE} element={<CategoriesListPage />} />
                     </>
                 )}

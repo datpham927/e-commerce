@@ -10,8 +10,7 @@ import { useActionStore } from '../../../store/actionStore';
 const AdminProfile: React.FC = () => {
     const [payload, setPayload] = useState<IAdmin>({} as IAdmin);
     const { admin, setAdmin } = useAdminStore();
-    const { setIsLoading } = useActionStore();
-    const mobile_ui = false;
+    const { setIsLoading, mobile_ui } = useActionStore();
 
     useEffect(() => {
         setPayload(admin);
@@ -32,15 +31,15 @@ const AdminProfile: React.FC = () => {
             showNotification('Số điện thoại không hợp lệ', false);
             return;
         }
-    
+
         setIsLoading(true); // Bắt đầu loading
-    
+
         const res = await apiUpdateProfileAmin(payload);
-    
+
         if (!res.success) {
             // Nếu API trả về lỗi, kiểm tra mã lỗi
             setIsLoading(false); // Dừng loading
-            if (res.code === 203) { 
+            if (res.code === 203) {
                 // Lỗi số điện thoại đã tồn tại
                 showNotification('Số điện thoại đã tồn tại!', false);
             } else {
@@ -49,12 +48,11 @@ const AdminProfile: React.FC = () => {
             }
             return;
         }
-    
+
         setIsLoading(false); // Dừng loading
         setAdmin(res.data);
         showNotification('Cập nhật thành công', true);
     };
-    
 
     return (
         <div className="tablet:fixed tablet:top-0 tablet:right-0 tablet:z-[1000] w-full h-full bg-white overflow-hidden p-4 laptop:rounded-lg tablet:overflow-y-scroll ">

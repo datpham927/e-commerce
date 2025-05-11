@@ -9,9 +9,9 @@ import Loading from '../../components/common/Loading';
 import Chat from '../../components/chat';
 import ChatBoxAI from '../../components/chatboxAI';
 import ToastComponent from '../../components/toastComponent';
+import { BottomNavigate } from '../../components/mobile/BottomNavigate';
 const DefaultLayout = () => {
     useFetchUser();
-    // const { mobile_ui } = useAppSelector((state) => state.action);
     return (
         <>
             <div className="flex flex-col h-full mx-auto  bg-background_primary">
@@ -20,18 +20,14 @@ const DefaultLayout = () => {
                     <Outlet />
                 </main>
                 <Footer />
-
                 <Auth />
                 <Loading />
-                <div className="fixed bottom-4 right-5 bg-blue-600 rounded-lg shadow-lg p-2 flex flex-col items-center justify-center space-y-2  z-[900] ">
+                <div className="tablet:hidden fixed bottom-4 right-5 bg-blue-600 rounded-lg shadow-lg p-2 flex flex-col items-center justify-center space-y-2  z-[900] ">
                     <ChatBoxAI />
                     <Chat />
                 </div>
-                {/* <PhoneAuth /> */}
-                {/* {!mobile_ui ||!location.pathname.includes(path.PAGE_PAYPAL) &&<Footer />}
-             
-                <BottomNavigate /> */}
             </div>
+            <BottomNavigate />
             <ToastComponent />
         </>
     );

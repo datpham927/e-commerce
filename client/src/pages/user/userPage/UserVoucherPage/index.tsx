@@ -23,7 +23,7 @@ const UserVoucherPage: React.FC = () => {
                 <h1 className="text-2xl font-bold text-primary mb-6 text-center">Danh sách voucher</h1>
                 <div className="flex flex-col bg-white pb-8 gap-10 z-0">
                     {userVouchers?.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="grid tablet:grid-cols-1 grid-cols-2 gap-6">
                             {userVouchers.map((voucher) => {
                                 const expired = isVoucherExpired(voucher.voucher_end_date);
                                 return (

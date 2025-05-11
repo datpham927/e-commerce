@@ -11,128 +11,105 @@ const OnlineOrder = require('../models/OnlineOrder');
 const OfflineOrder = require('../models/OfflineOrder');
 const { RequestError } = require('../core/error.response');
 const userModel = require('../models/user.model');
+const adminModel = require('../models/admin.model');
 
 class OrderService {
     static async createOfflineOrder(payload) {
         const {
-            adminId, // ID người đặt hàng (admin hoặc người dùng)
+            adminId, // ID của người dùng đặt hàng
             order_payment_method, // Phương thức thanh toán
             order_voucherId, // ID mã giảm giá (nếu có)
-            order_products, // Danh sách sản phẩm và số lượng
+            order_products, // Danh sách sản phẩm trong đơn hàng
         } = payload;
-
-        // Bước 1: Kiểm tra sản phẩm tồn tại và đủ số lượng
+        // Bước 1: Kiểm tra sản phẩm
+        // Kiểm tra tất cả sản phẩm trong danh sách order_products
         const productChecks = await Promise.all(
             order_products.map(async (item) => {
-                const product = await Product.findById(item.productId);
-                if (!product) throw new RequestError('Không tìm thấy sản phẩm');
+                const product = await Product.findById(item.productId); // Tìm sản phẩm trong DB theo ID
+                if (!product) throw new NotFoundError('Không tìm thấy sản phẩm'); // Nếu không tìm thấy, báo lỗi
                 return {
-                    name: product.product_name,
-                    available: product.product_quantity >= item.quantity,
+                    name: product.product_name, // Tên sản phẩm
+                    available: product.product_quantity >= item.quantity, // Kiểm tra số lượng đủ hay không
                 };
             }),
         );
-
-        const outOfStockProducts = productChecks.filter((check) => !check.available).map((check) => check.name);
-
+        // Lọc ra các sản phẩm hết hàng
+        const outOfStockProducts = productChecks
+            .filter((check) => !check.available) // Lấy các sản phẩm không đủ số lượng
+            .map((check) => check.name); // Lấy tên của các sản phẩm đó
+        // Kiểm tra nếu có sản phẩm hết hàng thì báo lỗi với danh sách tên
         if (outOfStockProducts.length > 0) {
-            throw new RequestError(`Các sản phẩm đã hết hàng: ${outOfStockProducts.join(', ')}`);
+            throw new BadRequestError(`Các sản phẩm đã hết hàng: ${outOfStockProducts.join(', ')}`); // Báo lỗi với danh sách sản phẩm hết hàng
         }
-
-        // Bước 2: Tính tổng tiền và chuẩn hóa danh sách sản phẩm đặt hàng
+        // Bước 2: Tính tổng tiền đơn hàng và bổ sung thông tin product list
         let totalPrice = 0;
         let totalApplyDiscount = 0;
         const productsToOrder = await Promise.all(
             order_products.map(async (item) => {
-                const product = await Product.findById(item.productId);
-                const discountPercent = product.product_discount || 0;
-                const discountAmount = product.product_price * (1 - discountPercent / 100);
-                totalApplyDiscount += discountAmount * item.quantity;
-                totalPrice += product.product_price * item.quantity;
+                const product = await Product.findById(item.productId); // Lấy thông tin sản phẩm
+                // Tính giá sau khi áp dụng giảm giá (nếu có)
+                totalApplyDiscount += (product.product_price * (100 - (product.product_discount || 0))) / 100;
+                totalPrice += product.product_price * item.quantity; // Cộng dồn vào tổng giá trị
                 return {
-                    productId: product._id,
-                    price: product.product_price,
-                    quantity: item.quantity,
-                    discount: discountPercent,
+                    productId: product._id, // ID sản phẩm
+                    price: product.product_price, // Giá gốc
+                    quantity: item.quantity, // Số lượng đặt mua
+                    discount: product.product_discount,
                 };
             }),
         );
-
-        // Bước 3: Áp dụng mã giảm giá (nếu có)
+        // Bước 3: Xử lý mã giảm giá (nếu có)
         if (order_voucherId) {
+            // Kiểm tra xem user đã sở hữu voucher chưa
             const userVoucher = await userVoucherModel.findOne({
-                vc_user_id: adminId,
+                vc_user_id: userId,
                 vc_vouchers: { $in: [order_voucherId] },
             });
-
             if (!userVoucher) {
-                throw new RequestError('Bạn không sở hữu voucher này');
+                throw new NotFoundError('Bạn không sở hữu voucher này');
             }
-
+            // Tìm mã giảm giá trong DB
             const voucher = await Voucher.findById(order_voucherId);
             if (!voucher) {
-                throw new RequestError('Không tìm thấy voucher');
+                throw new NotFoundError('Không tìm thấy voucher');
             }
-
+            // Giá trị đơn hàng tối thiểu để áp dụng voucher
             if (totalPrice < voucher.voucher_min_order_value) {
-                throw new RequestError(`Giá trị đơn hàng tối thiểu để áp dụng voucher là ${voucher.voucher_min_order_value}`);
+                throw new BadRequestError(`Giá trị đơn hàng tối thiểu ${voucher.voucher_min_order_value}`);
             }
-
             if (voucher.voucher_method === 'percent') {
-                const discount = (totalPrice * voucher.voucher_value) / 100;
+                // Nếu giảm giá theo phần trăm
+                const discount = (totalPrice * voucher.voucher_value) / 100; // Tính số tiền giảm
+                // Áp dụng giảm giá, nhưng không vượt quá giá trị tối đa của voucher
                 totalApplyDiscount += Math.min(discount, voucher.voucher_max_price || Infinity);
             } else {
-                totalApplyDiscount += voucher.voucher_value;
+                // Nếu giảm giá theo số tiền cố định
+                totalApplyDiscount += voucher.voucher_value; //
             }
         }
-
-        // Bước 4: Trừ số dư coin của người dùng
-        const user = await userModel.findById(adminId);
-        if (!user) throw new RequestError('Người dùng không tồn tại');
-
-        const finalAmount = totalPrice - totalApplyDiscount;
-        if (user.coin < finalAmount) {
-            throw new RequestError(`Số dư không đủ. Bạn cần ${finalAmount} coin nhưng chỉ có ${user.coin} coin.`);
-        }
-
-        // Cập nhật số dư coin
-        await userModel.findByIdAndUpdate(adminId, {
-            $inc: { coin: -finalAmount },
-        });
-
-        // (Tùy chọn) Ghi lịch sử giao dịch trừ coin
-        await CoinTransaction.create({
-            userId: adminId,
-            amount: -finalAmount,
-            description: `Thanh toán đơn hàng offline với tổng giá trị ${finalAmount} coin`,
-            type: 'order',
-            createdAt: new Date(),
-        });
-
-        // Bước 5: Tạo đơn hàng
         const newOrder = await OfflineOrder.create([
             {
                 order_staff: adminId,
-                order_products: productsToOrder,
-                order_voucher: order_voucherId,
-                order_total_price: totalPrice,
-                order_total_apply_discount: totalApplyDiscount,
-                order_payment_method,
+                order_products: productsToOrder, // Danh sách sản phẩm
+                order_voucher: order_voucherId, // Mã giảm giá (nếu có)
+                order_total_price: totalPrice, // Tổng giá trị đơn hàng
+                order_total_apply_discount: totalApplyDiscount, // tổng discount
+                order_payment_method, // Phương thức thanh toán
             },
         ]);
-
-        // Bước 6: Cập nhật tồn kho sản phẩm
-        await Promise.all(
-            order_products.map((item) =>
-                Product.findByIdAndUpdate(item.productId, {
-                    $inc: {
-                        product_quantity: -item.quantity,
-                        product_sold: item.quantity,
-                    },
-                }),
-            ),
-        );
-
+        if (newOrder) {
+            // Cập nhật số lượng sản phẩm trong kho
+            await Promise.all(
+                order_products.map((item) =>
+                    Product.findByIdAndUpdate(item.productId, {
+                        $inc: {
+                            product_quantity: -item.quantity, // Giảm số lượng tồn kho
+                            product_sold: item.quantity, // Tăng số lượng đã bán
+                        },
+                    }),
+                ),
+            );
+        }
         return newOrder;
     }
 

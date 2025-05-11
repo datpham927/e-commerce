@@ -14,7 +14,7 @@ import useSocketStore from '../../../store/socketStore';
 import useAuthStore from '../../../store/authStore';
 import ReactLoading from 'react-loading';
 
-const ChatModal: React.FC<{ conversationId: string; SetUnreadMessages: (count: number) => void }> = ({ conversationId, SetUnreadMessages }) => {
+const ChatModal: React.FC<{ conversationId: string; setUnreadMessages?: (count: any) => void }> = ({ conversationId, setUnreadMessages }) => {
     const [messages, setMessages] = useState<IMessage[]>([]);
     const [isOpenBox, setIsOpenBox] = useState<boolean>(false);
     const [value, setValue] = useState<string>('');
@@ -60,7 +60,7 @@ const ChatModal: React.FC<{ conversationId: string; SetUnreadMessages: (count: n
         const fetchApi = async () => {
             const res = await apiGetMessagesByConversation(conversationId);
             await apiMarkMessagesAsSeenByUser(conversationId);
-            SetUnreadMessages(0);
+            setUnreadMessages?.(0);
             setMessages(
                 res.data && res.data.length > 0
                     ? res.data
@@ -139,11 +139,11 @@ const ChatModal: React.FC<{ conversationId: string; SetUnreadMessages: (count: n
 
     return (
         <div
-            className={`tablet:fixed tablet:top-0 tablet:right-0 tablet:left-0 tablet:w-full tablet:h-full absolute bottom-0 right-0 w-auto h-[500px] bg-white shadow-search rounded-md duration-1000 origin-bottom-right z-[1000] ${
+            className={`tablet:w-full tablet:h-[78vh]  laptop:absolute   bottom-0 right-0 w-auto h-[500px] bg-white shadow-search rounded-md duration-1000 origin-bottom-right z-[1000] ${
                 isOpenChat ? 'laptop:animate-active-openChat' : 'laptop:animate-active-openChatOff'
             }`}>
-            <div className="flex h-full w-[400px] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-                <div className="sticky flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800 xl:px-6">
+            <div className="flex tablet:w-full h-full laptop:w-[400px] flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                <div className="tablet:hidden sticky flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800 xl:px-6">
                     <div className="flex w-full items-center gap-3">
                         <div className="relative h-12 w-full max-w-[48px] rounded-full">
                             <img
@@ -155,7 +155,7 @@ const ChatModal: React.FC<{ conversationId: string; SetUnreadMessages: (count: n
                         </div>
                         <h5 className="text-sm font-medium text-gray-500 dark:text-gray-400">Hỏi Trợ lý cá nhân</h5>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className=" flex items-center gap-3">
                         <div className="flex gap-2">
                             <div
                                 className="text-secondary cursor-pointer"
@@ -228,7 +228,7 @@ const ChatModal: React.FC<{ conversationId: string; SetUnreadMessages: (count: n
                             </div>
                             <button
                                 onClick={handleOnClick}
-                                className="ml-3 flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500 text-white hover:bg-brand-600 xl:ml-5">
+                                className=" ml-3 flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500 text-white hover:bg-brand-600 xl:ml-5">
                                 <SendIcon />
                             </button>
                         </div>

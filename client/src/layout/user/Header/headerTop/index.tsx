@@ -3,9 +3,9 @@ import Notification from './Notification';
 import User from './User';
 import Cart from '../../../../components/cart';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import { useActionStore } from '../../../../store/actionStore';
 const HeaderTop: React.FC = () => {
-    // const { mobile_ui } = useAppSelector((state) => state.action);
-    const mobile_ui = false;
+    const { mobile_ui } = useActionStore();
     return (
         <div className="flex w-full justify-between items-center py-[6px] px-6  ">
             <div className="flex gap-1 text-white text-sm">

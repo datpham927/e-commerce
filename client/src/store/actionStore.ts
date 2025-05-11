@@ -6,11 +6,6 @@ interface ActionState {
     mobile_ui: boolean;
     isLoading: boolean;
     featureAuth: number; // 0 register, 1 login, 2 forgot
-    // socketRef: Socket | null;
-    // notifications: INotification[];
-    // unreadNotification: INotification[];
-    // conversations: Conversation[];
-    //ima
     loadDataConversation: boolean;
     searchImage: string;
     isOpenChat: boolean;
@@ -21,13 +16,6 @@ interface ActionState {
     setIsOpenChat: (value: boolean) => void;
     setFeatureAuth: (value: number) => void;
     setSearchImage: (value: string) => void;
-    // setSocketRef: (socket: Socket | null) => void;
-    // setNotifications: (payload: INotification | INotification[]) => void;
-    // setUnreadNotifications: () => void;
-    // setUnreadNotificationsEmpty: () => void;
-    // setConversations: (payload: Conversation | Conversation[]) => void;
-    // setIsWatchedConversations: (payload: { conversationId: string; userId: string; isWatched: boolean }) => void;
-    // setLoadDataConversation: () => void;
 }
 
 // Create the Zustand store

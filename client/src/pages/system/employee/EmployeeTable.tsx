@@ -18,22 +18,22 @@ const EmployeeTable: React.FC<EmployeeListProps> = ({ employees, onEdit, onDelet
                 <Table>
                     <TableHeader className="bg-gray-100 dark:bg-gray-700">
                         <TableRow>
-                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white">
+                            <TableCell isHeader className="px-6 py-4 font-medium text-gray-700 dark:text-white">
                                 Tên nhân viên
                             </TableCell>
-                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white">
+                            <TableCell isHeader className="px-6 py-4 font-medium text-gray-700 dark:text-white">
                                 Ảnh đại diện
                             </TableCell>
-                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white">
+                            <TableCell isHeader className="px-6 py-4 font-medium text-gray-700 dark:text-white">
                                 Vai trò
                             </TableCell>
-                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white">
+                            <TableCell isHeader className="px-6 py-4 font-medium text-gray-700 dark:text-white">
                                 SĐT
                             </TableCell>
-                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white text-center">
+                            <TableCell isHeader className="px-6 py-4 font-medium text-gray-700 dark:text-white text-center">
                                 Email
                             </TableCell>
-                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white text-center">
+                            <TableCell isHeader className="px-6 py-4 font-medium text-gray-700 dark:text-white text-center">
                                 Thao tác
                             </TableCell>
                         </TableRow>
@@ -42,22 +42,21 @@ const EmployeeTable: React.FC<EmployeeListProps> = ({ employees, onEdit, onDelet
                     <TableBody className="divide-y divide-gray-200 dark:divide-gray-600">
                         {employees?.map((c) => (
                             <TableRow key={c._id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                                <TableCell className="px-6 py-4 text-gray-900 dark:text-gray-100 font-medium">{c.admin_name}</TableCell>
+                                <TableCell className="px-6 py-4 text-gray-900 dark:text-gray-100 ">{c.admin_name}</TableCell>
                                 <TableCell className="px-6 py-4">
                                     <div className="w-12 h-12 rounded-full overflow-hidden border border-gray-300 dark:border-gray-600 shadow">
                                         <img src={c?.admin_avatar_url || LogoAdmin} alt={c.admin_name} className="w-full h-full object-cover" />
                                     </div>
                                 </TableCell>
                                 <TableCell className="px-6 py-4 text-gray-800 dark:text-gray-200">
-                                    {c.admin_type === 'admin' ? (
-                                        <span className="inline-block px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs font-medium dark:bg-indigo-600 dark:text-white">
-                                            Quản trị viên
+                                    {c?.roles?.map((role: any, index: any) => (
+                                        <span
+                                            key={index}
+                                            className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium dark:bg-gray-600 dark:text-white">
+                                            {role}
+                                            {index < c?.roles?.length - 1 && ', '}
                                         </span>
-                                    ) : (
-                                        <span className="inline-block px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium dark:bg-gray-600 dark:text-white">
-                                            Nhân viên
-                                        </span>
-                                    )}
+                                    ))}
                                 </TableCell>
                                 <TableCell className="px-6 py-4 text-gray-800 dark:text-gray-200">{c.admin_mobile}</TableCell>
                                 <TableCell className="px-6 py-4 text-center text-gray-800 dark:text-gray-200">

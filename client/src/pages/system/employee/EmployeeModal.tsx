@@ -8,24 +8,9 @@ import { Modal } from '../../../components/ui/modal';
 import Button from '../../../components/ui/button/Button';
 import ImageCropper from '../../../components/ImageCropper';
 import { IAdmin } from '../../../interfaces/admin.interfaces';
-import {
-    FormControl,
-    FormControlLabel,
-    FormLabel,
-    InputLabel,
-    Radio,
-    RadioGroup,
-    Typography,
-    SelectChangeEvent,
-    OutlinedInput,
-    ListItemText,
-    Checkbox,
-    MenuItem,
-    Select,
-} from '@mui/material';
+import { FormControl, InputLabel, OutlinedInput, ListItemText, Checkbox, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
 import { apiGetAllRoles } from '../../../services/role.service';
 import { IRole } from '../../../interfaces/role.interfaces';
-import { useActionStore } from '../../../store/actionStore';
 
 interface EmployeeModalProps {
     isOpen: boolean;
@@ -33,6 +18,7 @@ interface EmployeeModalProps {
     onSave: (data: IAdmin | any) => void;
     employee?: IAdmin | any;
 }
+
 const EmployeeModal: React.FC<EmployeeModalProps> = ({ isOpen, closeModal, onSave, employee }) => {
     const [inputFields, setInputFields] = useState<Partial<IAdmin>>({
         admin_avatar_url: '',
@@ -40,16 +26,19 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ isOpen, closeModal, onSav
         admin_mobile: '',
         admin_name: '',
         admin_roles: '',
+        admin_type: 'employee',
         admin_password: '',
     });
-    const { setIsLoading } = useActionStore();
     const [roles, setRoles] = useState<IRole[]>([]);
     const [invalidFields, setInvalidFields] = useState<Array<{ name: string; message: string }>>([]);
+    const [isUploading, setIsUploading] = useState(false);
+
     useEffect(() => {
         if (employee) {
             setInputFields(employee);
         }
     }, [employee]);
+
     useEffect(() => {
         const fetchApi = async () => {
             const res = await apiGetAllRoles(null);
@@ -59,6 +48,7 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ isOpen, closeModal, onSav
         };
         fetchApi();
     }, []);
+
     const handleSave = () => {
         const { _id, admin_password, ...data } = inputFields;
         const check = employee ? validate(data, setInvalidFields) : validate({ ...data }, setInvalidFields);
@@ -68,29 +58,33 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ isOpen, closeModal, onSav
         }
         onSave(employee ? { _id: employee._id, ...data } : { ...data, admin_password });
     };
+
     const handleInputField = (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
         setInputFields((prev) => ({
             ...prev,
             [type]: e.target.value,
-            ...(type !== 'admin' ? { admin_roles: [] } : {}), // Chỉ thêm admin_roles nếu type !== 'admin'
         }));
         setInvalidFields((prev) => prev.filter((field) => field.name !== type));
     };
 
     const handleImageUpload = async (image: string, type: string): Promise<void> => {
-        setIsLoading(true);
-        const formData = new FormData();
-        formData.append('file', image);
-        formData.append('upload_preset', import.meta.env.VITE_REACT_UPLOAD_PRESET as string);
-        const response = await apiUploadImage(formData);
-        setInputFields((prev) => ({ ...prev, [type]: response.url }));
-        setInvalidFields((prev) => prev.filter((field) => field.name !== type));
-        setIsLoading(false);
+        setIsUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append('file', image);
+            formData.append('upload_preset', import.meta.env.VITE_REACT_UPLOAD_PRESET as string);
+            const response = await apiUploadImage(formData);
+            setInputFields((prev) => ({ ...prev, [type]: response.url }));
+            setInvalidFields((prev) => prev.filter((field) => field.name !== type));
+        } catch (error) {
+            showNotification('Tải ảnh thất bại, vui lòng thử lại!');
+        } finally {
+            setIsUploading(false);
+        }
     };
 
     const handleChange = (event: SelectChangeEvent<string[]>) => {
         const selectedRoleNames = event.target.value as string[];
-        // Tìm role_id từ role_name
         const selectedRoleIds = roles.filter((role) => selectedRoleNames.includes(role.role_name)).map((role) => role._id);
         setInputFields((prev) => ({
             ...prev,
@@ -101,8 +95,8 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ isOpen, closeModal, onSav
     return (
         <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[500px] m-4">
             <div className="no-scrollbar relative w-full max-w-[500px] rounded-3xl bg-white p-6 dark:bg-gray-900">
-                <h4 className="mb-4 text-xl  font-semibold text-gray-800 dark:text-white">{employee ? 'Chỉnh sửa nhân viên' : 'Thêm nhân viên'}</h4>
-                <div className="max-h-[400px] overflow-y-auto p-4 my-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200  border-gray-200 rounded-md">
+                <h4 className="mb-4 text-xl font-semibold text-gray-800 dark:text-white">{employee ? 'Chỉnh sửa nhân viên' : 'Thêm nhân viên'}</h4>
+                <div className="max-h-[400px] overflow-y-auto p-4 my-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 border-gray-200 rounded-md">
                     {employee ? (
                         <InputReadOnly col label="Email" value={inputFields?.admin_email} />
                     ) : (
@@ -141,34 +135,30 @@ const EmployeeModal: React.FC<EmployeeModalProps> = ({ isOpen, closeModal, onSav
                             invalidFields={invalidFields}
                         />
                     )}
-                    <FormControl sx={{ marginY: '10px' }}>
-                        <FormLabel sx={{ fontSize: '13px' }}>Loại tài khoản</FormLabel>
-                        <RadioGroup row value={inputFields?.admin_type || 'admin'} onChange={(e) => handleInputField(e, 'admin_type')}>
-                            <FormControlLabel value="admin" control={<Radio />} label={<Typography sx={{ fontSize: '12px' }}>Quản trị viên</Typography>} />
-                            <FormControlLabel value="employee" control={<Radio />} label={<Typography sx={{ fontSize: '12px' }}>Nhân viên</Typography>} />
-                        </RadioGroup>
+                    <FormControl sx={{ width: '100%', marginY: '20px' }}>
+                        <InputLabel>Vai trò</InputLabel>
+                        <Select
+                            multiple
+                            value={roles.filter((role) => inputFields?.admin_roles.includes(role._id)).map((role) => role.role_name)}
+                            onChange={handleChange}
+                            input={<OutlinedInput label="Vai trò" />}
+                            renderValue={(selected) => selected.join(', ')}>
+                            {roles?.map((r) => (
+                                <MenuItem key={r._id} value={r.role_name}>
+                                    <Checkbox checked={inputFields?.admin_roles.includes(r._id)} />
+                                    <ListItemText primary={r.role_name} />
+                                </MenuItem>
+                            ))}
+                        </Select>
                     </FormControl>
-                    {inputFields?.admin_type == 'employee' && (
-                        <FormControl sx={{ width: ' 100%' }}>
-                            <InputLabel>Vai trò</InputLabel>
-                            <Select
-                                multiple
-                                value={roles.filter((role) => inputFields?.admin_roles.includes(role._id)).map((role) => role.role_name)}
-                                onChange={handleChange}
-                                input={<OutlinedInput label="Vai trò" />}
-                                renderValue={(selected) => selected.join(', ')}>
-                                {roles?.map((r) => (
-                                    <MenuItem key={r._id} value={r.role_name}>
-                                        <Checkbox checked={inputFields?.admin_roles.includes(r._id)} />
-                                        <ListItemText primary={r.role_name} />
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    )}
-                    <ImageCropper width={200} height={200} label="Thêm thêm ảnh" idName="admin_avatar_url" onCropComplete={handleImageUpload} />
-                    {inputFields?.admin_avatar_url && <img className="my-2  w-1/2 rounded-sm" src={inputFields?.admin_avatar_url} alt="" />}
-                    {invalidFields.some((i) => i.name === 'banner_imageUrl') && <p className="text-xs text-red_custom">Vui lòng chọn hình ảnh</p>}
+
+                    <ImageCropper width={200} height={200} label="Thêm ảnh" idName="admin_avatar_url" onCropComplete={handleImageUpload} />
+
+                    {isUploading && <Typography className="text-blue-500 text-sm  my-2">Đang tải ảnh lên...</Typography>}
+
+                    {inputFields?.admin_avatar_url && <img className="my-2 w-1/2 rounded-sm" src={inputFields?.admin_avatar_url} alt="avatar" />}
+
+                    {invalidFields.some((i) => i.name === 'admin_avatar_url') && <p className="text-xs text-red_custom">Vui lòng chọn hình ảnh</p>}
                 </div>
                 <div className="flex justify-end gap-3">
                     <Button size="sm" variant="outline" onClick={closeModal}>

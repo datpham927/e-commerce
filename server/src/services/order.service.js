@@ -223,13 +223,15 @@ class OrderService {
         const shippingPrice = shipping.sc_shipping_price;
 
         // Bước 5: Tính số tiền cần trả
-        const amountDue = totalPrice - totalApplyDiscount + shippingPrice;
+        let amountDue = totalPrice - totalApplyDiscount + shippingPrice;
 
         // Bước 6: Xử lý thanh toán và số tiền đã trả
         let message = 'Đặt hàng thành công';
         let amountPaid = 0;
+        let final_payment_method = order_payment_method; // New variable to handle payment method
+
         if (order_payment_method === 'COIN') {
-            const user = await userModel.findById(userId);
+            let user = await userModel.findById(userId);
             if (!user) throw new RequestError('Không tìm thấy người dùng');
             let userBalance = user.user_balance || 0;
             if (userBalance >= amountDue) {
@@ -238,29 +240,23 @@ class OrderService {
                     $inc: { user_balance: -amountDue },
                 });
                 amountPaid = amountDue;
-                message = `Đặt hàng thành công, đã thanh toán toàn bộ bằng COIN: ${amountDue.toLocaleString()} đ`;
+                message = `Đặt hàng thành công, đã thanh toán toàn bộ bằng số dư: ${amountDue.toLocaleString()} đ`;
             } else {
                 // Không đủ tiền => Trừ hết coin, phần còn lại thanh toán COD
                 amountPaid = userBalance;
-                const remaining = amountDue - userBalance;
+                let remaining = amountDue - userBalance;
                 await userModel.findByIdAndUpdate(userId, {
-                    $set: { user_balance: 0 },
+                    $inc: { user_balance: -userBalance },
                 });
-
-                // Cập nhật order_payment_method thành COIN+COD
-                order_payment_method = 'COIN+COD';
+                final_payment_method = 'COIN+CASH'; // Update payment method
                 amountDue = remaining;
-
-                message = `Đặt hàng thành công. Đã trừ toàn bộ COIN (${amountPaid.toLocaleString()} đ), còn lại thanh toán khi nhận hàng: ${remaining.toLocaleString()} đ`;
+                message = `Đặt hàng thành công. Đã trừ toàn bộ số dư (${amountPaid.toLocaleString()} đ), còn lại thanh toán khi nhận hàng: ${remaining.toLocaleString()} đ`;
             }
         } else if (order_payment_method === 'VNPAY') {
             amountPaid = amountDue;
             message = `Đặt hàng thành công, đã thanh toán qua VNPAY: ${amountDue.toLocaleString()} đ`;
-        } else if (order_payment_method === 'VNPAY') {
-            // Nếu thanh toán bằng VNPAY, số tiền đã trả bằng số tiền cần trả
-            amountPaid = amountDue;
-            message = `Đặt hàng thành công, đã thanh toán qua VNPAY: ${amountDue.toLocaleString()} đ`;
         }
+
         // Tạo đơn hàng mới trong DB
         const order_date_shipping = {
             from: new Date(Date.now() + shipping.sc_delivery_time.from * 24 * 60 * 60 * 1000),
@@ -275,7 +271,7 @@ class OrderService {
                 order_total_price: totalPrice,
                 order_total_apply_discount: totalApplyDiscount,
                 order_date_shipping,
-                order_payment_method,
+                order_payment_method: final_payment_method, // Use updated payment method
                 order_shipping_address,
                 order_shipping_price: shippingPrice,
                 order_shipping_company,
@@ -443,7 +439,7 @@ class OrderService {
                 throw new RequestError(`Người dùng không tồn tại`);
             }
 
-            // Hoàn lại số tiền đã trả bằng COIN hoặc VNPAY (tuỳ loại)
+            // Hoàn lại số tiền đã trả bằng số dư hoặc VNPAY (tuỳ loại)
             refundedAmount = order.order_amount_paid;
             user.user_balance += refundedAmount;
             await user.save();

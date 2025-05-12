@@ -231,7 +231,7 @@ class OrderService {
         if (order_payment_method === 'COIN') {
             const user = await userModel.findById(userId);
             if (!user) throw new RequestError('Không tìm thấy người dùng');
-            const userBalance = user.user_balance || 0;
+            let userBalance = user.user_balance || 0;
             if (userBalance >= amountDue) {
                 // Đủ tiền, trừ toàn bộ bằng coin
                 await userModel.findByIdAndUpdate(userId, {
@@ -243,7 +243,6 @@ class OrderService {
                 // Không đủ tiền => Trừ hết coin, phần còn lại thanh toán COD
                 amountPaid = userBalance;
                 const remaining = amountDue - userBalance;
-
                 await userModel.findByIdAndUpdate(userId, {
                     $set: { user_balance: 0 },
                 });

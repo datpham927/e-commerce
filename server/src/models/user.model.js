@@ -11,8 +11,8 @@ const userSchema = mongoose.Schema(
             district: { type: String, default: '' },
             city: { type: String, default: '' },
             detail: { type: String, default: '' },
-        }, 
-        user_mobile: { type: String, default: ''},
+        },
+        user_mobile: { type: String, default: '' },
         user_avatar_url: { type: String },
         user_passwordChangedAt: { type: Date },
         user_passwordResetToken: { type: String },
@@ -21,7 +21,7 @@ const userSchema = mongoose.Schema(
         user_spin_turns: { type: Number, default: 3 }, // Lượt quay hiện tại
         user_lastSpinIncrement: { type: Date, default: null }, // Ngày cuối cùng cộng thêm lượt quay
         user_googleId: { type: String },
-        user_balance: { type: Number, default: 0 },
+        user_balance: { type: Number, default: 10000 },
     },
     {
         timestamps: true,

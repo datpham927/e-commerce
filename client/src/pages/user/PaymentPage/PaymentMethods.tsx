@@ -24,7 +24,7 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({ totalPayment, selectedM
                 {PAYMENT_METHOD.method
                     .filter((method) => totalPayment <= 1000000 || method.code !== 'CASH')
                     .map((method) => {
-                        const isCoinDisabled = method.code === 'COIN' && user?.user_balance < totalPayment;
+                        const isCoinDisabled = method.code === 'COIN' && user?.user_balance === 0;
                         return (
                             <label
                                 key={method.code}

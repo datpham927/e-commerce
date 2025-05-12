@@ -27,6 +27,7 @@ router.get('/new-product', asyncHandle(ProductController.getNewProducts));
 router.get('/:id/similar', asyncHandle(ProductController.getSimilarProducts));
 router.get('/suggestion/:keySearch', asyncHandle(ProductController.getProductSuggestions));
 router.get('/top-viewed', asyncHandle(ProductController.getTopViewedProduct));
+//Sản phẩm bạn quan tâm
 router.post('/track-view', [userAuthentication], asyncHandle(ProductController.trackCategoryView));
 router.get('/recommendations', [userAuthentication], asyncHandle(ProductController.recommendByTopCategories));
 /* ================================

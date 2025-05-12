@@ -170,7 +170,10 @@ const insertProductsData = async () => {
                         if (featuresArray.length == 0) {
                             return null;
                         }
+                        const possibleRatings = [3.5, 4.0, 4.5, 5.0];
+
                         return await productModel.create({
+                            product_ratings: possibleRatings[Math.floor(Math.random() * possibleRatings.length)],
                             product_name: item.title,
                             product_code: autoCode(item.title),
                             product_thumb: image_url,

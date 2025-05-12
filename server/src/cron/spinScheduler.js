@@ -3,7 +3,7 @@ const userModel = require('../models/user.model');
 const notificationModel = require('../models/notification.model');
 
 // Tác vụ chạy lúc 00:00 mỗi ngày
-cron.schedule('0 0 * * *', async () => {
+cron.schedule('00 00 * * *', async () => {
     console.log('⏰ Bắt đầu cộng 3 lượt quay cho tất cả user...');
     try {
         await userModel.updateMany(

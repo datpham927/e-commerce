@@ -44,8 +44,7 @@ const validate = (valueForm: Record<string, any>, setInvalidFields: (fields: Arr
         if (key.includes('phone') || key.includes('mobile')) {
             const phoneRegex = /^[0-9]{10,11}$/;
             const phonePattern = /^(0[3|5|7|8|9])[0-9]{8}$/;
-
-            if (!phoneRegex.test(value) || phonePattern.test(value)) {
+            if (!phoneRegex.test(value) || !phonePattern.test(value)) {
                 invalidFields.push({
                     name: key,
                     message: 'Số điện thoại không hợp lệ. Vui lòng kiểm tra lại.',

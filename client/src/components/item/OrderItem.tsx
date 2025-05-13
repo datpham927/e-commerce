@@ -26,12 +26,9 @@ const OrderItem: React.FC<OrderItemProps> = ({ order, view = false, isUpdateAddr
     const [payload, setPayload] = useState<IUserProfile>(user);
     const [isOpenEditAddress, setIsOpenEditAddress] = useState(false);
     const navigate = useNavigate();
-
     const shippingFrom = formatShippingDate(order?.order_date_shipping?.from || 0);
     const shippingTo = formatShippingDate(order?.order_date_shipping?.to || 0);
     const status = statusOrder(order);
-    const amountDueRemaining = order.order_amount_due - order.order_amount_paid;
-
     // Địa chỉ đang sử dụng (nếu người dùng đã chỉnh sửa, dùng địa chỉ mới)
     const currentAddress = payload.user_address?.detail
         ? {
@@ -92,7 +89,7 @@ const OrderItem: React.FC<OrderItemProps> = ({ order, view = false, isUpdateAddr
                 </div>
                 <div className="flex justify-end text-sm text-gray-600">
                     Số tiền còn lại (thanh toán khi nhận hàng):
-                    <span className="text-red-500 font-semibold ml-2">{formatMoney(amountDueRemaining)}</span>
+                    <span className="text-red-500 font-semibold ml-2">{formatMoney(order.order_amount_due)}</span>
                 </div>
             </div>
 

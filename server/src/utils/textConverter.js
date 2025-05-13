@@ -1,7 +1,6 @@
 'use strict';
 
-const formatDate = require("./formatDate");
-
+const formatDate = require('./formatDate');
 
 module.exports = {
     convertOrderToText: (orders = []) => {
@@ -42,22 +41,40 @@ module.exports = {
      * @param {Array} products - Danh sách sản phẩm từ productModel
      * @returns {string} Chuỗi văn bản mô tả sản phẩm
      */
-    convertProductsToText: (products = []) => {
+    convertProductsToText(products = []) {
         if (!Array.isArray(products)) return '';
-
         return products
-            .map(
-                (p, index) => `
-          Sản phẩm ${index + 1}:
-          - Tên sản phẩm: ${p.product_name || 'Chưa có tên'}
-          - Lượt bán: ${p.product_sold || 0}
-          - Đánh giá sao: ${p.product_ratings || 'Chưa có đánh giá'}
-          - Giảm giá: ${p.product_discount || 0}%
-          - URL Hình ảnh: ${p.product_thumb || 'Chưa có ảnh'}
-          - Mô tả: ${p.product_description || 'Chưa có mô tả'}
-          - URL Liên kết sản phẩm: /${p.product_slug || '#'}/${p._id || '#'}
-        `,
-            )
+            .map((p, index) => {
+                const {
+                    product_name,
+                    product_sold,
+                    product_ratings,
+                    product_discount,
+                    product_thumb,
+                    product_description,
+                    product_slug,
+                    _id,
+                    product_attribute,
+                } = p;
+
+                // Xử lý các thuộc tính sản phẩm
+                const attributesText =
+                    Array.isArray(product_attribute) && product_attribute.length > 0
+                        ? product_attribute.map((attr) => `  - ${attr.name}: ${attr.value}`).join('\n')
+                        : '  - Không có thuộc tính nào';
+                return `
+Sản phẩm ${index + 1}:
+- Tên sản phẩm: ${product_name || 'Chưa có tên'}
+- Lượt bán: ${product_sold || 0}
+- Đánh giá sao: ${product_ratings || 'Chưa có đánh giá'}
+- Giảm giá: ${product_discount || 0}%
+- URL Hình ảnh: ${product_thumb || 'Chưa có ảnh'}
+- Mô tả: ${product_description || 'Chưa có mô tả'}
+- URL Liên kết sản phẩm: /${product_slug || '#'}/${_id || '#'}
+- Thuộc tính sản phẩm:
+${attributesText}
+`;
+            })
             .join('');
     },
     /**

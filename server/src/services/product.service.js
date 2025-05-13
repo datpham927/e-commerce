@@ -25,7 +25,6 @@ class ProductService {
             try {
                 // Đảm bảo folder tồn tại
                 await fs.mkdir(imgDir, { recursive: true });
-
                 // Tải ảnh và trích xuất đặc trưng
                 await downloadImage(payload.product_thumb, tempPath);
                 const searchFeatures = await extractFeatures(tempPath);

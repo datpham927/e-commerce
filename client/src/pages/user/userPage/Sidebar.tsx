@@ -47,7 +47,6 @@ export const Sidebar: React.FC = () => {
                     />
                 </div>
             </div>
-
             <div className="flex flex-col items-center text-center mx-4 justify-center py-2 px-3 bg-blue-50 rounded-xl border border-blue-400 shadow-sm">
                 <span className="text-[14px] text-gray-900">Điểm hiện có</span>
                 <div className="flex items-center gap-1 text-amber-500 font-semibold text-sm mt-1">

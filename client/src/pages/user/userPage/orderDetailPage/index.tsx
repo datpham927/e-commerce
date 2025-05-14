@@ -22,9 +22,6 @@ const OrderDetailPage: React.FC = () => {
 
     if (!order) return <SkeletonViewOrder />;
 
-    // Tính toán số tiền còn lại cần trả
-    const amountDueRemaining = order.order_amount_due - order.order_amount_paid;
-
     return (
         <div className="w-full p-4 max-w-6xl mx-auto">
             {/* Header */}
@@ -76,9 +73,9 @@ const OrderDetailPage: React.FC = () => {
                     <p className="text-sm text-gray-600 mt-1">
                         Số tiền đã trả: <span className="text-green-500 font-semibold">{formatMoney(order.order_amount_paid)}</span>
                     </p>
-                    {amountDueRemaining > 0 && (
+                    {order.order_amount_due > 0 && (
                         <p className="text-sm text-gray-600 mt-1">
-                            Số tiền còn lại (trả bằng tiền mặt): <span className="text-red-500 font-semibold">{formatMoney(amountDueRemaining)}</span>
+                            Số tiền còn lại (trả bằng tiền mặt): <span className="text-red-500 font-semibold">{formatMoney(order.order_amount_due)}</span>
                         </p>
                     )}
                 </div>

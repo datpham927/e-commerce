@@ -73,9 +73,7 @@ const OrderTable: React.FC<OrderListProps> = ({ orders, tab, onChangeStatus }) =
 
                                 <TableCell className="px-5 py-3 text-center dark:text-gray-300">
                                     <span className="truncate-trailing text-[rgb(128,128,137)] line-clamp-1 text-theme-sm dark:text-white/90">
-                                        {order.order_payment_method == 'VNPAY'
-                                            ? 'Đã thanh toán'
-                                            : formatMoney(order.order_amount_due - order.order_amount_paid)}
+                                        {order.order_payment_method == 'VNPAY' ? 'Đã thanh toán' : formatMoney(order.order_amount_due)}
                                     </span>
                                 </TableCell>
                                 <TableCell className="text-center space-y-1">

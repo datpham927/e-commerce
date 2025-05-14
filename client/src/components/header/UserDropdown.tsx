@@ -24,7 +24,6 @@ export default function UserDropdown() {
     const handleLogout = async () => {
         const res = await apiLogoutAdmin();
         if (!res.success) return;
-        localStorage.clear();
         logoutAdmin();
         navigate(PATH.ADMIN_LOGIN);
     };
@@ -57,34 +56,22 @@ export default function UserDropdown() {
 
                 <ul className="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800">
                     <li>
-                    <DropdownItem
-    onItemClick={closeDropdown}
-    tag="a"
-    to={PATH.MANAGE_PROFILE}
-    className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
-    
-    <img
-        src="https://img.icons8.com/?size=100&id=23293&format=png&color=000000"
-        alt="edit icon"
-        className="w-9 h-9"
-    />
-    Chỉnh sửa hồ sơ
-</DropdownItem>
-
+                        <DropdownItem
+                            onItemClick={closeDropdown}
+                            tag="a"
+                            to={PATH.MANAGE_PROFILE}
+                            className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
+                            <img src="https://img.icons8.com/?size=100&id=23293&format=png&color=000000" alt="edit icon" className="w-9 h-9" />
+                            Chỉnh sửa hồ sơ
+                        </DropdownItem>
                     </li>
                 </ul>
                 <button
-  onClick={handleLogout}
-  className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
->
-  <img
-    src="https://img.icons8.com/?size=100&id=13925&format=png&color=000000"
-    alt="logout icon"
-    className="w-7 h-7"
-  />
-  Đăng xuất
-</button>
-
+                    onClick={handleLogout}
+                    className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
+                    <img src="https://img.icons8.com/?size=100&id=13925&format=png&color=000000" alt="logout icon" className="w-7 h-7" />
+                    Đăng xuất
+                </button>
             </Dropdown>
         </div>
     );

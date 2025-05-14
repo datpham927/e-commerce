@@ -6,6 +6,7 @@ const autoCancelLateOrders = require('./autoCancelLateOrders');
 // 🎯 Cron #1: Cộng lượt quay mỗi ngày lúc 00:00
 cron.schedule('0 0 * * *', async () => {
     console.log('⏰ [Cron] Bắt đầu cộng 3 lượt quay cho tất cả user...');
+
     try {
         await userModel.updateMany(
             {},

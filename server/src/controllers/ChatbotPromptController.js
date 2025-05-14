@@ -12,9 +12,6 @@ const OnlineOrder = require('../models/OnlineOrder');
 class ChatbotPromptController {
     static async getPrompt(req, res) {
         const { userId } = req.query;
-        console.log({ userId });
-        const { page = 1, limit = 50 } = req.query;
-        const skip = (page - 1) * limit;
         // Hàm lấy dữ liệu từ cache
         const getCachedData = async (key, fetchFunction) => {
             try {
@@ -52,15 +49,12 @@ class ChatbotPromptController {
             userModel.countDocuments({ user_isBlocked: false }),
             productModel
                 .find({ product_isPublished: true })
-                .select('product_name product_sold product_ratings product_discount product_thumb product_description product_slug _id')
-                .skip(skip)
-                .limit(limit)
+                .select('product_name product_sold product_attribute product_ratings product_discount product_thumb product_description product_slug _id')
                 .lean(),
             getCachedData('categories', () => categoryModel.find().select('category_name category_thumb category_slug category_code').lean()),
             getCachedData('brands', () => brandModel.find().select('brand_name brand_thumb brand_slug _id').lean()),
             getCachedData('shippings', () => shippingCompanyModel.find().select('sc_name sc_address sc_shipping_price sc_shipping_time').lean()),
         ]);
-
         // Tạo thống kê
         const statsText = `
         Tổng số lượng sản phẩm đã bán: ${stats[0]?.totalSold || 0},

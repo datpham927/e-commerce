@@ -55,22 +55,30 @@ class AdminService {
     }
 
     static async getAllAdmins({ admin_id, limit, page }) {
-        const limitNum = parseInt(limit, 10) || 10; // Mặc định limit = 10 nếu không hợp lệ
-        const pageNum = parseInt(page, 10) || 0; // Mặc định page = 0 nếu không hợp lệ
+        const limitNum = parseInt(limit, 10) || 10; // Default limit = 10 if invalid
+        const pageNum = parseInt(page, 10) || 0; // Default page = 0 if invalid
         const skipNum = pageNum * limitNum;
-        const admins = await AdminModel.find({ _id: { $ne: admin_id } })
-            .select('-admin_password  -__v') // Loại bỏ trường admin_password khỏi kết quả
-            .sort({ createdAt: -1 }) // Sắp xếp theo thời gian tạo giảm dần
-            .skip(skipNum) // Bỏ qua số bản ghi theo trang
-            .limit(limitNum) // Giới hạn số bản ghi trả về
-            .lean(); // Chuyển đổi thành plain JavaScript object
-        const totalAdmin = await AdminModel.countDocuments(); // Đếm tổng số admin
 
+        const admins = await AdminModel.find({ _id: { $ne: admin_id } })
+            .select('-admin_password -__v') // Exclude admin_password and __v fields
+            .populate('admin_roles', 'role_name') // Populate role_name from Role model
+            .sort({ createdAt: -1 }) // Sort by creation date in descending order
+            .skip(skipNum) // Skip records based on page
+            .limit(limitNum) // Limit the number of records returned
+            .lean(); // Convert to plain JavaScript object
+
+        // Transform admins to include roles (role names) and keep admin_roles as IDs
+        const transformedAdmins = admins.map((admin) => ({
+            ...admin,
+            roles: admin.admin_roles.map((role) => role.role_name), // Extract role names
+            admin_roles: admin.admin_roles.map((role) => role._id), // Keep only role IDs
+        }));
+        const totalAdmin = await AdminModel.countDocuments(); // Count total admins
         return {
-            totalPage: Math.ceil(totalAdmin / limitNum) || 0, // Tổng số trang (0-based)
-            currentPage: pageNum, // Trang hiện tại
-            totalAdmin, // Tổng số admin
-            admins, // Danh sách admin kèm thông tin role và permission
+            totalPage: Math.ceil(totalAdmin / limitNum) || 0, // Total pages (0-based)
+            currentPage: pageNum, // Current page
+            totalAdmin, // Total number of admins
+            admins: transformedAdmins, // List of admins with roles and role IDs
         };
     }
     static async getProfile(adminId) {

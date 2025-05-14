@@ -705,3 +705,7 @@ select:focus {
     box-shadow: none !important;
     border-color: #22d3ee !important;
 }
+
+.space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    margin: 0;
+}

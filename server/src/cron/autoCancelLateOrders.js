@@ -1,16 +1,17 @@
-const OnlineOrder = require('../models/OnlineOrder');
 const Notification = require('../models/notification.model');
-const User = require('../models/user.model'); // Để lấy danh sách admin
+const OnlineOrder = require('../models/OnlineOrder.model');
+const User = require('../models/user.model');
 
 const autoCancelLateOrders = async () => {
-    console.log('⏰ [Cron] Đang kiểm tra đơn hàng cần tự động hủy...');
+    console.log('⏰ [Cron] Checking for orders to auto-cancel...');
     try {
+        // Find shipped orders with a shipping deadline
         const orders = await OnlineOrder.find({
             order_status: 'shipped',
             'order_date_shipping.to': { $exists: true, $ne: null },
         })
-        .populate('order_products.productId') // Để có ảnh và tên sản phẩm
-        .lean();
+            .populate('order_products.productId')
+            .lean();
 
         const now = new Date();
         const expiredOrders = orders.filter(order => {
@@ -19,44 +20,46 @@ const autoCancelLateOrders = async () => {
         });
 
         if (expiredOrders.length === 0) {
-            console.log('✅ [Cron] Không có đơn hàng nào quá hạn cần hủy.');
+            console.log('✅ [Cron] No overdue orders to cancel.');
             return;
         }
 
         const expiredOrderIds = expiredOrders.map(order => order._id);
+
+        // Update status of expired orders to cancelled
         await OnlineOrder.updateMany(
             { _id: { $in: expiredOrderIds } },
             { $set: { order_status: 'cancelled' } }
         );
 
-        // Gửi thông báo đến người dùng
-        const userNotifications = expiredOrders.map(order => {
+        const userNotifications = [];
+        const adminNotifications = [];
+
+        expiredOrders.forEach(order => {
             const firstProduct = order.order_products?.[0]?.productId;
-            return {
+            userNotifications.push({
                 notification_user: order.order_user,
                 notification_title: '🚫 Một đơn hàng của bạn đã bị hủy',
-                notification_subtitle: `Đơn hàng có sản phẩm "${firstProduct?.product_name || '...'}" đã bị hủy do quá hạn giao hàng.`,
+                notification_subtitle: `Đơn hàng #"${order?.order_code}" đã bị hủy do quá hạn giao hàng.`,
                 notification_imageUrl: firstProduct?.product_thumb || '',
                 notification_link: '/nguoi-dung/don-hang',
                 notification_type: 'user',
-            };
+            });
+                adminNotifications.push({
+                    notification_title: '🚨 Đơn hàng quá hạn đã bị hủy!',
+                    notification_subtitle: `Hệ thống vừa tự động hủy đơn hàng #"${order?.order_code}" vì quá hạn giao hàng.`,
+                    notification_imageUrl: 'https://cdn-icons-png.flaticon.com/512/5957/5957885.png',
+                    notification_link: '/quan-ly/don-hang',
+                    notification_type: 'admin',
+                });
         });
-
-        // Gửi thông báo đến admin
-        const adminUsers = await User.find({ user_role: 'ADMIN', user_isBlocked: false }, '_id').lean();
-        const adminNotifications = adminUsers.map(admin => ({
-            notification_title: '🚨 Đơn hàng quá hạn đã bị hủy!',
-            notification_subtitle: `Hệ thống vừa tự động hủy ${expiredOrderIds.length} đơn hàng vì quá hạn giao hàng.`,
-            notification_imageUrl: 'https://cdn-icons-png.flaticon.com/512/5957/5957885.png',
-            notification_link: '/quan-ly/don-hang',
-            notification_type: 'admin',
-        }));
-
-        await Notification.insertMany([...userNotifications, ...adminNotifications]);
-
-        console.log(`✅ [Cron] Đã hủy ${expiredOrderIds.length} đơn hàng và gửi thông báo đến user + admin.`);
+        const notifications = [...userNotifications, ...adminNotifications];
+        // Insert all notifications
+        console.log({notifications})
+        await Notification.insertMany(notifications);
+        console.log(`✅ [Cron] Cancelled ${expiredOrderIds.length} orders `);
     } catch (err) {
-        console.error('❌ [Cron] Lỗi khi hủy đơn hàng quá hạn:', err);
+        console.error('❌ [Cron] Error cancelling overdue orders:', err);
     }
 };
 

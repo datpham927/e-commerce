@@ -1,8 +1,8 @@
 const Product = require('../models/product.model');
 const User = require('../models/user.model');
 const Review = require('../models/reviews.model');
-const OnlineOrder = require('../models/OnlineOrder');
-const OfflineOrder = require('../models/OfflineOrder');
+const OnlineOrder = require('../models/OnlineOrder.model');
+const OfflineOrder = require('../models/OfflineOrder.model');
 
 class DashboardService {
     static async getStats(startDate, endDate) {

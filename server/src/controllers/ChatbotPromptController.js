@@ -7,7 +7,7 @@ const shippingCompanyModel = require('../models/shippingCompany.model');
 const userModel = require('../models/user.model');
 const textConverter = require('../utils/textConverter');
 const redisClient = require('../config/redisClient'); // Sử dụng redisClient từ file cấu hình
-const OnlineOrder = require('../models/OnlineOrder');
+const OnlineOrder = require('../models/OnlineOrder.model');
 
 class ChatbotPromptController {
     static async getPrompt(req, res) {

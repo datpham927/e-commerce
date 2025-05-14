@@ -40,5 +40,5 @@ cron.schedule('0 0 * * *', async () => {
 });
 
 // 🎯 Cron #2: Tự hủy đơn hàng quá hạn mỗi ngày lúc 1h sáng
-cron.schedule('* * * * *', autoCancelLateOrders); // Chạy mỗi phút để test
+cron.schedule('0 0 * * *', autoCancelLateOrders); // Chạy mỗi phút để test
 

@@ -9,8 +9,7 @@ import { useActionStore } from '../../../../store/actionStore';
 import { apiLogout } from '../../../../services/auth.user.service';
 const User: React.FC = () => {
     const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
-    // const { isLoginSuccess } = useAppSelector((state) => state.auth);
-    // const { avatar_url, firstName, lastName, email } = useAppSelector((state) => state.user);
+
     const { user } = useUserStore();
     const { isUserLoggedIn, logoutUser } = useAuthStore();
     const { setOpenFeatureAuth } = useActionStore();

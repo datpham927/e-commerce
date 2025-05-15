@@ -4,7 +4,7 @@ export const showNotification = (message: string, err?: boolean): void => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     err
         ? toast.success(message, {
-              position: 'top-right',
+              position: 'top-center',
               autoClose: 2000,
               hideProgressBar: false,
               closeOnClick: true,
@@ -13,7 +13,7 @@ export const showNotification = (message: string, err?: boolean): void => {
               progress: undefined,
           })
         : toast.error(message, {
-              position: 'top-right',
+              position: 'top-center',
               autoClose: 2000,
               hideProgressBar: false,
               closeOnClick: true,

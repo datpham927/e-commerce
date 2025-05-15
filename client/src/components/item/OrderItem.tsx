@@ -89,7 +89,7 @@ const OrderItem: React.FC<OrderItemProps> = ({ order, view = false, isUpdateAddr
                 </div>
                 <div className="flex justify-end text-sm text-gray-600">
                     Số tiền còn lại (thanh toán khi nhận hàng):
-                    <span className="text-red-500 font-semibold ml-2">{formatMoney(order.order_amount_due)}</span>
+                    <span className="text-red-500 font-semibold ml-2">{formatMoney(order.order_amount_due-order.order_amount_paid)}</span>
                 </div>
             </div>
 

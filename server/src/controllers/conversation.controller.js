@@ -151,16 +151,49 @@ const deleteConversation = async (req, res) => {
  */
 const getConversationByUserName = async (req, res) => {
     const { name } = req.query;
-    if (!name) throw new BadRequestError('Thiếu tên người dùng');
-    const user = await User.findOne({ user_name: { $regex: name, $options: 'i' } });
-    if (!user) throw new BadRequestError('Không tìm thấy người dùng');
-    const conversation = await conversationModel.findOne({ user: user._id }).populate('user', 'user_name user_email').populate('participants');
-    if (!conversation) throw new BadRequestError('Không tìm thấy cuộc hội thoại');
-    return res.status(200).json({
-        success: true,
-        data: conversation,
-    });
+
+    try {
+        if (!name) {
+            return res.status(400).json({
+                success: false,
+                message: 'Thiếu tên người dùng',
+            });
+        }
+
+        const user = await User.findOne({ user_name: { $regex: name, $options: 'i' } });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy người dùng',
+            });
+        }
+
+        const conversation = await conversationModel
+            .findOne({ user: user._id })
+            .populate('user', 'user_name user_email')
+            .populate('admin', 'admin_name admin_email');
+
+        if (!conversation) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy cuộc hội thoại',
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            data: conversation,
+        });
+    } catch (err) {
+        console.error('Lỗi khi tìm kiếm cuộc trò chuyện:', err);
+        return res.status(500).json({
+            success: false,
+            message: 'Đã xảy ra lỗi khi xoá cuộc trò chuyện',
+        });
+    }
 };
+
 
 module.exports = {
     getConversationByUserName,

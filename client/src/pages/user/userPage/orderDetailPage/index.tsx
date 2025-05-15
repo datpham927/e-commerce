@@ -75,7 +75,7 @@ const OrderDetailPage: React.FC = () => {
                     </p>
                     {order.order_amount_due > 0 && (
                         <p className="text-sm text-gray-600 mt-1">
-                            Số tiền còn lại (trả bằng tiền mặt): <span className="text-red-500 font-semibold">{formatMoney(order.order_amount_due)}</span>
+                            Số tiền còn lại (trả bằng tiền mặt): <span className="text-red-500 font-semibold">{formatMoney(order.order_amount_due-order.order_amount_paid)}</span>
                         </p>
                     )}
                 </div>

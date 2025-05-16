@@ -13,7 +13,6 @@ const conversationSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'Admin',
             required: true,
-            unique: true, // Một người dùng chỉ có một cuộc hội thoại duy nhất
         },
         seen: {
             type: Boolean,

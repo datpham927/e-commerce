@@ -15,6 +15,7 @@ const ChatPage: React.FC = () => {
     const { user } = useUserStore();
     const { isUserLoggedIn } = useAuthStore();
     const { setOpenFeatureAuth, setIsLoading, setIsOpenChat } = useActionStore();
+    const [admin, setAdmin] = useState<{ admin_name: string; admin_avatar_url: string }>();
 
     // Fetch prompt when user ID or selected option changes
     useEffect(() => {
@@ -33,6 +34,7 @@ const ChatPage: React.FC = () => {
             const res = await apiCreateConversation();
             setIsLoading(false);
             if (res?.success && res?.data?._id) {
+                setAdmin(res.admin);
                 setConversationId(res.data._id);
                 setIsOpenChat(true);
             }
@@ -72,7 +74,7 @@ const ChatPage: React.FC = () => {
             </div>
 
             <div className="w-full flex-1 overflow-y-auto px-4">
-                {selectedOption === 'ai' ? <ChatBoxAIModal isOpenBox={true} context={prompt} /> : <ChatModal conversationId={conversationId} />}
+                {selectedOption === 'ai' ? <ChatBoxAIModal isOpenBox={true} context={prompt} /> : <ChatModal admin={admin} conversationId={conversationId} />}
             </div>
         </div>
     );

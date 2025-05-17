@@ -71,8 +71,8 @@ const ChatModal: React.FC<{
                     : [
                           {
                               sender: {
-                                  admin_name: admin.admin_name,
-                                  admin_avatar_url: admin.admin_avatar_url,
+                                  admin_name: admin?.admin_name,
+                                  admin_avatar_url: admin?.admin_avatar_url,
                                   _id: '',
                               },
                               senderRole: 'admin',
@@ -150,7 +150,11 @@ const ChatModal: React.FC<{
                 <div className="tablet:hidden sticky flex items-center justify-between border-b border-gray-200 px-5 py-4 dark:border-gray-800 xl:px-6">
                     <div className="flex w-full items-center gap-3">
                         <div className="relative h-12 w-full max-w-[48px] rounded-full">
-                            <img src={admin.admin_avatar_url} alt="profile" className="h-full w-full overflow-hidden rounded-full object-cover object-center" />
+                            <img
+                                src={admin?.admin_avatar_url}
+                                alt="profile"
+                                className="h-full w-full overflow-hidden rounded-full object-cover object-center"
+                            />
                             <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full border-[1.5px] border-white dark:border-gray-900 bg-success-500"></span>
                         </div>
                         <h5 className="text-sm font-medium text-gray-500 dark:text-gray-400">Hỏi Trợ lý cá nhân</h5>

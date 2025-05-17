@@ -22,7 +22,7 @@ const DefaultLayout = () => {
                 <Footer />
                 <Auth />
                 <Loading />
-                <div className="tablet:hidden fixed bottom-4 right-5 bg-blue-600 rounded-lg shadow-lg p-2 flex flex-col items-center justify-center space-y-2  z-[900] ">
+                <div className="tablet:hidden fixed bottom-4 right-5 bg-white rounded-lg shadow-lg p-2 flex flex-col items-center justify-center space-y-2  z-[900] ">
                     <ChatBoxAI />
                     <Chat />
                 </div>

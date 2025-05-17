@@ -13,6 +13,7 @@ const Chat: React.FC = () => {
     // const { socketRef } = useAppSelector((state) => state.action);
     const { isUserLoggedIn } = useAuthStore();
     const [conversationId, setConversationId] = useState<string>('');
+    const [admin, setAdmin] = useState<{ admin_name: string; admin_avatar_url: string }>();
     const [unreadMessages, setUnreadMessages] = useState<number>(0);
     const { setIsOpenChat, setOpenFeatureAuth } = useActionStore();
     const { socket, connect, isConnected } = useSocketStore();
@@ -52,6 +53,7 @@ const Chat: React.FC = () => {
         const res = await apiCreateConversation();
         setIsOpenChat(true);
         if (res?.success) {
+            setAdmin(res.admin);
             setConversationId(res?.data?._id);
         }
     };
@@ -66,18 +68,18 @@ const Chat: React.FC = () => {
                     }
                     handleAddConversation();
                 }}
-                className="flex flex-col  items-center  cursor-pointer justify-center  h-12 text-white rounded-md text-sm   relative transition duration-200">
-                <span className="mr-2">
+                className="flex flex-col text-blue-600 items-center  cursor-pointer justify-center  h-12 rounded-md text-sm   relative transition duration-200">
+                <span>
                     <MessageIcon />
                 </span>
                 Tin mới
                 {isUserLoggedIn && unreadMessages > 0 && (
-                    <span className="absolute top-2 right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    <span className="absolute top-2 right-2 bg-red-500 text-blue-600 text-xs rounded-full w-5 h-5 flex items-center justify-center">
                         {unreadMessages}
                     </span>
                 )}
             </div>
-            <ChatModal conversationId={conversationId} setUnreadMessages={setUnreadMessages} />
+            <ChatModal conversationId={conversationId} admin={admin} setUnreadMessages={setUnreadMessages} />
         </div>
     );
 };

@@ -67,6 +67,24 @@ const createSocket = (httpServer) => {
             results.forEach((result) => console.log(result));
         });
 
+        socket.on('sendNotificationForAdminOnline', async (data) => {
+            if (getOnlineAdmins().length === 0) return;
+            console.log('📨 Gửi tin nhắn đến các admin online...');
+            const sendPromises = getOnlineAdmins().map(
+                (admin) =>
+                    new Promise((resolve) => {
+                        socket.to(admin.socketId).emit('getNotificationByAdmin', data, (ack) => {
+                            if (ack) {
+                                resolve(`✅ Sent to admin ${admin.socketId}`);
+                            } else {
+                                resolve(`❌ Failed to send to admin ${admin.socketId}`);
+                            }
+                        });
+                    }),
+            );
+            const results = await Promise.all(sendPromises);
+            results.forEach((result) => console.log(result));
+        });
         // === Ngắt kết nối ===
         socket.on('disconnect', () => {
             console.log('❌ Client disconnected:', socket.id);

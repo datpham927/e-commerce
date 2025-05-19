@@ -7,7 +7,7 @@ import { apiCreateConversation } from '../../services/conversation';
 import { apiGetUnreadMessagesCount } from '../../services/message.service';
 import MessageIcon from '@mui/icons-material/Message';
 import useSocketStore from '../../store/socketStore';
-import { notificationAudio } from '../../assets';
+import { notificationAudioUser } from '../../assets';
 
 const Chat: React.FC = () => {
     // const { socketRef } = useAppSelector((state) => state.action);
@@ -24,18 +24,18 @@ const Chat: React.FC = () => {
         if (!isConnected || !isUserLoggedIn) return;
 
         // Handle 'getMessage' event to increment unread messages
-        const handlesetUnreadMessages = () => {
-            const audio = new Audio(notificationAudio);
+        const handleSetUnreadMessages = () => {
+            const audio = new Audio(notificationAudioUser);
             audio.play().catch((err) => {
                 console.warn('🔇 Không thể phát âm thanh:', err);
             });
             setUnreadMessages((prev) => prev + 1);
         };
         // Register socket event listener
-        socket.on('getMessage', handlesetUnreadMessages);
+        socket.on('getMessage', handleSetUnreadMessages);
         // Cleanup: Remove event listener on unmount or dependency change
         return () => {
-            socket.off('getMessage', handlesetUnreadMessages);
+            socket.off('getMessage', handleSetUnreadMessages);
         };
     }, [isConnected, isUserLoggedIn, socket]);
     useEffect(() => {
@@ -74,7 +74,7 @@ const Chat: React.FC = () => {
                 </span>
                 Tin mới
                 {isUserLoggedIn && unreadMessages > 0 && (
-                    <span className="absolute top-2 right-2 bg-red-500 text-blue-600 text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    <span className="absolute top-2 right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                         {unreadMessages}
                     </span>
                 )}

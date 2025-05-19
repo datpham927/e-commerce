@@ -31,6 +31,7 @@ export { default as header_mobile } from './image/header_mobile.png';
 export { default as notExit } from './image/notExit.png';
 export { default as cuoiAudio } from './audio/cuoi.mp3';
 export { default as notificationAudio } from './audio/notification.wav';
+export { default as notificationAudioUser } from './audio/notificationUser.mp3';
 export { default as votayAudio } from './audio/votayAudio.mp3';
 export { default as dpnAudio } from './audio/dpnAudio.mp3';
 export { default as spinAudio } from './audio/spinAudio.mp3';

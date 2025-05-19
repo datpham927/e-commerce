@@ -59,10 +59,8 @@ const AdminLogin = () => {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}>
                 <motion.h2 className="mb-4 text-2xl font-bold text-center text-gray-900 dark:text-white">Đăng nhập Admin</motion.h2>
-
                 {errorMessage && <p className="mb-2 text-sm text-red-500">{errorMessage}</p>}
-
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-white">
                             Email

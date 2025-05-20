@@ -57,7 +57,7 @@ export const ViewOrder: React.FC<ViewOrderProps> = ({ order, isOpen, closeModal 
                             <td className="border border-gray-200 px-4 py-2">{formatMoney(item.price)}</td>
                             <td className="border border-gray-200 px-4 py-2">{item.quantity}</td>
                             <td className="border border-gray-200 px-4 py-2">{item.discount}%</td>
-                            <td className="border border-gray-200 px-4 py-2">{formatMoney(order.order_total_price - order.order_total_apply_discount)}</td>
+                            <td className="border border-gray-200 px-4 py-2">{formatMoney(item.price * item.quantity * (1 - item.discount / 100))}</td>
                         </tr>
                     ))}
                 </tbody>

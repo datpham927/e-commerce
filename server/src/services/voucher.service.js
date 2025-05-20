@@ -126,13 +126,6 @@ class VoucherService {
         };
     }
 
-    // Lấy voucher theo ID
-    static async getVoucherByCode(code) {
-        const voucher = await voucherModel.findOne({ voucher_is_active: true, voucher_code: code });
-        if (!voucher) throw new RequestError('Voucher không tồn tại!');
-        return voucher;
-    }
-
     // Cập nhật voucher theo ID
     static async updateVoucher(id, payload) {
         // Kiểm tra id hợp lệ
@@ -181,6 +174,7 @@ class VoucherService {
 
     // 🔹 Tìm kiếm voucher theo tên
     static async searchVoucherByName(name) {
+        console.log({ name });
         const vouchers = await voucherModel.find({
             $or: [{ voucher_name: { $regex: new RegExp(name, 'i') } }, { voucher_code: { $regex: new RegExp(name, 'i') } }],
         });
@@ -241,6 +235,12 @@ class VoucherService {
             .lean();
 
         return vouchers;
+    }
+    // Lấy voucher theo ID
+    static async getVoucherByCode(code) {
+        const voucher = await voucherModel.findOne({ voucher_is_active: true, voucher_code: code });
+        if (!voucher) throw new RequestError('Voucher không tồn tại!');
+        return voucher;
     }
 }
 

@@ -51,7 +51,7 @@ const ChatPage: React.FC = () => {
         setSelectedOption(option);
     };
     return (
-        <div className="fixed inset-0 w-full h-screen bg-gradient-to-br bg-white p-4 flex flex-col items-center justify-start space-y-6 z-[900] text-white">
+        <div className="fixed inset-0 w-full h-screen bg-gradient-to-br bg-white p-4 flex flex-col items-center justify-start space-y-4 z-[900] text-white">
             <div className="w-full flex justify-center">
                 <h2 className="text-xl font-semibold text-primary">Chọn Trợ lý Trò chuyện</h2>
             </div>

@@ -23,6 +23,17 @@ export const getAllConversationsByAdmin = async () => {
         };
     }
 };
+export const getAllConversations = async () => {
+    try {
+        const res = await adminClient.get('/v1/api/conversation/all-by-admin');
+        return res.data;
+    } catch (error) {
+        return {
+            success: false,
+            message: error,
+        };
+    }
+};
 
 export const deleteConversation = async (conversationId: string) => {
     try {

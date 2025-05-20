@@ -110,7 +110,7 @@ const ChatBoxAIModal: React.FC<ChatBoxAIModalProps> = ({ context, isOpenBox, set
                 </div>
 
                 {/* Messages */}
-                <div className="flex-1 overflow-auto p-5 space-y-6 relative custom-scrollbar">
+                <div className="flex-1 overflow-auto p-5 space-y-4 relative custom-scrollbar">
                     {!context && (
                         <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
                             <ReactLoading type="cylon" color="rgb(0, 136, 72)" />

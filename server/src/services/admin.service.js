@@ -53,34 +53,44 @@ class AdminService {
             admin_email: admin.admin_email,
         };
     }
-
-    static async getAllAdmins({ admin_id, limit, page }) {
-        const limitNum = parseInt(limit, 10) || 10; // Default limit = 10 if invalid
-        const pageNum = parseInt(page, 10) || 0; // Default page = 0 if invalid
+    static async getAllAdmins({ admin_id, limit, page, search }) {
+        const limitNum = parseInt(limit, 10) || 10;
+        const pageNum = parseInt(page, 10) || 0;
         const skipNum = pageNum * limitNum;
 
-        const admins = await AdminModel.find({ _id: { $ne: admin_id } })
-            .select('-admin_password -__v') // Exclude admin_password and __v fields
-            .populate('admin_roles', 'role_name') // Populate role_name from Role model
-            .sort({ createdAt: -1 }) // Sort by creation date in descending order
-            .skip(skipNum) // Skip records based on page
-            .limit(limitNum) // Limit the number of records returned
-            .lean(); // Convert to plain JavaScript object
+        // Tạo điều kiện tìm kiếm
+        const query = {
+            _id: { $ne: admin_id },
+        };
 
-        // Transform admins to include roles (role names) and keep admin_roles as IDs
+        if (search) {
+            query.admin_name = { $regex: search, $options: 'i' }; // Tìm theo tên (không phân biệt hoa thường)
+        }
+
+        const admins = await AdminModel.find(query)
+            .select('-admin_password -__v')
+            .populate('admin_roles', 'role_name')
+            .sort({ createdAt: -1 })
+            .skip(skipNum)
+            .limit(limitNum)
+            .lean();
+
         const transformedAdmins = admins.map((admin) => ({
             ...admin,
-            roles: admin.admin_roles.map((role) => role.role_name), // Extract role names
-            admin_roles: admin.admin_roles.map((role) => role._id), // Keep only role IDs
+            roles: admin.admin_roles.map((role) => role.role_name),
+            admin_roles: admin.admin_roles.map((role) => role._id),
         }));
-        const totalAdmin = await AdminModel.countDocuments(); // Count total admins
+
+        const totalAdmin = await AdminModel.countDocuments(query); // Đếm theo điều kiện tìm kiếm
+
         return {
-            totalPage: Math.ceil(totalAdmin / limitNum) || 0, // Total pages (0-based)
-            currentPage: pageNum, // Current page
-            totalAdmin, // Total number of admins
-            admins: transformedAdmins, // List of admins with roles and role IDs
+            totalPage: Math.ceil(totalAdmin / limitNum) || 0,
+            currentPage: pageNum,
+            totalAdmin,
+            admins: transformedAdmins,
         };
     }
+
     static async getProfile(adminId) {
         const admin = await AdminModel.findById(adminId)
             .select('-admin_password') // không lấy password
@@ -128,7 +138,43 @@ class AdminService {
 
         return updatedAdmin;
     }
+    static async getAllAdmins({ admin_id, limit, page, search }) {
+        const limitNum = parseInt(limit, 10) || 10;
+        const pageNum = parseInt(page, 10) || 0;
+        const skipNum = pageNum * limitNum;
 
+        // Tạo điều kiện tìm kiếm
+        const query = {
+            _id: { $ne: admin_id },
+        };
+
+        if (search) {
+            query.admin_name = { $regex: search, $options: 'i' }; // Tìm theo tên (không phân biệt hoa thường)
+        }
+
+        const admins = await AdminModel.find(query)
+            .select('-admin_password -__v')
+            .populate('admin_roles', 'role_name')
+            .sort({ createdAt: -1 })
+            .skip(skipNum)
+            .limit(limitNum)
+            .lean();
+
+        const transformedAdmins = admins.map((admin) => ({
+            ...admin,
+            roles: admin.admin_roles.map((role) => role.role_name),
+            admin_roles: admin.admin_roles.map((role) => role._id),
+        }));
+
+        const totalAdmin = await AdminModel.countDocuments(query); // Đếm theo điều kiện tìm kiếm
+
+        return {
+            totalPage: Math.ceil(totalAdmin / limitNum) || 0,
+            currentPage: pageNum,
+            totalAdmin,
+            admins: transformedAdmins,
+        };
+    }
     static async searchAdminsByNameOrEmail(keyword) {
         if (!keyword || typeof keyword !== 'string') return [];
 
@@ -137,10 +183,16 @@ class AdminService {
             $or: [{ admin_mobile: regex }, { admin_name: regex }, { admin_email: regex }],
         })
             .select('-admin_password -__v')
+            .populate('admin_roles', 'role_name')
             .sort({ createdAt: -1 })
             .lean();
 
-        return results;
+        const transformedAdmins = results.map((admin) => ({
+            ...admin,
+            roles: admin.admin_roles.map((role) => role.role_name),
+            admin_roles: admin.admin_roles.map((role) => role._id),
+        }));
+        return transformedAdmins;
     }
 }
 

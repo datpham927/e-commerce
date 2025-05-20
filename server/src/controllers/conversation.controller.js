@@ -106,6 +106,32 @@ const getAllConversationsByAdmin = async (req, res) => {
         });
     }
 };
+/**
+ * @desc Lấy tất cả cuộc trò chuyện
+ */
+const getAllConversations = async (req, res) => {
+    try {
+        // Lấy tất cả cuộc trò chuyện
+        const conversation = await conversationModel.find().populate('user', 'user_avatar_url user_name').sort({ updatedAt: -1 });
+        if (!conversation) {
+            return res.status(404).json({
+                success: false,
+                message: 'Không có cuộc trò chuyện nào',
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: 'Lấy cuộc trò chuyện thành công',
+            data: conversation,
+        });
+    } catch (err) {
+        console.error('Lỗi khi lấy cuộc trò chuyện:', err);
+        res.status(500).json({
+            success: false,
+            message: 'Đã xảy ra lỗi khi lấy cuộc trò chuyện',
+        });
+    }
+};
 
 /**
  * @desc Xoá cuộc trò chuyện
@@ -186,4 +212,5 @@ module.exports = {
     createConversation,
     getAllConversationsByAdmin,
     deleteConversation,
+    getAllConversations,
 };

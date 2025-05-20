@@ -5,7 +5,7 @@ import PageMeta from '../../../components/common/PageMeta';
 import Sidebar from './Sidebar';
 import ChatWindow from './ChatWindow';
 
-import { getAllConversationsByAdmin } from '../../../services/conversation';
+import { getAllConversations, getAllConversationsByAdmin } from '../../../services/conversation';
 import { apiMarkMessagesAsSeenByAdmin } from '../../../services/message.service';
 
 import useSocketStore from '../../../store/socketStore';
@@ -14,6 +14,7 @@ import useAuthStore from '../../../store/authStore';
 import { IConversation } from '../../../interfaces/conversation.interfaces';
 import { IMessage } from '../../../interfaces/messages.interfaces';
 import NotExit from '../../../components/common/NotExit';
+import useAdminStore from '../../../store/adminStore';
 
 interface UserOnline {
     userId: string;
@@ -26,11 +27,12 @@ const ChatManage: React.FC = () => {
     const [userOnline, setUserOnline] = useState<UserOnline[]>([]);
     const { socket, connect, isConnected } = useSocketStore();
     const { isAdminLoggedIn } = useAuthStore();
+    const { admin } = useAdminStore();
 
     // Fetch initial conversations
     useEffect(() => {
         const fetchConversations = async () => {
-            const res = await getAllConversationsByAdmin();
+            const res = admin.admin_type === 'admin' ? await getAllConversations() : await getAllConversationsByAdmin();
             if (res.success) {
                 setConversations(res.data);
             }

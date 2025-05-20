@@ -176,7 +176,7 @@ const ChatModal: React.FC<{
                     </div>
                 </div>
 
-                <div className="relative custom-scrollbar max-h-full flex-1 space-y-4 overflow-auto p-5 xl:space-y-8 xl:p-6">
+                <div className="relative custom-scrollbar max-h-full flex-1  space-y-6  overflow-auto p-5 xl:space-y-8 xl:p-6">
                     {isScrolling && (
                         <div className="absolute inset-0 bg-white flex items-center justify-center">
                             <div className="w-full flex justify-center h-full items-center">

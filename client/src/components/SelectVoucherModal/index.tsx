@@ -97,7 +97,7 @@ const SelectVoucherModal: React.FC<SelectVoucherModalProps> = ({ setIsOpen, setV
                 </div>
 
                 {/* Danh sách voucher */}
-                <div className="space-y-4 max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+                <div className=" space-y-6  max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
                     {userVouchers.map((voucher: IVoucher) => {
                         const isVoucherValid = priceMemo > voucher.voucher_min_order_value;
                         const isVoucherExpired = new Date(voucher.voucher_end_date) < new Date();

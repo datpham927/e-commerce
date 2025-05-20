@@ -2,7 +2,7 @@ import { Skeleton } from '@mui/material';
 
 const DashboardSkeleton = () => {
     return (
-        <div className="space-y-4">
+        <div className=" space-y-6 ">
             {/* Tiêu đề Dashboard */}
             <Skeleton variant="text" width={150} height={30} />
             {/* Hàng thống kê 1 */}

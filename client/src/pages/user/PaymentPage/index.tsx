@@ -155,7 +155,6 @@ const PaymentPage: React.FC = () => {
     const handleVNPayPayment = () => {
         const { vnp_TmnCode, vnp_HashSecret, vnp_Url, BASE_URL } = ENV;
         const returnUrl = `${BASE_URL}${PATH.PAGE_PAYMENT_CONFIRM}`;
-
         if (!vnp_HashSecret || !vnp_Url || !vnp_TmnCode || !returnUrl) {
             alert('Không thể thực hiện thanh toán, thiếu thông tin cấu hình.');
             return;
@@ -186,7 +185,6 @@ const PaymentPage: React.FC = () => {
 
         const vnp_SecureHash = calculateVnpSecureHash(sortedParams, vnp_HashSecret);
         const paymentUrl = `${vnp_Url}?${sortedParams}&vnp_SecureHash=${vnp_SecureHash}`;
-
         alert(`Thanh toán qua VNPay với số tiền: ${totalPayment} VND`);
         window.location.href = paymentUrl;
     };

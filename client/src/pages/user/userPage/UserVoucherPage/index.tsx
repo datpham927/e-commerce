@@ -1,17 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Thêm dòng này
 import { NotFound } from '../../../../components';
 import useUserVoucherStore from '../../../../store/userVoucherStore';
 import { formatMoney } from '../../../../utils/formatMoney';
 import { calculateVoucherStatus } from '../../../../utils/calculateVoucherStatus';
+import { getVoucherByUser } from '../../../../services/user.voucher.service';
 
 const UserVoucherPage: React.FC = () => {
-    const { userVouchers } = useUserVoucherStore();
+    const { userVouchers, setUserVouchers } = useUserVoucherStore();
     const navigate = useNavigate(); // Khởi tạo navigate
     const isVoucherExpired = (endDate: any) => {
         return new Date(endDate) < new Date();
     };
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const res = await getVoucherByUser();
+            setUserVouchers(res?.data || []);
+        };
+        fetchUserData();
+    }, []);
 
     const handleUseVoucher = () => {
         navigate('/gio-hang');

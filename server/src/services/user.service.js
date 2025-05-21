@@ -229,7 +229,6 @@ class UserService {
             console.error(`User ${userId} has no spin turns`);
             throw new RequestError('Bạn đã hết lượt quay!', 400);
         }
-
         console.log(`User ${userId} spun with prizeIndex: ${prizeIndex}`);
         const currentDate = new Date();
         let response = {

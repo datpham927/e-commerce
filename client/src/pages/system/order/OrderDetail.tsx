@@ -23,7 +23,7 @@ const OrderDetail: React.FC = () => {
     if (!order) return <SkeletonViewOrder />;
 
     // Tính toán số tiền còn lại cần trả
-    const amountDueRemaining = order.order_amount_due;
+    const amountDueRemaining = order.order_amount_due - order.order_amount_paid;
 
     return (
         <div className="w-full p-4 max-w-6xl mx-auto">

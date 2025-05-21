@@ -1,5 +1,5 @@
 const PERMISSIONS = {
-    ADMIN_MANAGE: 'admin_manage',
+    DASHBOARD_MANAGE: 'dashboard_manage',
     BANNER_MANAGE: 'banner_manage', // Quản lý banner của người dùng
     BRAND_MANAGE: 'brand_manage', // Quản lý thương hiệu của người dùng
     CATEGORY_MANAGE: 'category_manage', // Quản lý danh mục sản phẩm

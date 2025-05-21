@@ -163,7 +163,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ selectedConversation, userOnlin
             {/* Messages */}
             <div className="flex-1 relative overflow-auto p-4  space-y-6  custom-scrollbar">
                 {isScrolling && (
-                    <div className="absolute inset-0 bg-white/80 dark:bg-gray-900/80 flex items-center justify-center z-10">
+                    <div className="absolute inset-0 bg-white dark:bg-gray-900/80 flex items-center justify-center z-10">
                         <ReactLoading type="cylon" color="#008848" />
                     </div>
                 )}
@@ -175,27 +175,25 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ selectedConversation, userOnlin
             </div>
 
             {/* Message Input */}
-            {admin.admin_type !== 'admin' && (
-                <div className="border-t border-gray-200 p-3 dark:border-gray-800">
-                    <div className="flex items-center gap-2">
-                        <input
-                            value={value}
-                            onChange={(e) => setValue(e.target.value)}
-                            type="text"
-                            placeholder="Nhập tin nhắn..."
-                            className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm outline-none focus:border-green-500 dark:bg-gray-800 dark:text-white"
-                            onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                        />
-                        <label className="cursor-pointer text-green-600">
-                            📎
-                            <input type="file" accept="image/*" hidden onChange={handleUploadImage} />
-                        </label>
-                        <button onClick={handleSendMessage} className="text-white bg-green-600 p-2 rounded-full hover:bg-green-700">
-                            <SendIcon />
-                        </button>
-                    </div>
+            <div className="border-t border-gray-200 p-3 dark:border-gray-800">
+                <div className="flex items-center gap-2">
+                    <input
+                        value={value}
+                        onChange={(e) => setValue(e.target.value)}
+                        type="text"
+                        placeholder="Nhập tin nhắn..."
+                        className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm outline-none focus:border-green-500 dark:bg-gray-800 dark:text-white"
+                        onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                    />
+                    <label className="cursor-pointer text-green-600">
+                        📎
+                        <input type="file" accept="image/*" hidden onChange={handleUploadImage} />
+                    </label>
+                    <button onClick={handleSendMessage} className="text-white bg-green-600 p-2 rounded-full hover:bg-green-700">
+                        <SendIcon />
+                    </button>
                 </div>
-            )}
+            </div>
         </div>
     );
 };

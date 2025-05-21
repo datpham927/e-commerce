@@ -10,10 +10,8 @@ interface PermissionMiddlewareProps {
 const PermissionMiddleware: React.FC<PermissionMiddlewareProps> = ({ requiredPermissions, children, redirectNode }) => {
     const { admin } = useAdminStore();
     const hasPermission = admin?.admin_type === 'admin' || admin?.permissions?.includes(requiredPermissions);
-
     // Nếu không có quyền, không render gì cả
     if (!hasPermission) return redirectNode;
-
     return children;
 };
 

@@ -1,4 +1,3 @@
-
 import { PATH } from '../utils/const';
 
 export type NavItem = {
@@ -14,6 +13,7 @@ export const navItems: NavItem[] = [
         name: 'Tổng quan',
         icon: <img src="https://img.icons8.com/?size=100&id=7kZSmEyroNI0&format=png&color=000000" alt="icon" className="w-9 h-9" />,
         path: PATH.MANAGE_DASHBOARD,
+        permission: 'dashboard_manage',
     },
     {
         icon: <img src="https://img.icons8.com/?size=100&id=hSUoULMc0FvV&format=png&color=000000" alt="icon" className="w-8 h-8" />,
@@ -37,7 +37,7 @@ export const navItems: NavItem[] = [
         ],
         permission: 'offline_order',
     },
-    
+
     {
         icon: <img src="https://img.icons8.com/?size=100&id=zKZc2LIdmO4A&format=png&color=000000" alt="icon" className="w-8 h-8" />,
         name: 'Banner',

@@ -38,7 +38,7 @@ export const PaymentSection: React.FC<PaymentSectionProps> = ({
     return (
         <div className="mt-6 p-6 rounded-xl bg-white shadow-md">
             <h2 className="text-xl font-semibold mb-4">Thông tin thanh toán</h2>
-            <div className="space-y-4">
+            <div className="space-y-6">
                 <div>
                     <FormControl component="fieldset">
                         <FormLabel component="legend" className="text-gray-600">

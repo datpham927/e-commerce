@@ -17,7 +17,7 @@ class UserVoucherService {
         });
         // Thêm log để kiểm tra thông tin voucher
         if (!voucher) throw new NotFoundError('Voucher không tồn tại hoặc đã hết hạn');
-        const userVoucherCount = voucher.voucher_users_used.some((userUsedId) => userUsedId.toString() === userId.toString());
+        const userVoucherCount = voucher.voucher_users_used.some((userId) => userId.toString() === userId.toString());
         console.log(voucher.voucher_users_used);
         if (userVoucherCount) {
             throw new RequestError('Bạn đã đạt giới hạn số lần sử dụng voucher này');
@@ -66,7 +66,7 @@ class UserVoucherService {
         });
         if (existingVoucher) throw new RequestError('Bạn đã sở hữu voucher này');
         // Kiểm tra user đã sử dụng hay chưa
-        const userVoucherCount = voucher.voucher_users_used.some((userUsedId) => userUsedId.toString() === userId.toString());
+        const userVoucherCount = voucher.voucher_users_used.some((userId) => userId.toString() === userId.toString());
         if (userVoucherCount) {
             throw new RequestError('Bạn đã đạt giới hạn số lần sử dụng voucher này');
         }

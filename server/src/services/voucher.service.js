@@ -181,8 +181,22 @@ class VoucherService {
 
     // 🔹 Tìm kiếm voucher theo tên
     static async searchVoucherByName(name) {
+        if (!name) {
+            throw new RequestError('Vui lòng nhập từ khóa tìm kiếm!');
+        }
+
+        // Escape ký tự đặc biệt để tránh lỗi regex
+        const escapeRegex = (str) => {
+            return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+        };
+
+        const escapedName = escapeRegex(name);
+
         const vouchers = await voucherModel.find({
-            $or: [{ voucher_name: { $regex: new RegExp(name, 'i') } }, { voucher_code: { $regex: new RegExp(name, 'i') } }],
+            $or: [
+                { voucher_name: { $regex: escapedName, $options: 'i' } },
+                { voucher_code: { $regex: escapedName, $options: 'i' } },
+            ],
         });
 
         if (!vouchers.length) {

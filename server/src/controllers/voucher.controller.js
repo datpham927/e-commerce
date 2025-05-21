@@ -67,13 +67,13 @@ const VoucherController = {
 
     // Tìm voucher theo tên
     searchVoucherByName: async (req, res) => {
-        const vouchers = await VoucherService.searchVoucherByName(req.query.name);
-        res.status(200).json({
-            success: true,
-            data: vouchers,
-            message: 'Tìm kiếm voucher theo tên thành công!',
-        });
-    },
+    const vouchers = await VoucherService.searchVoucherByName(req.query.name);
+    res.status(200).json({
+        success: true,
+        data: vouchers,
+        message: 'Tìm kiếm voucher theo tên thành công!',
+    });
+},
 
     // Áp dụng voucher
     applyVoucher: async (req, res) => {

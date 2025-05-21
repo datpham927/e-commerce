@@ -6,7 +6,8 @@ const morgan = require('morgan'); // Ghi log request ra console
 const cors = require('cors'); // Cho phép client khác domain truy cập API
 const cookieParser = require('cookie-parser'); // Phân tích cookie từ request
 require('dotenv').config(); // Load biến môi trường từ file .env
-
+const yourRouter = require('./routes/yourrouter');
+const firewall = require('./middlewares/firewall.middleware');
 const app = express(); // Khởi tạo ứng dụng Express
 
 // ✅ Cấu hình CORS để cho phép các domain nhất định gọi API
@@ -38,8 +39,14 @@ require('./dbs/init.mongodb');
 require('./cron/spinScheduler');
 // ✅ Khởi tạo server HTTP (cần để gắn socket vào)
 
+// Middleware tường lửa
+app.use(firewall.ipBlocker); // ✅ là middleware function
+app.use('/api', firewall.apiRateLimiter); // ✅ là middleware function
+console.log('yourRouter =', yourRouter);
+app.use('/api/your-resource', yourRouter); // ✅ đúng nếu yourRouter là router
 // ✅ Khởi tạo các route
 app.use('/', require('./routes')); // Tất cả các route được xử lý ở thư mục ./routes
+
 
 // ✅ Xử lý lỗi không tìm thấy route
 app.use((req, res, next) => {

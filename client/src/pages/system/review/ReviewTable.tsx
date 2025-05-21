@@ -1,6 +1,16 @@
 import DoneIcon from '@mui/icons-material/Done';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Table, TableBody, TableCell, TableHeader, TableRow } from '../../../components/ui/table';
+import StarIcon from '@mui/icons-material/Star';
+import StarHalfIcon from '@mui/icons-material/StarHalf';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHeader,
+    TableRow,
+} from '../../../components/ui/table';
 import { IReview } from '../../../interfaces/review.interfaces';
 
 interface ReviewListProps {
@@ -17,6 +27,7 @@ const ReviewTable: React.FC<ReviewListProps> = ({ Reviews, onDelete, onApprove }
                     <TableHeader className="bg-gray-100 dark:bg-gray-700">
                         <TableRow>
                             <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white text-center">Người dùng</TableCell>
+                            <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white text-center">Số sao</TableCell>
                             <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white text-center">Bình luận</TableCell>
                             <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white text-center">Hình ảnh</TableCell>
                             <TableCell isHeader className="px-6 py-4 font-semibold text-gray-700 dark:text-white text-center">Trạng thái</TableCell>
@@ -29,6 +40,26 @@ const ReviewTable: React.FC<ReviewListProps> = ({ Reviews, onDelete, onApprove }
                             <TableRow key={review?._id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
                                 <TableCell className="px-6 py-4 text-center text-gray-900 dark:text-gray-100 font-medium">
                                     {review?.review_user?.user_name || 'Ẩn danh'}
+                                </TableCell>
+
+                                {/* ⭐ Cột Số sao ⭐ */}
+                                <TableCell className="px-6 py-4 text-center">
+                                    {typeof review?.review_rating === 'number' && review.review_rating > 0 ? (
+                                        <div className="flex justify-center gap-[2px]">
+                                            {Array.from({ length: 5 }).map((_, i) => {
+                                                const rating = review.review_rating;
+                                                if (i + 1 <= Math.floor(rating)) {
+                                                    return <StarIcon key={i} className="text-yellow-400" fontSize="small" />;
+                                                } else if (i < rating && rating < i + 1) {
+                                                    return <StarHalfIcon key={i} className="text-yellow-400" fontSize="small" />;
+                                                } else {
+                                                    return <StarBorderIcon key={i} className="text-yellow-400" fontSize="small" />;
+                                                }
+                                            })}
+                                        </div>
+                                    ) : (
+                                        <span className="text-sm text-gray-500 dark:text-gray-400 italic">Chưa mua sản phẩm</span>
+                                    )}
                                 </TableCell>
 
                                 <TableCell className="px-6 py-4 text-center text-gray-700 dark:text-gray-300 max-w-[300px]">

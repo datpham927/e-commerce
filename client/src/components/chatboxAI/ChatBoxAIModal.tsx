@@ -25,7 +25,7 @@ const ChatBoxAIModal: React.FC<ChatBoxAIModalProps> = ({ context, isOpenBox, set
         {
             id: crypto.randomUUID(),
             role: 'bot',
-            content: `👋 Chào bạn nha! Mình là ChatBoxAI – trợ lý vui tính của cửa hàng thực phẩm 🛒 Bạn cần gì giúp đỡ, cứ thoải mái hỏi mình nhé! 😆`,
+            content: `👋 Chào bạn nha! Mình là trợ lý vui tính của cửa hàng thực phẩm 🛒 Bạn cần gì giúp đỡ, cứ thoải mái hỏi mình nhé! 😆`,
         },
     ]);
     const scrollRef = useRef<HTMLDivElement>(null);

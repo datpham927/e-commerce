@@ -12,6 +12,5 @@ const PERMISSIONS = [
     { key: 'USER_MANAGE', value: 'user_manage', name: 'Quản lý người dùng' },
     { key: 'EMPLOYEE_MANAGE', value: 'employee_manage', name: 'Quản lý nhân viên' },
     { key: 'SHIPPING_COMPANY_MANAGE', value: 'shipping_company_manage', name: 'Quản lý công ty vận chuyển' },
-    { key: 'SHIPPING_COMPANY_MANAGE', value: 'shipping_company_manage', name: 'Quản lý công ty vận chuyển' },
 ];
 export default PERMISSIONS;

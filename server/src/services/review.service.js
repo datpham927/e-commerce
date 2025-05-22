@@ -96,7 +96,7 @@ class ReviewService {
         }
         const reviews = await Review.find(filter)
             .sort({ createdAt: -1 })
-            .populate('review_user', '_id user_name user_avatar_url')
+            .populate('review_user', '_id user_name user_avatar_url createdAt')
             .skip(skipNum)
             .limit(limitNum)
             .lean();

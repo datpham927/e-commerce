@@ -18,7 +18,7 @@ class DashboardService {
 
             const pendingReviews = await Review.find({ isApproved: false })
                 .select('review_user review_comment review_rating review_productId createdAt')
-                .populate('review_user', 'user_name user_email')
+                .populate('review_user', 'user_name user_email createdAt')
                 .populate('review_productId', 'product_name');
 
             const now = new Date();

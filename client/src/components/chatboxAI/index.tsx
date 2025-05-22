@@ -28,7 +28,7 @@ const ChatBoxAI: React.FC = () => {
                         setIsOpenBox(true);
                     }
                 }}
-                className="flex flex-col text-blue-600 items-center cursor-pointer justify-center  h-12  rounded-md blue-600 text-sm   transition duration-200">
+                className="flex flex-col text-blue-600 items-center cursor-pointer justify-center rounded-md blue-600 text-sm   transition duration-200">
                 <img src="https://photo.salekit.com/uploads/fchat_5b4872d13803896dd77125af/logo1.png" className="w-12" />
                 Trợ lý
             </div>

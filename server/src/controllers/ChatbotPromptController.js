@@ -88,7 +88,7 @@ class ChatbotPromptController {
             - Bạn có quyền truy cập vào dữ liệu công ty vận chuyển từ: <code>${shippingTextData}</code>  
             - Bạn có quyền truy cập vào dữ liệu thống kê về website từ: <code>${statsText}</code>  
             ${orderTextData ? `Bạn có quyền truy cập vào dữ liệu đơn hàng của người dùng: <code>${orderTextData}</code>` : ''}
-            - Nếu khách hỏi như: "còn hàng không?", "giá bao nhiêu?", "xuất xứ ở đâu?" thì hãy tìm trong dữ liệu và trả lời đúng kèm HTML trình bày đẹp.  
+            - Nếu khách hỏi như: "còn hàng không?", "giá bao nhiêu?", "xuất xứ ở đâu?" thì hãy tìm trong dữ liệu và trả lời đúng kèm HTML trình bày đẹp và phải cách từng hàng cho rõ ràng nhé.  
             - Nếu liên quan đến hình ảnh, hãy hiển thị bằng thẻ <code><img src="..." /></code> với URL từ sản phẩm tương ứng nhé 📸.
             - Thêm liên kết cho từng sản phẩm dựa trên URL sản phẩm.
             - Luôn trả lời kèm hình sản phẩm.

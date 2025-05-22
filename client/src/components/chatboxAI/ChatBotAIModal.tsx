@@ -11,13 +11,13 @@ interface ChatMessage {
     content: string;
 }
 
-interface ChatBoxAIModalProps {
+interface ChatBotAIModalProps {
     context: string;
     isOpenBox: boolean;
     setIsOpenBox?: (open: boolean) => void;
 }
 
-const ChatBoxAIModal: React.FC<ChatBoxAIModalProps> = ({ context, isOpenBox, setIsOpenBox }) => {
+const ChatBotAIModal: React.FC<ChatBotAIModalProps> = ({ context, isOpenBox, setIsOpenBox }) => {
     const [prompt, setPrompt] = useState('');
     const [isVisible, setIsVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -191,4 +191,4 @@ const ChatBoxAIModal: React.FC<ChatBoxAIModalProps> = ({ context, isOpenBox, set
     );
 };
 
-export default memo(ChatBoxAIModal);
+export default memo(ChatBotAIModal);

@@ -39,7 +39,7 @@ class OrderService {
             .map((check) => check.name); // Lấy tên của các sản phẩm đó
         // Kiểm tra nếu có sản phẩm hết hàng thì báo lỗi với danh sách tên
         if (outOfStockProducts.length > 0) {
-            throw new BadRequestError(`Các sản phẩm đã hết hàng: ${outOfStockProducts.join(', ')}`); // Báo lỗi với danh sách sản phẩm hết hàng
+            throw new RequestError(`Các sản phẩm đã hết hàng: ${outOfStockProducts.join(', ')}`); // Báo lỗi với danh sách sản phẩm hết hàng
         }
         // Bước 2: Tính tổng tiền đơn hàng và bổ sung thông tin product list
         let totalPrice = 0;
@@ -48,7 +48,7 @@ class OrderService {
             order_products.map(async (item) => {
                 const product = await Product.findById(item.productId); // Lấy thông tin sản phẩm
                 // Tính giá sau khi áp dụng giảm giá (nếu có)
-                totalApplyDiscount += (product.product_price * (100 - (product.product_discount || 0))) / 100;
+                totalApplyDiscount += (product.product_price * (product.product_discount || 0)) / 100;
                 totalPrice += product.product_price * item.quantity; // Cộng dồn vào tổng giá trị
                 return {
                     productId: product._id, // ID sản phẩm
@@ -75,7 +75,7 @@ class OrderService {
             }
             // Giá trị đơn hàng tối thiểu để áp dụng voucher
             if (totalPrice < voucher.voucher_min_order_value) {
-                throw new BadRequestError(`Giá trị đơn hàng tối thiểu ${voucher.voucher_min_order_value}`);
+                throw new RequestError(`Giá trị đơn hàng tối thiểu ${voucher.voucher_min_order_value}`);
             }
             if (voucher.voucher_method === 'percent') {
                 // Nếu giảm giá theo phần trăm

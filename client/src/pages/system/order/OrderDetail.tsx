@@ -68,7 +68,8 @@ const OrderDetail: React.FC = () => {
                 <div className="bg-white shadow rounded-xl p-4">
                     <h2 className="text-sm font-semibold text-secondary mb-2 uppercase">Hình thức thanh toán</h2>
                     <p className="text-sm text-gray-600">
-                        Phương thức: <span className="text-primary">{order.order_payment_method}</span>
+                        Phương thức:
+                        <span className="text-primary">{order.order_payment_method === 'COIN+CASH' ? 'Tiền mặt' : order.order_payment_method}</span>
                     </p>
                     <p className="text-sm text-gray-600 mt-1">
                         Số tiền cần trả: <span className="text-primary font-semibold">{formatMoney(order.order_amount_due)}</span>

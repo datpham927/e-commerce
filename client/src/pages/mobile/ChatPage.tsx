@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import ChatBoxAIModal from '../../components/chatboxAI/ChatBoxAIModal';
+import ChatBotAIModal from '../../components/chatboxAI/ChatBotAIModal';
 import ChatModal from '../../components/chat/chatModal';
 import useUserStore from '../../store/userStore';
 import useAuthStore from '../../store/authStore';
@@ -74,7 +74,7 @@ const ChatPage: React.FC = () => {
             </div>
 
             <div className="w-full flex-1 overflow-y-auto px-4">
-                {selectedOption === 'ai' ? <ChatBoxAIModal isOpenBox={true} context={prompt} /> : <ChatModal admin={admin} conversationId={conversationId} />}
+                {selectedOption === 'ai' ? <ChatBotAIModal isOpenBox={true} context={prompt} /> : <ChatModal admin={admin} conversationId={conversationId} />}
             </div>
         </div>
     );

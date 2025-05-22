@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import ChatBoxAIModal from './ChatBoxAIModal';
+import ChatBotAIModal from './ChatBotAIModal';
 import { apiGetPrompt } from '../../services/chatbot.service';
 import useUserStore from '../../store/userStore';
 import { showNotification } from '../common/showNotification';
@@ -32,7 +32,7 @@ const ChatBoxAI: React.FC = () => {
                 <img src="https://photo.salekit.com/uploads/fchat_5b4872d13803896dd77125af/logo1.png" className="w-12" />
                 Trợ lý
             </div>
-            <ChatBoxAIModal isOpenBox={isOpenBox} setIsOpenBox={setIsOpenBox} context={prompt} />
+            <ChatBotAIModal isOpenBox={isOpenBox} setIsOpenBox={setIsOpenBox} context={prompt} />
         </div>
     );
 };

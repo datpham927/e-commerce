@@ -116,8 +116,8 @@ const FormEditAddress: React.FC<FormEditAddressProps> = ({ payload, setPayload, 
                     const addr = res?.address;
                     if (addr) {
                         const provinceName = addr.city || addr.state || addr.province;
-                        const districtName = addr.suburb?.replace('District', '')?.trim()|| addr.city_district;
-                        const wardName = addr.quarter||addr.village;
+                        const districtName = addr.suburb?.replace('District', '')?.trim() || addr.city_district;
+                        const wardName = addr.quarter || addr.village;
                         // --- Tìm province ---
                         const matchedProvince = provinces?.find((p) => p.name.toLowerCase().includes(provinceName?.toLowerCase()));
                         if (matchedProvince) {
@@ -174,7 +174,7 @@ const FormEditAddress: React.FC<FormEditAddressProps> = ({ payload, setPayload, 
                     if (setIsOpen) setIsOpen(true);
                 }}>
                 <h1 className="text-xl mx-auto mb-8">Chỉnh sửa địa chỉ</h1>
-                <div className="flex gap-6">
+                <div className="flex gap-6 tablet:flex-col">
                     <div className="flex flex-col gap-6 w-[400px] justify-center">
                         <div className="flex flex-col gap-3">
                             <SelectOptions
@@ -197,9 +197,9 @@ const FormEditAddress: React.FC<FormEditAddressProps> = ({ payload, setPayload, 
                         </div>
                         <InputReadOnly label="Địa chỉ" value={address} />
                     </div>
-                    <div className="my-5">
+                    <div className="my-5 tablet:w-full">
                         <h1 className="text-[20px] my-2 font-semibold">Bản đồ</h1>
-                        <div className="my-2">
+                        <div className="my-2 tablet:flex  tablet:flex-col  items-center">
                             <MapComponent placeName={address} />
                             <ButtonOutline onClick={handleGetLocationAndPlaceName} className="mx-auto px-6 text-white bg-primary mt-6">
                                 Lấy vị trí của bạn

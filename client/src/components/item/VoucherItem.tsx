@@ -20,10 +20,7 @@ const VoucherItem: React.FC<VoucherProps> = ({ voucher, onSave, userOwnedVoucher
             onSave(voucher);
         }
     };
-
     // Tính giá trị giảm giá tối đa
-    const maxDiscount = voucher.voucher_max_price ?? voucher.voucher_value;
-
     return (
         <div className="flex items-stretch border border-gray-200 rounded-lg bg-white shadow-md hover:shadow-lg transition-shadow duration-200 w-full max-w-md mx-auto min-h-24">
             {/* Phần bên trái: Logo và danh mục */}
@@ -34,7 +31,10 @@ const VoucherItem: React.FC<VoucherProps> = ({ voucher, onSave, userOwnedVoucher
             {/* Phần giữa: Thông tin voucher */}
             <div className="flex-1 p-3 w-1/2 flex flex-col justify-center">
                 <span className="block text-base font-bold text-gray-800">
-                    {voucher.voucher_name} - Giảm tối đa {formatMoney(maxDiscount)}
+                    {voucher.voucher_name} - Giảm
+                    {voucher.voucher_method == 'fixed'
+                        ? ` ${formatMoney(voucher.voucher_value)}`
+                        : ` ${voucher.voucher_value} % tối đa ${formatMoney(voucher.voucher_max_price)}`}
                 </span>
                 <span className="block text-xs text-gray-600 mt-1">Đơn tối thiểu {formatMoney(voucher.voucher_min_order_value ?? 0)}</span>
                 <span className="block text-xs text-gray-600 mt-1">Có hiệu lực đến {formatDate(voucher.voucher_end_date ?? 0)}</span>

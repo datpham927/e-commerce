@@ -84,7 +84,6 @@ const ChatBotAIModal: React.FC<ChatBotAIModalProps> = ({ context, isOpenBox, set
     };
 
     if (!isVisible) return null;
-    console.log({ context });
     return (
         <div
             className={`tablet:w-full tablet:h-[75vh] laptop:absolute bottom-0 right-0 w-auto laptop:h-[500px] bg-white shadow-search rounded-md duration-1000 origin-bottom-right z-[1000] ${

@@ -115,8 +115,6 @@ export default function VoucherManage(): JSX.Element {
 
     // ✅ Gửi API tìm kiếm
     const handleSearch = async () => {
-        console.log({ searchQuery });
-
         if (!searchQuery.trim()) {
             showNotification('Vui lòng nhập từ khóa tìm kiếm', false);
             return;

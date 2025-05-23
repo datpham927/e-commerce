@@ -55,7 +55,6 @@ const getWeightedRandomPrizeIndex = (): number => {
     // tỉ lệ random trong khoảng [0%,90%]   cao hơn [90%,100%]
     // Tính tổng xác suất
     const total = PRIZES.reduce((sum, prize) => sum + prize.probability, 0);
-    console.log({ total });
     if (total !== 100) {
         console.error('Xác suất phải có tổng bằng 100');
         return 0;
@@ -63,7 +62,6 @@ const getWeightedRandomPrizeIndex = (): number => {
     // Tạo số ngẫu nhiên từ 0 đến 100
     const random = Math.random() * 100;
     let cumulative = 0;
-    console.log({ random });
     // Duyệt qua từng phần thưởng, tích lũy xác suất
     for (let i = 0; i < PRIZES.length; i++) {
         cumulative += PRIZES[i].probability;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useRef } from 'react';
 import { ReceiptContent } from '../../../components/ReceiptContent';
 import { apiCreateOfflineOrders } from '../../../services/order.service';
@@ -44,7 +45,6 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
         for (const item of cart) {
             // Đảm bảo lấy đúng ID sản phẩm
             const productId = typeof item.productId === 'string' ? item.productId : item.productId._id;
-            console.log('Product ID:', productId);
 
             // Gọi API lấy thông tin sản phẩm
             const res = await apiGetProductById(productId);

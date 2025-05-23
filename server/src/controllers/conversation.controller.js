@@ -17,7 +17,6 @@ const createConversation = async (req, res) => {
         // Lọc ra các admin hợp lệ có quyền quản lý tin nhắn
         const allAdmins = await Admin.find({ admin_type: 'employee' }).populate('admin_roles').lean();
         const validAdmins = allAdmins.filter((admin) => admin.admin_roles?.some((role) => role.role_permissions.includes('message_manage')));
-        console.log(allAdmins);
         if (!validAdmins.length) {
             return res.status(400).json({
                 success: false,

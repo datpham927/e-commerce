@@ -134,7 +134,6 @@ const apiLoginWithGoogle = async (credential: string) => {
         const res = await apiClient.put('/v1/api/auth/login_google', { credential });
         return res.data;
     } catch (error) {
-        console.log(error);
         return {
             success: false,
             message: error,

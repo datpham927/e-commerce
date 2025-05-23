@@ -33,7 +33,10 @@ const RedeemVoucherItem: React.FC<RedeemVoucherItemProps> = ({ voucher, handleRe
                 {/* Voucher Info */}
                 <div>
                     <h3 className="text-base md:text-lg font-semibold text-gray-800 leading-6">
-                        {voucher.voucher_name} - Giảm {formatMoney(voucher.voucher_max_price ?? voucher.voucher_value)}
+                        {voucher.voucher_name} - Giảm
+                        {voucher.voucher_method == 'fixed'
+                            ? ` ${formatMoney(voucher.voucher_value)}`
+                            : ` ${voucher.voucher_value} % tối đa ${formatMoney(voucher.voucher_max_price)}`}
                     </h3>
                     <p className="text-sm text-gray-600 mt-1">Đơn tối thiểu {formatMoney(voucher.voucher_min_order_value)}</p>
 

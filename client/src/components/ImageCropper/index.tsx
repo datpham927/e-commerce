@@ -49,7 +49,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ width, height, idName, labe
     };
 
     return (
-        <div className="flex flex-col items-center  space-y-6 ">
+        <div className="flex flex-col items-center">
             <input id={idName} type="file" multiple hidden onChange={onSelectFile} />
             <label htmlFor={idName} className={`flex w-full gap-2 ${type === 'search' ? '' : ' text-secondary'} text-sm`}>
                 {type === 'search' ? (

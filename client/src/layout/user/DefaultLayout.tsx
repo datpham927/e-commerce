@@ -7,7 +7,7 @@ import { Auth } from '../../feature';
 import useFetchUser from '../../hooks/useFetchUser';
 import Loading from '../../components/common/Loading';
 import Chat from '../../components/chat';
-import ChatBoxAI from '../../components/chatboxAI';
+import ChatBoxAI from '../../components/chatbotAI';
 import ToastComponent from '../../components/toastComponent';
 import { BottomNavigate } from '../../components/mobile/BottomNavigate';
 const DefaultLayout = () => {
@@ -22,7 +22,7 @@ const DefaultLayout = () => {
                 <Footer />
                 <Auth />
                 <Loading />
-                <div className="tablet:hidden fixed bottom-5 right-5 bg-gradient-to-br from-white via-slate-100 to-slate-200 rounded-2xl shadow-2xl p-2 flex flex-col items-center justify-center space-y-2 z-[900] border border-slate-300">
+                <div className="tablet:hidden fixed bottom-5 right-5 bg-gradient-to-br from-white via-slate-100 to-slate-200 rounded-2xl shadow-2xl p-2 flex flex-col items-center justify-center space-y-23 z-[900] border border-slate-300">
                     <ChatBoxAI />
                     <Chat />
                 </div>

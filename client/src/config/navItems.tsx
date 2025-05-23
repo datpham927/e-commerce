@@ -28,17 +28,6 @@ export const navItems: NavItem[] = [
         permission: 'order_manage',
     },
     {
-        icon: <img src="https://img.icons8.com/?size=100&id=48785&format=png&color=40C057" alt="icon" className="w-8 h-8" />,
-        name: 'Bán hàng tại quầy',
-        path: PATH.MANAGE_OFFLINE_ORDER,
-        subItems: [
-            { name: 'Tạo hóa đơn', path: PATH.MANAGE_OFFLINE_ORDER },
-            { name: 'Danh sách hóa đơn', path: PATH.MANAGE_LIST_OFFLINE_ORDER },
-        ],
-        permission: 'offline_order',
-    },
-
-    {
         icon: <img src="https://img.icons8.com/?size=100&id=zKZc2LIdmO4A&format=png&color=000000" alt="icon" className="w-8 h-8" />,
         name: 'Banner',
         path: PATH.MANAGE_BANNER,
@@ -67,6 +56,16 @@ export const navItems: NavItem[] = [
         name: 'Công ty vận chuyển',
         path: PATH.MANAGE_SHIPPING,
         permission: 'shipping_company_manage',
+    },
+    {
+        icon: <img src="https://img.icons8.com/?size=100&id=48785&format=png&color=40C057" alt="icon" className="w-8 h-8" />,
+        name: 'Bán hàng tại quầy',
+        path: PATH.MANAGE_OFFLINE_ORDER,
+        subItems: [
+            { name: 'Tạo hóa đơn', path: PATH.MANAGE_OFFLINE_ORDER },
+            { name: 'Danh sách hóa đơn', path: PATH.MANAGE_LIST_OFFLINE_ORDER },
+        ],
+        permission: 'offline_order',
     },
     {
         icon: <img src="https://img.icons8.com/?size=100&id=DRyDxSR9Q7aS&format=png&color=000000" alt="icon" className="w-9 h-9" />,

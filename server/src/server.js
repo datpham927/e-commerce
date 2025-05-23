@@ -47,7 +47,6 @@ app.use('/api/your-resource', yourRouter); // ✅ đúng nếu yourRouter là ro
 // ✅ Khởi tạo các route
 app.use('/', require('./routes')); // Tất cả các route được xử lý ở thư mục ./routes
 
-
 // ✅ Xử lý lỗi không tìm thấy route
 app.use((req, res, next) => {
     const error = new Error('Not Found'); // Tạo lỗi 404

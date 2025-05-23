@@ -22,7 +22,7 @@ const ChatModal: React.FC<{
     const [messages, setMessages] = useState<IMessage[]>([]);
     const [isOpenBox, setIsOpenBox] = useState<boolean>(false);
     const [value, setValue] = useState<string>('');
-    const [isScrolling, setIsScrolling] = useState<boolean>(false);
+    const [isScrolling, setIsScrolling] = useState<boolean>(true);
     const { user } = useUserStore();
     const { isOpenChat, setIsOpenChat, mobile_ui, setIsLoading } = useActionStore();
     const navigate = useNavigate();
@@ -32,6 +32,7 @@ const ChatModal: React.FC<{
     useEffect(() => {
         if (isOpenChat) {
             setIsOpenBox(true);
+            setTimeout(() => setIsScrolling(false), 2000);
         } else {
             setTimeout(() => setIsOpenBox(false), 299);
         }
@@ -89,12 +90,10 @@ const ChatModal: React.FC<{
     const scroll = useRef<any>(null);
     useEffect(() => {
         if (!isOpenBox || !scroll.current) return;
-        setIsScrolling(true);
         scroll.current.scrollIntoView({
             behavior: 'instant',
             block: 'end',
         });
-        setIsScrolling(false);
     }, [messages, isOpenBox]);
 
     const handleOnClick = async () => {
@@ -176,17 +175,17 @@ const ChatModal: React.FC<{
                     </div>
                 </div>
 
-                <div className="relative custom-scrollbar max-h-full flex-1  space-y-6  overflow-auto p-5 xl:space-y-8 xl:p-6">
+                <div className="relative flex-1 max-h-full overflow-auto p-5 space-y-6 xl:p-6 xl:space-y-8 scrollbar-custom">
                     {isScrolling && (
                         <div className="absolute inset-0 bg-white flex items-center justify-center">
-                            <div className="w-full flex justify-center h-full items-center">
+                            <div className="w-full h-full flex items-center justify-center">
                                 <ReactLoading type="cylon" color="rgb(0, 136, 72)" />
                             </div>
                         </div>
                     )}
                     {messages?.map((message, index) => (
-                        <div ref={scroll} key={index}>
-                            <ChatMessage message={message} isSentByUser={message?.sender._id === user?._id} />
+                        <div key={index} ref={scroll}>
+                            <ChatMessage message={message} isSentByUser={message.sender?._id === user?._id} />
                         </div>
                     ))}
                 </div>

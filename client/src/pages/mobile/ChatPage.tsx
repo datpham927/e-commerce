@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import ChatBotAIModal from '../../components/chatboxAI/ChatBotAIModal';
+import ChatBotAIModal from '../../components/chatbotAI/ChatBotAIModal';
 import ChatModal from '../../components/chat/chatModal';
 import useUserStore from '../../store/userStore';
 import useAuthStore from '../../store/authStore';

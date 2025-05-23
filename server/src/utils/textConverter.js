@@ -28,7 +28,7 @@ module.exports = {
           - Phí giao hàng: ${order.order_shipping_price || 0}
           - Thời gian vận chuyển: từ ${formatDate(order.order_date_shipping?.from) || 'N/A'} đến ${formatDate(order.order_date_shipping?.to) || 'N/A'} ngày
           - Trạng thái đơn hàng: ${order.order_status || 'N/A'}
-          - URL Liên kết đơn hàng: /nguoi-dung/don-hang    
+          - URL Liên kết đơn hàng: /nguoi-dung/chi-tiet-don-hang/${order._id}
           - Ngày đặt: ${formatDate(order.updateAt)}
           - mã sản phẩm: ${order.order_code || 'Chưa có tên'}
           `;

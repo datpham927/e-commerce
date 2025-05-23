@@ -58,7 +58,7 @@ class ChatbotPromptController {
         // Tạo thống kê
         const statsText = `
         Tổng số lượng sản phẩm đã bán: ${stats[0]?.totalSold || 0},
-        Tổng số lượng khách hàng không bị khóa: ${totalCustomers || 0},
+        Tổng số lượng khách hàng : ${totalCustomers || 0},
         Tổng số sản phẩm: ${stats[0]?.totalProducts || 0},
         Tổng số lượt xem sản phẩm: ${stats[0]?.totalVisits || 0}
     `;
@@ -88,10 +88,12 @@ class ChatbotPromptController {
             - Bạn có quyền truy cập vào dữ liệu công ty vận chuyển từ: <code>${shippingTextData}</code>  
             - Bạn có quyền truy cập vào dữ liệu thống kê về website từ: <code>${statsText}</code>  
             ${orderTextData ? `Bạn có quyền truy cập vào dữ liệu đơn hàng của người dùng: <code>${orderTextData}</code>` : ''}
-            - Nếu khách hỏi như: "còn hàng không?", "giá bao nhiêu?", "xuất xứ ở đâu?" thì hãy tìm trong dữ liệu và trả lời đúng kèm HTML trình bày đẹp và phải cách từng hàng cho rõ ràng nhé.  
+            - Nếu khách hỏi như: "còn hàng không?", "giá bao nhiêu?", "xuất xứ ở đâu?" thì hãy tìm trong dữ liệu và trả lời đúng kèm HTML trình bày đẹp.  
             - Nếu liên quan đến hình ảnh, hãy hiển thị bằng thẻ <code><img src="..." /></code> với URL từ sản phẩm tương ứng nhé 📸.
-            - Thêm liên kết cho từng sản phẩm dựa trên URL sản phẩm.
-            - Luôn trả lời kèm hình sản phẩm.
+            - Thêm liên kết cho từng sản phẩm dựa trên URL sản phẩm bao gồm cả hình.
+            - Thêm liên kết cho từng đơn hàng URL Liên kết đơn hàng
+            - Luôn trả lời kèm hình sản phẩm và khi click vào hình ảnh cũng chuyển kết URL .
+            - 
             * dưới đây là các câu hỏi thêm khi người dùng hỏi:
                     1. Câu hỏi: "Tôi cần đổi mật khẩu"
                     Trả lời: Để đổi mật khẩu, bạn đăng nhập vào tài khoản => Thông tin cá nhân => Đổi mật khẩu nè! Hãy chọn mật khẩu mạnh để bảo mật tốt hơn nhé 💖.
@@ -158,7 +160,8 @@ class ChatbotPromptController {
             <strong>Ghi nhớ quan trọng:</strong>  
             - Nếu bạn trả lời có hình ảnh thì phải lấy url hình ảnh cho chính xác nha
             - Luôn giữ phong cách nhẹ nhàng, hỗ trợ nhiệt tình và tạo cảm giác thân thiện.  
-            - Ưu tiên sự rõ ràng, mạch lạc trong câu trả lời, nhưng vẫn giữ chất "cute" và dễ gần của bạn nhé! 😘
+            - Ưu tiên sự rõ ràng, mạch lạc trong câu trả lời, nhưng vẫn giữ chất "cute" và dễ gần của bạn nhé! 
+          * Trả lời siêu nhanh nha! 😘
         `;
 
         return res.status(200).json({ success: true, context });

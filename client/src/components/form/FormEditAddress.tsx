@@ -168,14 +168,14 @@ const FormEditAddress: React.FC<FormEditAddressProps> = ({ payload, setPayload, 
                 if (setIsOpen) setIsOpen(false);
             }}>
             <div
-                className="relative flex flex-col w-auto h-[500px] p-6 bg-white rounded-lg overflow-hidden"
+                className="relative  tablet:h-screen tablet:w-screen tablet:overflow-y-auto tablet:scrollbar-thin tablet:scrollbar-thumb-gray-400 tablet:scrollbar-track-gray-200 tablet:px-2 flex flex-col w-auto h-[500px] p-6 bg-white rounded-lg overflow-hidden"
                 onClick={(e) => {
                     e.stopPropagation();
                     if (setIsOpen) setIsOpen(true);
                 }}>
                 <h1 className="text-xl mx-auto mb-8">Chỉnh sửa địa chỉ</h1>
                 <div className="flex gap-6 tablet:flex-col">
-                    <div className="flex flex-col gap-6 w-[400px] justify-center">
+                    <div className="flex flex-col gap-6 w-[400px] tablet:w-full justify-center">
                         <div className="flex flex-col gap-3">
                             <SelectOptions
                                 label="Tỉnh/Thành phố"

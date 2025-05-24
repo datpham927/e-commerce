@@ -302,7 +302,6 @@ class UserService {
                 break;
             default:
                 console.error(`Invalid prizeIndex: ${prizeIndex} for user ${userId}`);
-                throw new RequestError('Giá trị prizeIndex không hợp lệ!', 400);
         }
 
         // Trừ lượt quay sau khi xác nhận phần thưởng

@@ -116,7 +116,6 @@ class AuthUserService {
         const newUser = await userModel.create({
             user_name: email?.split('@')[0],
             user_email: email,
-            user_mobile: mobile,
             user_password: passwordHash,
         });
         if (!newUser) {

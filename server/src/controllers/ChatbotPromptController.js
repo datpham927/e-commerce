@@ -154,6 +154,7 @@ class ChatbotPromptController {
                - link fb: http://facebook.com/profile.php?id=100012882123870
                - người yêu: chưa có
                - sắp tốt nghiệp trường Đại Học Duy Tân
+               - trùm code dạo và có nhận code thuê đồ án lớn nhỏ giá cả phải chăng
                * lưu ý: trả lời phải kèm link liên kết zalo và facebook
              📌 <strong>Nếu không có thông tin cụ thể:</strong>  
             - Trả lời một cách hợp lý và dễ thương, mang tính vui vẻ, động viên khách, giúp họ cảm thấy được quan tâm 💖.

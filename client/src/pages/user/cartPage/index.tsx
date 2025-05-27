@@ -23,7 +23,13 @@ const CartPage: React.FC = () => {
     }, [selectedProducts]);
 
     const handleBuyProducts = () => {
-        const hasAddressInfo = user?.user_name && user?.user_mobile && user?.user_address?.detail;
+        const hasAddressInfo =
+            user?.user_name &&
+            user?.user_mobile &&
+            user?.user_address?.detail &&
+            user?.user_address?.city &&
+            user?.user_address?.district &&
+            user?.user_address?.village;
         if (hasAddressInfo) {
             if (selectedProducts?.length === 0) {
                 showNotification('Vui lòng chọn sản phẩm!');
@@ -31,7 +37,7 @@ const CartPage: React.FC = () => {
             }
             navigate(PATH.PAGE_PAYMENT);
         } else {
-            if (confirm('Vui lòng cập nhật thông tin!')) {
+            if (confirm('Vui lòng cập nhật lại thông tin!')) {
                 navigate(PATH.PAGE_PROFILE);
             }
         }
